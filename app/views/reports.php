@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/controllers/reports_controller.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/app/controllers/reports_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +7,8 @@
   <title>UNIFY — Reports</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/UNIFY(db)/public/assets/css/reports.css"/>
-  <link rel="stylesheet" href="/UNIFY(db)/public/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/reports.css"/>
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">
@@ -349,6 +349,6 @@
   </main>
 </div>
 
-<script src="/UNIFY(db)/public/assets/javascripts/reports.js"></script>
+<script src="/public/assets/javascripts/reports.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/controllers/login_controller.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/app/controllers/login_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login — UNIFY</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/UNIFY(db)/public/assets/css/login.css"/>
+  <link rel="stylesheet" href="/public/assets/css/login.css"/>
 </head>
 <body>
 
@@ -19,7 +19,7 @@
 
     <div class="logo-row">
       <div class="logo-circle">
-        <img src="/UNIFY(db)/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+        <img src="/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
       </div>
       <div class="logo-text">
         Club Management System
@@ -130,7 +130,7 @@
     </svg>
 
     <div class="emblem">
-      <img src="/UNIFY(db)/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+      <img src="/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
     </div>
 
     <h2>UNIFY</h2>
@@ -160,6 +160,6 @@
 
 </div><!-- /wrapper -->
 
-<script src="/UNIFY(db)/public/assets/javascripts/login.js"></script>
+<script src="/public/assets/javascripts/login.js"></script>
 </body>
 </html>

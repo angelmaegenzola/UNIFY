@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/controllers/members_controller.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/app/controllers/members_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,8 +7,8 @@
   <title>UNIFY — Members</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/UNIFY(db)/public/assets/css/members.css"/>
-  <link rel="stylesheet" href="/UNIFY(db)/public/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/members.css"/>
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">

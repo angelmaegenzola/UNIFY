@@ -1,18 +1,18 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/controllers/landing_page_controller.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/app/controllers/landing_page_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UNIFY — Plan Together</title>
-  <link rel="stylesheet" href="/UNIFY(db)/public/assets/css/landing-page.css" />
+  <link rel="stylesheet" href="/public/assets/css/landing-page.css" />
 </head>
 <body>
 
   <!-- Navbar -->
   <header class="navbar">
     <a href="index.php?page=landing-page" class="logo">
-      <img src="/UNIFY(db)/public/assets/pictures/logo.png" alt="Unify" />
+      <img src="/public/assets/pictures/logo.png" alt="Unify" />
     </a>
     <nav>
       <ul class="nav-links">

@@ -1,7 +1,7 @@
 <?php
 // ============================================================
 //  UNIFY — club_messages.php
-//  Path: /UNIFY(db)/app/api/club_messages.php
+//  Path: /app/api/club_messages.php
 // ============================================================
 
 ob_start();
