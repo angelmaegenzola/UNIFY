@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sign Up — UNIFY</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/unify/assets/css/signup.css"/>
+  <link rel="stylesheet" href="/assets/css/signup.css"/>
 </head>
 <body>
 
@@ -17,7 +17,7 @@
 
     <div class="logo-row">
       <div class="logo-circle">
-        <img src="/unify/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+        <img src="/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
       </div>
       <div class="logo-text">
         Club Management System
@@ -208,7 +208,7 @@
     </svg>
 
     <div class="emblem">
-      <img src="/unify/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+      <img src="/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
     </div>
 
     <h2>UNIFY</h2>
@@ -254,6 +254,6 @@
 
 </div><!-- /wrapper -->
 
-<script src="/unify/assets/javascripts/signup.js"></script>
+<script src="/assets/javascripts/signup.js"></script>
 </body>
 </html>

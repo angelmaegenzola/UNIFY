@@ -10,8 +10,8 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/unify/assets/css/dashboard.css" />
-  <link rel="stylesheet" href="/unify/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/assets/css/dashboard.css" />
+  <link rel="stylesheet" href="/assets/css/transitions.css" />
 </head>
 
 <body>
@@ -130,7 +130,7 @@
                   </div>
                 </div>
               </div>
-              <img src="/unify/assets/pictures/visuals.png" alt="" class="wb-char-img"
+              <img src="/assets/pictures/visuals.png" alt="" class="wb-char-img"
                 onerror="this.style.display='none'" />
             </div>
 
@@ -697,7 +697,7 @@
     }, $dbApplicants), JSON_HEX_TAG | JSON_HEX_APOS) ?>;
   </script>
 
-  <script src="/unify/assets/javascripts/dashboard.js"></script>
+  <script src="/assets/javascripts/dashboard.js"></script>
 
 <script>
 // ── ADMIN NOTIFICATION DROPDOWN ────────────────────────────
