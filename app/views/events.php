@@ -9,8 +9,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/unify/assets/css/events.css" />
-  <link rel="stylesheet" href="/unify/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/assets/css/events.css" />
+  <link rel="stylesheet" href="/assets/css/transitions.css" />
 </head>
 
 <body>
@@ -19,7 +19,7 @@
     <!-- ── Sidebar ── -->
     <aside class="sidebar">
       <div class="sidebar-brand">
-        <img src="/unify/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -353,7 +353,7 @@
       'status' => $e['status'],
     ], $dbEvents), JSON_HEX_TAG) ?>;
   </script>
-  <script src="/unify/assets/javascripts/events.js"></script>
+  <script src="/assets/javascripts/events.js"></script>
 </body>
 
 </html>
