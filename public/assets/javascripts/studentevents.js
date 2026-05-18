@@ -7,7 +7,7 @@
 (function () {
   'use strict';
 
-  const AJAX_URL = '/UNIFY(db)/public/index.php?page=studentevents_ajax';
+  const AJAX_URL = '/index.php?page=studentevents_ajax';
 
   // ── Shared modal state ───────────────────────────────────
   let currentEventId   = null;
