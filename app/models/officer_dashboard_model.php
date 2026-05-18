@@ -1,7 +1,7 @@
 <?php
 // Model: page-load queries for officer_dashboard
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 
 function getOfficerClub($pdo, $userId) {
     $stmt = $pdo->prepare("

@@ -28,7 +28,7 @@ if (empty($_SESSION['user_id'])) {
     exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 
 $user_id   = (int) $_SESSION['user_id'];
 $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/profile_pictures/';

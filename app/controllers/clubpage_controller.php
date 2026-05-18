@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) { header('Location: index.php?page=login'); exit; }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 $me = $pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
 $me->execute([$_SESSION['user_id']]);
 $me = $me->fetch(PDO::FETCH_ASSOC);

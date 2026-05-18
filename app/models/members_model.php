@@ -1,6 +1,6 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 
 $me = $pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
 $rows = $pdo->query(

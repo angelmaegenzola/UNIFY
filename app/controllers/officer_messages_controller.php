@@ -21,7 +21,7 @@ ob_start();
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/models/officer_dashboard_model.php';
 
 if (empty($_SESSION['user_id'])) {

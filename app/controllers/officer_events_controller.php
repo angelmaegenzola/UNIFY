@@ -8,7 +8,7 @@ ob_start();
 if (session_status() === PHP_SESSION_NONE) session_start();
 error_reporting(0);
 ini_set('display_errors', 0);
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 
 date_default_timezone_set('Asia/Manila');
 

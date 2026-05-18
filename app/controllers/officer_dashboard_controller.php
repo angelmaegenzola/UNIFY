@@ -1,7 +1,7 @@
 <?php
 ob_start();
 session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/models/officer_dashboard_model.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['officer','lead','student','president','vice president'])) {

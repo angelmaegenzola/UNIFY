@@ -12,7 +12,7 @@ if (empty($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'Not logged in.']); exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 
 $user_id = (int) $_SESSION['user_id'];
 $action  = $_GET['action'] ?? $_POST['action'] ?? 'list';

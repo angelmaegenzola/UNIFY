@@ -1,6 +1,6 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/config/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
 $clubs = $pdo->query(
     'SELECT c.*,
         (SELECT COUNT(*) FROM members m WHERE m.club_id = c.id AND m.status = "active") AS member_count,
