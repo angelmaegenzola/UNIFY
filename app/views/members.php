@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/app/controllers/members_controller.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/members_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

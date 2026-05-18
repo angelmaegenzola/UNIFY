@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/app/controllers/profile_controller.php'; ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/profile_controller.php'; ?>
 <?php
 // ── Fallback defaults ──────────────────────────────────────────────────────
 $user = $user ?? [];
