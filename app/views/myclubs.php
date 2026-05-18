@@ -7,7 +7,7 @@
   <title>UNIFY — My Clubs</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/myclubs.css" />
+  <link rel="stylesheet" href="/unify/assets/css/myclubs.css" />
 </head>
 <body>
 
@@ -16,7 +16,7 @@
   <!-- ═══════════ SIDEBAR ═══════════ -->
    <aside class="sidebar">
     <div class="sidebar-brand">
-      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/unify/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text">
         <div class="brand-name">UNIFY</div>
         <div class="brand-tagline">Club Management System</div>
@@ -349,7 +349,7 @@
 <!-- Toast -->
 <div class="crud-toast" id="crudToast"></div>
 
-<script src="/assets/javascripts/myclubs.js"></script>
+<script src="/unify/assets/javascripts/myclubs.js"></script>
 <?php
   // If redirected from explore with a specific club_id, auto-open that club
   $open_club_id = (int)($_GET['club_id'] ?? 0);

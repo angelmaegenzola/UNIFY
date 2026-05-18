@@ -5,14 +5,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UNIFY — Plan Together</title>
-  <link rel="stylesheet" href="/assets/css/landing-page.css" />
+  <link rel="stylesheet" href="/unify/assets/css/landing-page.css" />
 </head>
 <body>
 
   <!-- Navbar -->
   <header class="navbar">
     <a href="index.php?page=landing-page" class="logo">
-      <img src="/assets/pictures/logo.png" alt="Unify" />
+      <img src="/unify/assets/pictures/logo.png" alt="Unify" />
     </a>
     <nav>
       <ul class="nav-links">
