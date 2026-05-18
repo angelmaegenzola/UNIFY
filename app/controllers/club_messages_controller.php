@@ -1,7 +1,7 @@
 <?php
 // ============================================================
 //  UNIFY — club_messages.php
-//  Place at: /UNIFY(db)/app/controllers/club_messages.php
+//  Place at: /../app/controllers/club_messages.php
 //  Handles both GET (poll) and POST (send / delete) via AJAX
 // ============================================================
 

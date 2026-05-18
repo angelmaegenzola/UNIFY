@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/models/adminprofile_model.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/adminprofile_model.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header('Location: index.php?page=login');

@@ -18,7 +18,7 @@ $avatar_url   = $_sessionPic
     : '';
 
 // ── All data comes from the model (with safe fallbacks) ───
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/models/reports_model.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/reports_model.php';
 
 // ── Derived variables ─────────────────────────────────────
 $topClubs       = array_slice($clubActivity, 0, 5);

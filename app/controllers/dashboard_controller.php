@@ -307,7 +307,7 @@ $avatar_url   = $_sessionPic
     : '';
 
 // Load all dashboard data from the model
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/models/dashboard_model.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/dashboard_model.php';
 // Unread notifications count for admin
 $adminUnreadNotifs = 0;
 try {

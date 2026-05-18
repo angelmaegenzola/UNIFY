@@ -23,7 +23,7 @@ if ($db->connect_error) {
 $db->set_charset('utf8mb4');
 
 /* ── Load model ─────────────────────────────────────────────── */
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/models/exploreclub_model.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/exploreclub_model.php';
 $model = new ExploreClubModel($db);
 
 /* ── Helper: format time (defined early — used in AJAX block) ── */

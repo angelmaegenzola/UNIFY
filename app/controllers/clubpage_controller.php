@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $toast = $_GET['toast'] ?? '';
 $pdo->exec("UPDATE events SET status='completed' WHERE status='upcoming' AND event_date < CURDATE()");
-require_once $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/app/models/clubpage_model.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/clubpage_model.php';
 $avatarColors = ['oa-blue','oa-teal','oa-green','oa-yellow','oa-orange','oa-purple'];
 $eventColors  = ['cev-blue','cev-teal','cev-green','cev-yellow','cev-orange'];
 
