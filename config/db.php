@@ -116,7 +116,7 @@ function get_club_officers(mysqli $conn, int $club_id): array
         SELECT
             CONCAT(u.first_name, ' ', u.last_name) AS name,
             UPPER(CONCAT(
-                SUBSTRING(u.first_name, 1, 1),  
+                SUBSTRING(u.first_name, 1, 1),
                 SUBSTRING(u.last_name,  1, 1)
             ))                                     AS initials,
             m.role
