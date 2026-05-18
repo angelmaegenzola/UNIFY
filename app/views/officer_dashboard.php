@@ -7,8 +7,8 @@
   <title>UNIFY — Officer Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/public/assets/css/officer_dashboard.css" />
-  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/assets/css/officer_dashboard.css" />
+  <link rel="stylesheet" href="/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">
@@ -16,7 +16,7 @@
   <!-- ── SIDEBAR ────────────────────────────────────────────── -->
    <aside class="sidebar">
       <div class="sidebar-brand">
-        <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -590,6 +590,6 @@ window.OD = {
   }, $dbApplicants, array_keys($dbApplicants)), JSON_HEX_TAG | JSON_HEX_APOS) ?>
 };
 </script>
-<script src="/public/assets/javascripts/officer_dashboard.js"></script>
+<script src="/assets/javascripts/officer_dashboard.js"></script>
 </body>
 </html>

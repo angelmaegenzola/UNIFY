@@ -28,8 +28,8 @@ $categories = ['Tech','Arts','Sports','Academic','Cultural','Environment','Healt
   <title>UNIFY — Propose a New Club</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/public/assets/css/studenthome.css"/>
-  <link rel="stylesheet" href="/public/assets/css/club_request.css"/>
+  <link rel="stylesheet" href="/assets/css/studenthome.css"/>
+  <link rel="stylesheet" href="/assets/css/club_request.css"/>
 </head>
 <body>
 <div class="app">
@@ -37,7 +37,7 @@ $categories = ['Tech','Arts','Sports','Academic','Cultural','Environment','Healt
   <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sidebar-brand">
-      <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text">
         <div class="brand-name">UNIFY</div>
         <div class="brand-tagline">Club Management System</div>
@@ -195,4 +195,4 @@ $categories = ['Tech','Arts','Sports','Academic','Cultural','Environment','Healt
 
 </body>
 </html>
-<script src="/public/assets/javascripts/club_request.js"></script>
+<script src="/assets/javascripts/club_request.js"></script>

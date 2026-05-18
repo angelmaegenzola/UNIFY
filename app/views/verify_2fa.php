@@ -6,8 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Verify Identity — UNIFY</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/public/assets/css/login.css"/>
-  <link rel="stylesheet" href="/public/assets/css/verify_2fa.css">
+  <link rel="stylesheet" href="/assets/css/login.css"/>
+  <link rel="stylesheet" href="/assets/css/verify_2fa.css">
 </head>
 <body>
 
@@ -18,7 +18,7 @@
 
     <div class="logo-row">
       <div class="logo-circle">
-        <img src="/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+        <img src="/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
       </div>
       <div class="logo-text">
         Club Management System
@@ -97,7 +97,7 @@
       <path fill="rgba(255,255,255,.04)" d="M0,380 C100,350 200,400 310,370 C400,345 460,380 500,360 L500,560 L0,560 Z"/>
     </svg>
     <div class="emblem">
-      <img src="/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+      <img src="/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
     </div>
     <h2>UNIFY</h2>
     <p>Manage clubs, events, members and finances all in one place.</p>
@@ -117,4 +117,4 @@
 
 </body>
 </html>
-<script src="/public/assets/javascripts/verify_2fa.js"></script>
+<script src="/assets/javascripts/verify_2fa.js"></script>
