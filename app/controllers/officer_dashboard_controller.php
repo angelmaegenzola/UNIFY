@@ -223,10 +223,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($file['size'] > 2 * 1024 * 1024)   { echo json_encode(['error' => 'File too large (max 2MB).']); break; }
                 $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
                 $fname    = 'club_' . uniqid() . '.' . $ext;
-                $dir      = $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/public/assets/pictures/clubs/';
+                $dir      = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/clubs/';
                 if (!is_dir($dir)) mkdir($dir, 0755, true);
                 move_uploaded_file($file['tmp_name'], $dir . $fname);
-                $logoPath = '/UNIFY(db)/public/assets/pictures/clubs/' . $fname;
+                $logoPath = '/assets/pictures/clubs/' . $fname;
                 $pdo->prepare("UPDATE clubs SET logo_path = ? WHERE id = ?")->execute([$logoPath, $clubId]);
                 echo json_encode(['success' => true, 'logo' => $logoPath]);
                 break;
@@ -256,7 +256,7 @@ $picStmt  = $pdo->prepare('SELECT profile_picture FROM users WHERE id = ? LIMIT 
 $picStmt->execute([$userId]);
 $picFile  = $picStmt->fetchColumn();
 $avatar_url = $picFile
-    ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 $officerClub        = getOfficerClub($pdo, $userId);

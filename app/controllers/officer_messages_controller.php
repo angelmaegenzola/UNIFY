@@ -46,7 +46,7 @@ $picStmt = $pdo->prepare('SELECT profile_picture FROM users WHERE id = ? LIMIT 1
 $picStmt->execute([$userId]);
 $picFile    = $picStmt->fetchColumn();
 $avatar_url = $picFile
-    ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 // ── All active clubs ───────────────────────────────────────
@@ -125,7 +125,7 @@ $unreadNotifs = getUnreadNotifCount($pdo, $userId);
 // ── Helper ─────────────────────────────────────────────────
 function buildMessageRow($r, $myUserId) {
     $pic = !empty($r['profile_picture'])
-        ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($r['profile_picture']))
+        ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($r['profile_picture']))
         : '';
     return [
         'id'        => (int) $r['id'],

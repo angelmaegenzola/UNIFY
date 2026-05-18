@@ -12,7 +12,7 @@ $adminName    = trim($adminFirst . ' ' . $adminLast);
 $adminInitial = strtoupper(substr($adminFirst, 0, 1));
 $_sessionPic  = $_SESSION['profile_picture'] ?? '';
 $avatar_url   = $_sessionPic
-    ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($_sessionPic))
+    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($_sessionPic))
     : '';
 function handleLogoUpload(string $field): ?string {
     if (empty($_FILES[$field]['tmp_name'])) return null;
@@ -25,12 +25,12 @@ function handleLogoUpload(string $field): ?string {
 
     $ext     = pathinfo($file['name'], PATHINFO_EXTENSION);
     $fname   = 'club_' . uniqid() . '.' . $ext;
-    $dir     = $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/public/assets/pictures/clubs/';
+    $dir     = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/clubs/';
     if (!is_dir($dir)) mkdir($dir, 0755, true);
     $dest    = $dir . $fname;
 
     if (!move_uploaded_file($file['tmp_name'], $dest)) return null;
-    return '/UNIFY(db)/public/assets/pictures/clubs/' . $fname;
+    return '/assets/pictures/clubs/' . $fname;
 }
 $toast = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

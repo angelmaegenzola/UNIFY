@@ -303,7 +303,7 @@ $adminInitial = strtoupper(substr($adminFirst, 0, 1));
 // Build avatar URL from session (set by adminprofile or upload_avatar controllers)
 $_sessionPic  = $_SESSION['profile_picture'] ?? '';
 $avatar_url   = $_sessionPic
-    ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($_sessionPic))
+    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($_sessionPic))
     : '';
 
 // Load all dashboard data from the model

@@ -111,9 +111,9 @@ $avatar_url = '';
 if ($profile_picture) {
     $filename  = basename($profile_picture);
     if ($filename) {
-        $disk_path = $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/public/assets/pictures/profile_pictures/' . $filename;
+        $disk_path = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/profile_pictures/' . $filename;
         $avatar_url = file_exists($disk_path)
-            ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars($filename)
+            ? '/assets/pictures/profile_pictures/' . htmlspecialchars($filename)
             : '';
     }
 }

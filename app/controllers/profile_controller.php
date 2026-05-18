@@ -18,7 +18,7 @@ $user = $stmt->fetch();
 
 $profile_picture = $user['profile_picture'] ?? '';
 $avatar_url      = $profile_picture
-    ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($profile_picture))
+    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($profile_picture))
     : '';
 if (!$user) {
     session_destroy();

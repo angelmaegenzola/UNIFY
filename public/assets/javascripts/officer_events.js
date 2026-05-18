@@ -678,7 +678,7 @@ function openEditModal(dbId) {
     drop.innerHTML = filtered.map(m => {
       const initials = (m.first_name[0] + m.last_name[0]).toUpperCase();
       const avatarHtml = m.profile_picture
-        ? `<img src="/UNIFY(db)/public/assets/pictures/profile_pictures/${esc(m.profile_picture)}" class="asn-drop-avatar" />`
+        ? `<img src="/assets/pictures/profile_pictures/${esc(m.profile_picture)}" class="asn-drop-avatar" />`
         : `<span class="asn-drop-initials">${initials}</span>`;
       return `<div class="asn-drop-item" onmousedown="event.preventDefault(); OE.assigneeAdd(${m.user_id})">
         <div class="asn-drop-avatar-wrap">${avatarHtml}</div>
@@ -721,7 +721,7 @@ function openEditModal(dbId) {
     container.innerHTML = assigneeList.map(a => {
       const initials = ((a.first_name||'')[0] + (a.last_name||'')[0]).toUpperCase();
       const avatarHtml = a.profile_picture
-        ? `<img src="/UNIFY(db)/public/assets/pictures/profile_pictures/${esc(a.profile_picture)}" class="asn-chip-avatar" />`
+        ? `<img src="/assets/pictures/profile_pictures/${esc(a.profile_picture)}" class="asn-chip-avatar" />`
         : `<span class="asn-chip-initials">${initials}</span>`;
       const roleDisplay = a.role_label || '<em style="opacity:.6">Set role…</em>';
       // Status badge for assignment response
@@ -1382,7 +1382,7 @@ function openEditModal(dbId) {
       return `<div class="asn-drop-item" onclick="OE.collabMemberAdd(${m.user_id})">
         <div class="asn-drop-avatar-wrap">
           ${m.profile_picture
-            ? `<img src="/UNIFY(db)/public/assets/pictures/profile_pictures/${esc(m.profile_picture)}" class="asn-drop-avatar" />`
+            ? `<img src="/assets/pictures/profile_pictures/${esc(m.profile_picture)}" class="asn-drop-avatar" />`
             : `<span class="asn-drop-initials">${initials}</span>`}
         </div>
         <div class="asn-drop-info">
@@ -1425,7 +1425,7 @@ function openEditModal(dbId) {
       return `<div class="asn-chip" id="cm-chip-${m.user_id}">
         <div class="asn-chip-avatar-wrap">
           ${m.profile_picture
-            ? `<img src="/UNIFY(db)/public/assets/pictures/profile_pictures/${esc(m.profile_picture)}" class="asn-chip-avatar" />`
+            ? `<img src="/assets/pictures/profile_pictures/${esc(m.profile_picture)}" class="asn-chip-avatar" />`
             : `<span class="asn-chip-initials">${initials}</span>`}
         </div>
         <div class="asn-chip-body">

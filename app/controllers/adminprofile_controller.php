@@ -82,7 +82,7 @@ $adminInitial = strtoupper(substr($adminFirst, 0, 1));
 // ── Avatar URL ────────────────────────────────────────────
 $profile_picture = $dbUser['profile_picture'] ?? '';
 $avatar_url      = $profile_picture
-    ? '/UNIFY(db)/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($profile_picture))
+    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($profile_picture))
     : '';
 
 // Keep session in sync so other pages' sidebars can show the avatar
