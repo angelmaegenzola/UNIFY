@@ -7,7 +7,7 @@
 ob_start();
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-$conn = new mysqli('127.0.0.1', 'root', '', 'unify_db');
+$conn = new mysqli('localhost', 'u970217706_EGG', 'EGGPassword_Unify2C', 'u970217706_unify_db');
 if ($conn->connect_error) die(json_encode(['success' => false, 'error' => 'DB error']));
 $conn->set_charset('utf8mb4');
 

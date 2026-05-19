@@ -19,7 +19,7 @@ $full_name  = trim($first_name . ' ' . $last_name);
 $avatar     = strtoupper(substr($first_name, 0, 1));
 
 // ── Single DB connection ────────────────────────────────────
-$conn = new mysqli('127.0.0.1', 'root', '', 'unify_db');
+$conn = new mysqli('localhost', 'u970217706_EGG', 'EGGPassword_Unify2C', 'u970217706_unify_db');
 if ($conn->connect_error) die('Database connection failed.');
 $conn->set_charset('utf8mb4');
 

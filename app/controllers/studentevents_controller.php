@@ -333,7 +333,7 @@ foreach ($my_clubs_all as $mc) {
 $conn->close();
 
 // ── Fetch my assignments across all clubs ──────────────
-$conn2 = new mysqli('127.0.0.1', 'root', '', 'unify_db');
+$conn2 = new mysqli('localhost', 'u970217706_EGG', 'EGGPassword_Unify2C', 'u970217706_unify_db');
 $conn2->set_charset('utf8mb4');
 $conn2->query("SET time_zone = '+08:00'");
 

@@ -16,7 +16,7 @@ if (empty($_SESSION['user_id'])) {
 }
 
 /* ── DB connection ──────────────────────────────────────────── */
-$db = new mysqli('127.0.0.1', 'root', '', 'unify_db');
+$db = new mysqli('localhost', 'u970217706_EGG', 'EGGPassword_Unify2C', 'u970217706_unify_db');
 if ($db->connect_error) {
     die('Database connection failed: ' . $db->connect_error);
 }
