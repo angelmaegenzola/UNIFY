@@ -7,7 +7,7 @@
   <title>UNIFY — <?= $has_club ? 'Home' : 'Explore' ?></title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/public/assets/css/studenthome.css"/>
+  <link rel="stylesheet" href="public/assets/css/studenthome.css?v=3.0"/>
   <?php if ($has_club): ?>
   <?php endif; ?>
 </head>
@@ -601,3 +601,53 @@ function closeSidebar() {
 </script>
 </body>
 </html>
+<style>
+@media (max-width: 768px) {
+  /* Shorten the banner height and push down past topbar */
+  .welcome-banner {
+    margin-top: 24px !important;
+    padding: 16px 14px !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    height: auto !important;
+  }
+
+  /* Make typography more compact */
+  .welcome-banner .wb-name {
+    font-size: 1.4rem !important;
+    margin-top: 2px !important;
+    margin-bottom: 4px !important;
+  }
+  .welcome-banner .wb-sub {
+    font-size: 0.85rem !important;
+    margin-bottom: 12px !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Force layout action containers side-by-side */
+  .welcome-banner .wb-actions,
+  .welcome-banner .wb-body > div:last-child {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin-top: 8px !important;
+  }
+
+  /* Distribute links/buttons evenly on one line */
+  .welcome-banner .wb-actions a,
+  .welcome-banner .wb-actions button,
+  .welcome-banner .wb-body > div:last-child a,
+  .welcome-banner .wb-body > div:last-child button {
+    flex: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 10px 4px !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+  }
+}
+</style>

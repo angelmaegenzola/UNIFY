@@ -124,7 +124,7 @@ $adminName    = trim($adminFirst . ' ' . $adminLast);
 $adminInitial = strtoupper(substr($adminFirst, 0, 1));
 $_sessionPic  = $_SESSION['profile_picture'] ?? '';
 $avatar_url   = $_sessionPic
-    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($_sessionPic))
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($_sessionPic))
     : '';
 
 $eventsStmt = $pdo->query("

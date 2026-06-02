@@ -31,7 +31,7 @@ $pic_stmt->bind_result($picFile);
 $pic_stmt->fetch();
 $pic_stmt->close();
 $avatar_url = $picFile
-    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 // ── Role guard: always check DB, never trust stale session ──

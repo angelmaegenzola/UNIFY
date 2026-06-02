@@ -1472,8 +1472,46 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .topbar-actions { flex-shrink: 0 !important; margin-left: auto !important; }
   .topbar-profile-info, .tp-caret { display: none !important; }
   html body.sidebar-open { overflow: hidden !important; position: fixed !important; width: 100% !important; }
+}.back-btn {
+  display: none;
 }
 
+@media (max-width: 768px) {
+  .back-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    background: transparent;
+    border: none;
+
+    position: absolute;
+    top: 22px;   /* move lower */
+    left: 12px;
+
+    z-index: 20;
+
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+
+    text-decoration: none;
+    line-height: 1;
+  }
+
+  /* hide any icon */
+  .back-btn i {
+    display: none !important;
+  }
+
+  /* show only the < character */
+  .back-btn span {
+    display: block !important;
+  }
+}
 /* -- MOBILE: show logout + settings in sidebar -- */
 @media (max-width: 768px) {
   .sidebar-logout, .sidebar-settings-btn {
@@ -1482,20 +1520,7 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
     height: 32px !important;
     font-size: 14px !important;
   }
-}
-.hamburger-btn { display: none; }
-@media (max-width: 768px) {
-  .hamburger-btn {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 36px !important; height: 36px !important;
-    border: none !important; background: none !important;
-    cursor: pointer !important; color: var(--text-dark) !important;
-    font-size: 18px !important; flex-shrink: 0 !important;
-    margin-right: 4px !important; position: relative !important;
-    z-index: 102 !important;
-  }
+
   .topbar {
     padding: 10px 16px !important;
     background: var(--card-bg, #fff) !important;
@@ -1549,8 +1574,10 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   display: flex; align-items: center; justify-content: center;
   border: 2px solid var(--main-bg);
 }
-.badge.red { background: var(--red); color: #fff; }
-.badge.hidden { display: none; }
+.badge.red {
+  background: var(--red-accent);
+  color: #fff;
+}.badge.hidden { display: none; }
 .notif-dropdown {
   position: absolute; top: calc(100% + 10px); right: 0;
   width: 320px; background: var(--card-bg);
@@ -1611,4 +1638,47 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(10,40,24,0.45); z-index: 998; }
   .sidebar-overlay.open { display: block !important; }
   body.sidebar-open { overflow: hidden !important; }
+}
+/* -- MOBILE: profile page back button + content padding -- */
+@media (max-width: 768px) {
+  /* Back button like the screenshot */
+  .back-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: rgba(255,255,255,0.2) !important;
+    border: none !important;
+    border-radius: 50% !important;
+    position: absolute !important;
+    top: 56px !important;
+    left: 16px !important;
+    z-index: 20 !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    cursor: pointer !important;
+  }
+
+  /* Topbar position relative for back-btn */
+  .topbar {
+    position: relative !important;
+  }
+
+  /* Content padding so nothing sticks to edges */
+  .content {
+    padding: 16px !important;
+  }
+
+  .profile-body {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    overflow-y: auto !important;
+  }
+
+  .profile-left,
+  .profile-right {
+    overflow: visible !important;
+  }
 }

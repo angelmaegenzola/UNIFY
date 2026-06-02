@@ -376,7 +376,7 @@ $picStmt = $pdo->prepare('SELECT profile_picture FROM users WHERE id = ? LIMIT 1
 $picStmt->execute([$user_id]);
 $picFile    = $picStmt->fetchColumn();
 $avatar_url = $picFile
-    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 // Sidebar vars

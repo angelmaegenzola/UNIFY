@@ -97,7 +97,7 @@ try {
         'success'  => true,
         'message'  => 'Profile picture updated!',
         'filename' => $filename,
-        'url'      => '/assets/pictures/profile_pictures/' . $filename,
+        'url'      => '/public/assets/pictures/profile_pictures/' . $filename,
     ]);
 } catch (Exception $e) {
     error_log('[UNIFY] upload_avatar error: ' . $e->getMessage());

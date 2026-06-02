@@ -1,162 +1,216 @@
 <?php
-// ============================================================
-//  UNIFY — Student Profile Page
-//  app/views/studentprofile.php
-// ============================================================
-
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-if (empty($_SESSION['user_id'])) {
+// Redirect if not logged in
+if (!isset($_SESSION['user_id'])) {
     header('Location: index.php?page=login');
     exit;
 }
 
-// Admins should not see the student profile page
-if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') {
-    header('Location: index.php?page=adminprofile');
-    exit;
-}
+require_once __DIR__ . '/../../config/db.php';
 
-$conn = new mysqli('localhost', 'u970217706_EGG', 'EGGPassword_Unify2C', 'u970217706_unify_db');
-if ($conn->connect_error) die('Database connection failed.');
-$conn->set_charset('utf8mb4');
+$user_id = $_SESSION['user_id'];
 
-$user_id = (int) $_SESSION['user_id'];
+// ── Fetch user from DB ──────────────────────────────────────────────────────
+$stmt = $pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+$stmt->execute([$user_id]);
+$user = $stmt->fetch();
 
-// ── Fetch user ───────────────────────────────────────────────
-$stmt = $conn->prepare("
-    SELECT id, first_name, last_name, email, username, role, created_at,
-           two_fa_enabled, profile_picture
-    FROM users WHERE id = ?
-");
-$stmt->bind_param('i', $user_id);
-$stmt->execute();
-$user = $stmt->get_result()->fetch_assoc();
-$stmt->close();
-
+$profile_picture = $user['profile_picture'] ?? '';
+$avatar_url      = $profile_picture
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($profile_picture))
+    : '';
 if (!$user) {
     session_destroy();
     header('Location: index.php?page=login');
     exit;
 }
 
-// ── Fetch student_profiles ───────────────────────────────────
-$sp_stmt = $conn->prepare("
-    SELECT phone, date_of_birth, gender, nationality, address,
-           course, year_level, section, academic_year, department, campus, student_id
-    FROM student_profiles WHERE user_id = ?
-");
-$sp_stmt->bind_param('i', $user_id);
-$sp_stmt->execute();
-$profile = $sp_stmt->get_result()->fetch_assoc();
-$sp_stmt->close();
+$twoFaEnabled = !empty($user['two_fa_enabled']);
 
-// ── Stats ────────────────────────────────────────────────────
-$stats_stmt = $conn->prepare("
-    SELECT
-        (SELECT COUNT(*) FROM applications    WHERE user_id = ?)                       AS app_count,
-        (SELECT COUNT(*) FROM members         WHERE user_id = ? AND status = 'active') AS club_count,
-        (SELECT COUNT(*) FROM event_attendees WHERE user_id = ?)                       AS event_count
-");
-$stats_stmt->bind_param('iii', $user_id, $user_id, $user_id);
-$stats_stmt->execute();
-$stats = $stats_stmt->get_result()->fetch_assoc();
-$stats_stmt->close();
-
-// ── Nav checks ───────────────────────────────────────────────
-$mem = $conn->prepare("SELECT id FROM members WHERE user_id = ? AND status = 'active' LIMIT 1");
-$mem->bind_param('i', $user_id);
-$mem->execute();
-$mem->store_result();
-$has_club = $mem->num_rows > 0;
-$mem->close();
-
-$pend = $conn->prepare("SELECT id FROM applications WHERE user_id = ? AND status = 'pending' LIMIT 1");
-$pend->bind_param('i', $user_id);
-$pend->execute();
-$pend->store_result();
-$has_pending = $pend->num_rows > 0;
-$pend->close();
-
-// ── Recent activity ──────────────────────────────────────────
-$act_stmt = $conn->prepare("
-    SELECT a.status, a.applied_at, c.name AS club_name
-    FROM applications a
-    JOIN clubs c ON c.id = a.club_id
-    WHERE a.user_id = ?
-    ORDER BY a.applied_at DESC
-    LIMIT 5
-");
-$act_stmt->bind_param('i', $user_id);
-$act_stmt->execute();
-$activities = $act_stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-$act_stmt->close();
-
-$conn->close();
-
-// ── Display helpers ──────────────────────────────────────────
-$first_name  = htmlspecialchars($user['first_name'] ?? '');
-$last_name   = htmlspecialchars($user['last_name']  ?? '');
-$full_name   = trim($first_name . ' ' . $last_name);
-$initials    = strtoupper(
-    substr($user['first_name'] ?? '', 0, 1) .
-    substr($user['last_name']  ?? '', 0, 1)
+// ── Fetch clubs this user belongs to ───────────────────────────────────────
+$stmt = $pdo->prepare(
+    'SELECT c.id, c.name, c.category, c.logo_path, m.role
+     FROM members m
+     JOIN clubs c ON c.id = m.club_id
+     WHERE m.user_id = ? AND m.status = "active"
+     ORDER BY m.role ASC'
 );
-$email       = htmlspecialchars($user['email']      ?? '');
-$username    = htmlspecialchars($user['username']   ?? '');
-$created_at  = $user['created_at'] ? date('F j, Y', strtotime($user['created_at'])) : '—';
-$twoFaEnabled    = !empty($user['two_fa_enabled']);
-$profile_picture = $user['profile_picture'] ?? '';
-$avatar_url = '';
-if ($profile_picture) {
-    $filename  = basename($profile_picture);
-    if ($filename) {
-        $disk_path = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/pictures/profile_pictures/' . $filename;
-        $avatar_url = file_exists($disk_path)
-            ? '/assets/pictures/profile_pictures/' . htmlspecialchars($filename)
-            : '';
+$stmt->execute([$user_id]);
+$clubs = $stmt->fetchAll();
+
+// ── Sidebar club context (first/primary club) ───────────────────────────────
+$officerClub = null;
+$officerRole = 'member';
+
+$rolePriority = ['president' => 1, 'vice president' => 2, 'officer' => 3, 'member' => 4];
+
+foreach ($clubs as $c) {
+    $priority = $rolePriority[strtolower($c['role'])] ?? 99;
+    if ($officerClub === null || $priority < ($rolePriority[strtolower($officerRole)] ?? 99)) {
+        $officerClub = $c;
+        $officerRole = $c['role'];
     }
 }
 
-$phone       = htmlspecialchars($profile['phone']         ?? '—');
-$dob         = htmlspecialchars($profile['date_of_birth'] ?? '—');
-$gender      = htmlspecialchars($profile['gender']        ?? '—');
-$nationality = htmlspecialchars($profile['nationality']   ?? 'Filipino');
-$address     = htmlspecialchars($profile['address']       ?? '—');
-$course      = htmlspecialchars($profile['course']        ?? '—');
-$year_level  = htmlspecialchars($profile['year_level']    ?? '—');
-$section     = htmlspecialchars($profile['section']       ?? '—');
-$acad_year   = htmlspecialchars($profile['academic_year'] ?? '—');
-$department  = htmlspecialchars($profile['department']    ?? '—');
-$campus      = htmlspecialchars($profile['campus']        ?? '—');
-$student_id  = htmlspecialchars($profile['student_id']    ?? '—');
-
-$app_count   = (int) ($stats['app_count']   ?? 0);
-$club_count  = (int) ($stats['club_count']  ?? 0);
-$event_count = (int) ($stats['event_count'] ?? 0);
-
-if ($club_count > 0) {
-    $acct_status  = '<span class="status-pill active"><i class="fas fa-circle-check"></i> Active Member</span>';
-    $access_level = 'Full Member';
-} elseif ($app_count > 0) {
-    $acct_status  = '<span class="status-pill pending"><i class="fas fa-hourglass-half"></i> Pending</span>';
-    $access_level = 'Basic (Pre-member)';
-} else {
-    $acct_status  = '<span class="status-pill inactive"><i class="fas fa-circle-xmark"></i> No Application</span>';
-    $access_level = 'Basic (Pre-member)';
+if ($officerClub === null) {
+    $officerClub = [];
+    $officerRole = $user['role'] ?? 'member';
 }
 
-// ── Raw values for modal pre-fill (unescaped for JS) ─────────
-$raw_dob         = $profile['date_of_birth'] ?? '';
-$raw_gender      = $profile['gender']        ?? '';
-$raw_nationality = $profile['nationality']   ?? 'Filipino';
-$raw_phone       = $profile['phone']         ?? '';
-$raw_address     = $profile['address']       ?? '';
-$raw_student_id  = ($profile['student_id']   ?? '') ?: '';
-$raw_course      = ($profile['course']       ?? '') ?: '';
-$raw_year        = ($profile['year_level']   ?? '') ?: '';
-$raw_section     = ($profile['section']      ?? '') ?: '';
-$raw_dept        = ($profile['department']   ?? '') ?: '';
-$raw_acad_year   = ($profile['academic_year']?? '') ?: '';
-$raw_campus      = ($profile['campus']       ?? '') ?: '';
-?>
+$clubName    = $officerClub['name']      ?? 'No Club';
+$clubInitial = strtoupper(substr($clubName, 0, 1));
+
+// ── Sidebar / topbar user identity ─────────────────────────────────────────
+$userName = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ''));
+$userInit = strtoupper(substr($user['first_name'] ?? 'U', 0, 1));
+
+// ── Count stats ─────────────────────────────────────────────────────────────
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM members WHERE user_id = ? AND status = "active"');
+$stmt->execute([$user_id]);
+$clubs_count = (int) $stmt->fetchColumn();
+
+$stmt = $pdo->prepare('SELECT COUNT(*) FROM event_attendees WHERE user_id = ?');
+$stmt->execute([$user_id]);
+$events_count = (int) $stmt->fetchColumn();
+
+$stmt = $pdo->prepare(
+    'SELECT COUNT(*) FROM announcements
+     WHERE club_id IN (SELECT club_id FROM members WHERE user_id = ?)'
+);
+$stmt->execute([$user_id]);
+$announcements_count = (int) $stmt->fetchColumn();
+
+// ── Fetch student_id (LRN) for QR code ─────────────────────────────────────
+$stmt = $pdo->prepare('SELECT student_id FROM student_profiles WHERE user_id = ? LIMIT 1');
+$stmt->execute([$user_id]);
+$student_id_raw = $stmt->fetchColumn() ?: '';
+$qr_url = $student_id_raw
+    ? 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' . urlencode($student_id_raw) . '&bgcolor=ffffff&color=0d2b1a&qzone=2'
+    : '';
+
+// ── Handle POST ─────────────────────────────────────────────────────────────
+$success_msg = '';
+$error_msg   = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = $_POST['action'] ?? '';
+
+    // ── Update profile ──────────────────────────────────────────────────────
+    if ($action === 'update_profile') {
+        $first_name = trim($_POST['first_name']  ?? '');
+        $last_name  = trim($_POST['last_name']   ?? '');
+        $username   = trim($_POST['username']    ?? '');
+        $email      = trim($_POST['email']       ?? '');
+        $phone      = trim($_POST['phone']       ?? '');
+        $bio        = trim($_POST['bio']         ?? '');
+        $department = trim($_POST['department']  ?? '');
+        $course     = trim($_POST['course']      ?? '');
+        $year_level = trim($_POST['year_level']  ?? '');
+
+        if (empty($first_name) || empty($last_name) || empty($email)) {
+            $error_msg = 'First name, last name, and email are required.';
+        } else {
+            $stmt = $pdo->prepare(
+                'SELECT id FROM users WHERE (username = ? OR email = ?) AND id != ? LIMIT 1'
+            );
+            $stmt->execute([$username, $email, $user_id]);
+
+            if ($stmt->fetch()) {
+                $error_msg = 'That username or email is already in use.';
+            } else {
+                $stmt = $pdo->prepare(
+                    'UPDATE users
+                     SET first_name=?, last_name=?, username=?, email=?,
+                         phone=?, bio=?, department=?, course=?, year_level=?
+                     WHERE id=?'
+                );
+                $stmt->execute([
+                    $first_name, $last_name, $username, $email,
+                    $phone, $bio, $department, $course, $year_level,
+                    $user_id,
+                ]);
+
+                $_SESSION['first_name'] = $first_name;
+                $_SESSION['last_name']  = $last_name;
+                $_SESSION['username']   = $username;
+
+                $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
+                $stmt->execute([$user_id]);
+                $user = $stmt->fetch();
+
+                $userName = trim($first_name . ' ' . $last_name);
+                $userInit = strtoupper(substr($first_name, 0, 1));
+
+                $success_msg = 'Profile updated successfully.';
+            }
+        }
+
+    // ── Update password ─────────────────────────────────────────────────────
+    } elseif ($action === 'update_password') {
+        $current = $_POST['current_password'] ?? '';
+        $new     = $_POST['new_password']     ?? '';
+        $confirm = $_POST['confirm_password'] ?? '';
+
+        if (empty($current) || empty($new) || empty($confirm)) {
+            $error_msg = 'All password fields are required.';
+        } elseif ($new !== $confirm) {
+            $error_msg = 'New passwords do not match.';
+        } elseif (strlen($new) < 8) {
+            $error_msg = 'Password must be at least 8 characters.';
+        } elseif (!password_verify($current, $user['password_hash'])) {
+            $error_msg = 'Current password is incorrect.';
+        } else {
+            $stmt = $pdo->prepare('UPDATE users SET password_hash=? WHERE id=?');
+            $stmt->execute([password_hash($new, PASSWORD_BCRYPT), $user_id]);
+            $success_msg = 'Password changed successfully.';
+        }
+
+    // ── Update notifications ────────────────────────────────────────────────
+    } elseif ($action === 'update_notifications') {
+        $success_msg = 'Notification preferences saved.';
+    }
+}
+
+// ── Helper functions ────────────────────────────────────────────────────────
+if (!function_exists('clubIcon')) {
+    function clubIcon(string $category): string {
+        return match (strtolower($category)) {
+            'tech'        => 'fa-laptop-code',
+            'business'    => 'fa-briefcase',
+            'science'     => 'fa-flask',
+            'arts'        => 'fa-palette',
+            'academic'    => 'fa-book',
+            'advocacy'    => 'fa-bullhorn',
+            'engineering' => 'fa-gears',
+            'sports'      => 'fa-trophy',
+            default       => 'fa-building-columns',
+        };
+    }
+}
+
+if (!function_exists('clubColor')) {
+    function clubColor(string $category): string {
+        return match (strtolower($category)) {
+            'tech'        => '#2563eb',
+            'business'    => '#d4a017',
+            'science'     => '#0e7c6e',
+            'arts'        => '#9333ea',
+            'academic'    => '#0284c7',
+            'advocacy'    => '#dc2626',
+            'engineering' => '#ea580c',
+            'sports'      => '#16a34a',
+            default       => '#1a5c38',
+        };
+    }
+}
+
+if (!function_exists('roleBadge')) {
+    function roleBadge(string $role): string {
+        return match (strtolower($role)) {
+            'president', 'admin'            => 'cbadge-admin',
+            'vice president', 'officer'     => 'cbadge-officer',
+            default                         => 'cbadge-member',
+        };
+    }
+}

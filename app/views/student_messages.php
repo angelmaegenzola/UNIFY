@@ -27,9 +27,11 @@
 
     <nav class="sidebar-nav">
       <div class="nav-section-label">STUDENT MENU</div>
-      <a href="index.php?page=explore" class="nav-item">
+      <a href="index.php?page=explore" class="nav-item <?= !$has_club ? 'active' : '' ?>">
         <i class="fas fa-compass"></i><span>Explore Clubs</span>
       </a>
+
+      <?php if ($has_club): ?>
       <div class="nav-section-label">MY SPACE</div>
       <a href="index.php?page=studenthome" class="nav-item">
         <i class="fas fa-house"></i><span>Home</span>
@@ -43,6 +45,28 @@
       <a href="index.php?page=student_messages" class="nav-item active">
         <i class="fas fa-comments"></i><span>Club Chat</span>
       </a>
+      <?php else: ?>
+      <div class="nav-section-label">MY SPACE</div>
+      <a href="#" class="nav-item locked" onclick="showLockedToast(); return false;">
+        <i class="fas fa-house"></i><span>Home</span><i class="fas fa-lock nav-lock-icon"></i>
+      </a>
+      <a href="#" class="nav-item locked" onclick="showLockedToast(); return false;">
+        <i class="fas fa-users"></i><span>My Club</span><i class="fas fa-lock nav-lock-icon"></i>
+      </a>
+      <a href="#" class="nav-item locked" onclick="showLockedToast(); return false;">
+        <i class="fas fa-calendar-days"></i><span>Events</span><i class="fas fa-lock nav-lock-icon"></i>
+      </a>
+      <a href="#" class="nav-item locked" onclick="showLockedToast(); return false;">
+        <i class="fas fa-comments"></i><span>Club Chat</span><i class="fas fa-lock nav-lock-icon"></i>
+      </a>
+      <?php endif; ?>
+
+      <?php if ($is_officer): ?>
+      <div class="nav-section-label">MANAGEMENT</div>
+      <a href="index.php?page=officer_dashboard" class="nav-item officer-link">
+        <i class="fas fa-shield-halved"></i><span>Officer Dashboard</span>
+      </a>
+      <?php endif; ?>
     </nav>
 
     <div class="sidebar-bottom">
@@ -77,6 +101,7 @@
       </button>
       <div class="topbar-left">
         <span class="topbar-page-title">Club Chat</span>
+        <span class="topbar-date" id="topbarDate"></span>
       </div>
       <div class="topbar-center"></div>
       <div class="topbar-actions">

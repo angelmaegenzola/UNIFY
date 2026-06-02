@@ -843,7 +843,12 @@
   .topbar-profile { width: 34px !important; height: 34px !important; border-radius: 8px !important; padding: 0 !important; justify-content: center !important; }
   .topbar-avatar { width: 34px !important; height: 34px !important; border-radius: 8px !important; font-size: 12px !important; }
 }
-
+/* Catch space-separated class that can't be targeted normally */
+.role-badge[class*="vice"] {
+  background: #e0f2fe;
+  color: #075985;
+}
+.role-badge.vp { background: #e0f2fe; color: #075985; }
 /* ══════════════════════════════════════════════
    MOBILE FULL FIX
 ══════════════════════════════════════════════ */

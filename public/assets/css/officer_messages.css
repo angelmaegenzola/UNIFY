@@ -597,7 +597,7 @@
    RESPONSIVE
 ══════════════════════════════════════════════════════════ */
 @media (max-width: 1000px) { .msg-sidebar { width: 200px; min-width: 200px; } }
-@media (max-width: 860px) {
+@media (max-width: 620px) {
   .msg-sidebar { display: none; }
   .msg-messages { padding: 14px; }
   .msg-input-area { padding: 10px 12px 12px; }

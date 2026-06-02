@@ -1544,6 +1544,40 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
 @media (max-width: 768px) {
   .ann-scroll-wrap { padding: 8px 16px !important; }
 }
+/* -- MOBILE: ann table fit-to-width (override) -- */
+@media (max-width: 768px) {
+  .ann-scroll-wrap {
+    overflow-x: hidden !important;
+    padding: 8px 10px !important;
+    width: 100% !important;
+  }
+  .table-header-row,
+  .table-row {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 64px 70px 44px 52px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    gap: 6px !important;
+    padding: 8px 4px !important;
+  }
+  .table-body {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+  .td-col, .th-col { min-width: 0 !important; }
+  .td-title {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .cat-badge, .status-badge {
+    font-size: 9px !important;
+    padding: 2px 5px !important;
+  }
+  .td-actions { gap: 2px !important; }
+  .icon-action { width: 22px !important; height: 22px !important; }
+}
+
 .hamburger-btn { display: none; }
 @media (max-width: 768px) {
   .hamburger-btn {

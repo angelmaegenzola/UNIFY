@@ -278,7 +278,7 @@ $picStmt  = $pdo->prepare('SELECT profile_picture FROM users WHERE id = ? LIMIT 
 $picStmt->execute([$userId]);
 $picFile  = $picStmt->fetchColumn();
 $avatar_url = $picFile
-    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 $officerClub        = getOfficerClub($pdo, $userId);
