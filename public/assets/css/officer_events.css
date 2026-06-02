@@ -1928,3 +1928,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--main-bg);color:
 @media (max-width: 768px) {
   .content { padding: 0 4px 24px !important; }
 }
+
+@media (max-width: 768px) {
+  .content { padding: 0 0 24px !important; }
+}
