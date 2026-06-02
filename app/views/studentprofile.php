@@ -173,7 +173,6 @@ $sidebarUserName = $full_name;
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/public/assets/css/studenthome.css" />
-  <link rel="stylesheet" href="/public/assets/css/studenthome.css" />
   <link rel="stylesheet" href="/public/assets/css/studentprofile.css" />
   <link rel="stylesheet" href="/public/assets/css/topbar-mobile.css" />
 </head>
@@ -843,10 +842,10 @@ $sidebarUserName = $full_name;
           </div>
           <div class="sp-qr-modal-lrn"><?= htmlspecialchars($raw_student_id) ?></div>
           <div class="sp-qr-modal-name"><?= htmlspecialchars($full_name) ?></div>
-          <a href="<?= htmlspecialchars($qr_url) ?>" download="attendance-qr-<?= htmlspecialchars($raw_student_id) ?>.png"
-            class="sp-qr-modal-download">
-            <i class="fas fa-download"></i> Download QR Code
-          </a>
+          <button onclick="downloadQR('<?= htmlspecialchars($qr_url) ?>', '<?= htmlspecialchars($raw_student_id) ?>')"
+  class="sp-qr-modal-download">
+  <i class="fas fa-download"></i> Download QR Code
+</button>
         <?php else: ?>
           <div class="sp-qr-modal-missing">
             <i class="fas fa-circle-exclamation"
@@ -888,6 +887,21 @@ document.addEventListener('touchend', function(e) {
   _swiping = false;
 }, {passive:true});
 </script>
+
+<script>
+function downloadQR(url, studentId) {
+  fetch(url)
+    .then(r => r.blob())
+    .then(blob => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'attendance-qr-' + studentId + '.png';
+      a.click();
+      URL.revokeObjectURL(a.href);
+    });
+}
+</script>
+
 </body>
 
 </html>
