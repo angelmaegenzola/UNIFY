@@ -1979,3 +1979,15 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--main-bg);color:
 .oe-time-opt { padding: 6px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; color: var(--text-dark); text-align: center; }
 .oe-time-opt:hover { background: var(--green-light); }
 .oe-time-opt.selected { background: var(--green-accent); color: #fff; }
+
+/* Smaller time picker */
+.oe-time-opt { padding: 4px 8px !important; font-size: 11px !important; }
+.oe-time-col { max-height: 140px !important; }
+#oe-fStartList, #oe-fEndList { min-width: 140px !important; padding: 8px !important; }
+
+/* Assignees + collab side by side */
+.assignee-collab-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+
+/* Hide optional text */
+.assignee-col .form-label span[style*="text-light"],
+.collab-col .form-label span[style*="text-light"] { display: none !important; }
