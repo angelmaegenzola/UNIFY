@@ -2216,3 +2216,41 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   color: #fff !important;
   border-color: var(--green-dark) !important;
 }
+
+/* ══ FILTER BAR: label left, pills natural layout ══ */
+.filter-label {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--text-mid) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+.filter-pills {
+  display: flex !important;
+  width: auto !important;
+  flex-wrap: nowrap !important;
+  gap: 6px !important;
+  justify-content: flex-start !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+}
+.filter-pills::-webkit-scrollbar { display: none !important; }
+.filter-pill {
+  flex: 0 0 auto !important;
+  padding: 7px 14px !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border: 1.5px solid var(--border) !important;
+  background: var(--card-bg) !important;
+  color: var(--text-mid) !important;
+  white-space: nowrap !important;
+}
+.filter-pill.active {
+  background: var(--green-dark) !important;
+  color: #fff !important;
+  border-color: var(--green-dark) !important;
+}
