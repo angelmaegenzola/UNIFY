@@ -2031,3 +2031,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--main-bg);color:
   .mem-email { font-size: 10px !important; }
   .mem-role-chip { font-size: 10px !important; padding: 3px 8px !important; }
 }
+
+@media (max-width: 768px) {
+  .scanner-header { 
+    display: flex !important; 
+    flex-wrap: wrap !important; 
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 10px 14px !important;
+  }
+  .scanner-title { font-size: 12px !important; word-break: break-all !important; flex: 1 !important; min-width: 0 !important; }
+  .scanner-close { flex-shrink: 0 !important; white-space: nowrap !important; }
+  .scanner-list-card { width: 100% !important; min-width: 0 !important; }
+}
+
+@media (max-width: 768px) {
+  .main { padding-bottom: 16px !important; }
+}
