@@ -88,7 +88,7 @@
         </div>
       </div>
       <div class="topbar-actions">
-        <button class="icon-btn" id="notifBtn" title="Notifications" onclick="toggleNotif(event)">
+        <button class="icon-btn" id="notifBtn" title="Notifications" >
           <i class="fas fa-bell"></i>
           <span class="badge red hidden" id="notifBadge">0</span>
         </button>
@@ -358,19 +358,19 @@
         <div class="modal-fields">
           <div class="field-group">
             <label class="field-label">First Name <span class="field-required">*</span></label>
-            <input class="field-input" id="amFirstName" type="text" placeholder="Your first name" />
+            <input class="field-input" id="amFirstName" type="text" placeholder="Your first name" value="<?= $first_name ?>" />
           </div>
           <div class="field-group">
             <label class="field-label">Last Name <span class="field-required">*</span></label>
-            <input class="field-input" id="amLastName" type="text" placeholder="Your last name" />
+            <input class="field-input" id="amLastName" type="text" placeholder="Your last name" value="<?= $last_name ?>" />
           </div>
           <div class="field-group">
             <label class="field-label">Course <span class="field-required">*</span></label>
-            <input class="field-input" id="amCourse" type="text" placeholder="e.g. BSIT" />
+            <input class="field-input" id="amCourse" type="text" placeholder="e.g. BSIT" value="<?= $prefill_course ?>" />
           </div>
           <div class="field-group">
             <label class="field-label">Year Level <span class="field-required">*</span></label>
-            <input class="field-input" id="amYear" type="text" placeholder="e.g. 2nd Year" />
+            <input class="field-input" id="amYear" type="text" placeholder="e.g. 2nd Year" value="<?= $prefill_year ?>" />
           </div>
           <div class="field-group field-full">
             <label class="field-label">Role in Club <span class="field-required">*</span></label>
