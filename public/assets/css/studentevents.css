@@ -892,7 +892,6 @@ margin-bottom: 18px;
   .sidebar-brand { justify-content: center; padding: 18px 0; }
   .nav-item { justify-content: center; padding: 11px; }
   .sidebar-profile { justify-content: center; }
-  .topbar-date { display: none; }
   .notif-dropdown { right: 0; width: 270px; }
   .quick-stats { grid-template-columns: 1fr 1fr; }
 }

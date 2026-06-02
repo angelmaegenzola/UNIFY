@@ -1,3 +1,8 @@
+const _dateEl = document.getElementById('topbarDate');
+if (_dateEl) {
+  const _d = new Date();
+  _dateEl.textContent = _d.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
 /* ============================================================
    UNIFY — Student Events  |  studentevents.js
    Features: RSVP, Remind Me, Event Feedback / Rating
