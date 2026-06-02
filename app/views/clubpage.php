@@ -236,12 +236,21 @@
         </div>
         <div class="fg">
           <label>Category <span>*</span></label>
-          <select name="category" required>
-            <option value="">— Select —</option>
-            <option>Tech</option><option>Business</option><option>Sports</option>
-            <option>Academic</option><option>Arts</option><option>Science</option>
-            <option>Advocacy</option><option>Engineering</option>
-          </select>
+          <div class="custom-select-wrap" id="addCatWrap" style="position:relative;">
+            <button type="button" class="custom-select-btn" id="addCatBtn" onclick="toggleClubDrop('addCat',event)">— Select —</button>
+            <input type="hidden" name="category" id="addCat" required />
+            <div class="custom-select-list" id="addCatList">
+              <div class="custom-select-option" onclick="setClubDrop('addCat','','— Select —')">— Select —</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Tech','Tech')">Tech</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Business','Business')">Business</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Sports','Sports')">Sports</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Academic','Academic')">Academic</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Arts','Arts')">Arts</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Science','Science')">Science</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Advocacy','Advocacy')">Advocacy</div>
+              <div class="custom-select-option" onclick="setClubDrop('addCat','Engineering','Engineering')">Engineering</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-row-2">
@@ -256,10 +265,14 @@
       </div>
       <div class="fg">
         <label>Status</label>
-        <select name="status">
-          <option value="active">Active</option>
-          <option value="pending" selected>Pending</option>
-        </select>
+        <div class="custom-select-wrap" id="addStatusWrap" style="position:relative;">
+          <button type="button" class="custom-select-btn" id="addStatusBtn" onclick="toggleClubDrop('addStatus',event)">Pending</button>
+          <input type="hidden" name="status" id="addStatus" value="pending" />
+          <div class="custom-select-list" id="addStatusList">
+            <div class="custom-select-option" onclick="setClubDrop('addStatus','active','Active')">Active</div>
+            <div class="custom-select-option selected" onclick="setClubDrop('addStatus','pending','Pending')">Pending</div>
+          </div>
+        </div>
       </div>
       <div class="fg">
         <label>Description <span>*</span></label>
@@ -307,11 +320,20 @@
         </div>
         <div class="fg">
           <label>Category</label>
-          <select name="category" id="editCategory">
-            <option>Tech</option><option>Business</option><option>Sports</option>
-            <option>Academic</option><option>Arts</option><option>Science</option>
-            <option>Advocacy</option><option>Engineering</option>
-          </select>
+          <div class="custom-select-wrap" id="editCatWrap" style="position:relative;">
+            <button type="button" class="custom-select-btn" id="editCatBtn" onclick="toggleClubDrop('editCat',event)">Tech</button>
+            <input type="hidden" name="category" id="editCategory" />
+            <div class="custom-select-list" id="editCatList">
+              <div class="custom-select-option selected" onclick="setClubDrop('editCat','Tech','Tech')">Tech</div>
+              <div class="custom-select-option" onclick="setClubDrop('editCat','Business','Business')">Business</div>
+              <div class="custom-select-option" onclick="setClubDrop('editCat','Sports','Sports')">Sports</div>
+              <div class="custom-select-option" onclick="setClubDrop('editCat','Academic','Academic')">Academic</div>
+              <div class="custom-select-option" onclick="setClubDrop('editCat','Arts','Arts')">Arts</div>
+              <div class="custom-select-option" onclick="setClubDrop('editCat','Science','Science')">Science</div>
+              <div class="custom-select-option" onclick="setClubDrop('editCat','Advocacy','Advocacy')">Advocacy</div>
+              <div class="custom-select-option" onclick="setClubDrop('editCat','Engineering','Engineering')">Engineering</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-row-2">
@@ -327,11 +349,15 @@
       <div class="form-row-2">
         <div class="fg">
           <label>Status</label>
-          <select name="status" id="editStatus">
-            <option value="active">Active</option>
-            <option value="pending">Pending</option>
-            <option value="inactive">Inactive</option>
-          </select>
+          <div class="custom-select-wrap" id="editStatusWrap" style="position:relative;">
+            <button type="button" class="custom-select-btn" id="editStatusBtn" onclick="toggleClubDrop('editStatus',event)">Active</button>
+            <input type="hidden" name="status" id="editStatus" value="active" />
+            <div class="custom-select-list" id="editStatusList">
+              <div class="custom-select-option selected" onclick="setClubDrop('editStatus','active','Active')">Active</div>
+              <div class="custom-select-option" onclick="setClubDrop('editStatus','pending','Pending')">Pending</div>
+              <div class="custom-select-option" onclick="setClubDrop('editStatus','inactive','Inactive')">Inactive</div>
+            </div>
+          </div>
         </div>
         <div class="fg">
           <label>Budget (₱)</label>
@@ -639,5 +665,31 @@ function closeSheet() {
 <button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
   <i class="fas fa-bars"></i>
 </button>
+<script>
+function toggleClubDrop(id, e) {
+  e.stopPropagation();
+  const list = document.getElementById(id + 'List');
+  const btn  = document.getElementById(id + 'Btn');
+  const isOpen = list.classList.contains('open');
+  document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) { list.classList.add('open'); btn.classList.add('open'); }
+}
+function setClubDrop(id, val, label) {
+  document.getElementById(id).value = val;
+  document.getElementById(id + 'Btn').textContent = label;
+  document.getElementById(id + 'List').classList.remove('open');
+  document.getElementById(id + 'Btn').classList.remove('open');
+  document.querySelectorAll('#' + id + 'List .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent.trim() === label);
+  });
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  }
+});
+</script>
 </body>
 </html>

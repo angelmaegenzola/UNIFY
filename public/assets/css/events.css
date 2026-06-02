@@ -601,3 +601,163 @@ body.sidebar-open { overflow: hidden !important; }
   -ms-overflow-style: none !important;
 }
 .custom-select-list::-webkit-scrollbar { display: none !important; }
+
+/* ── Modal side padding fix ── */
+@media (max-width: 600px) {
+  .modal-overlay { align-items: center; padding: 0 16px; }
+  .modal-box {
+    border-radius: 16px;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal-body { padding: 16px 20px; }
+}
+
+/* ── Event modal custom selects ── */
+#efClubWrap, #efStatusWrap { width: 100%; }
+#efClubWrap .custom-select-btn,
+#efStatusWrap .custom-select-btn {
+  width: 100%; height: 40px;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0 32px 0 12px; font-size: 13px; color: var(--text-dark);
+  background: #f0f5f2 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+  cursor: pointer; outline: none; font-family: inherit;
+  text-align: left; display: flex; align-items: center;
+}
+#efClubWrap .custom-select-btn:hover, #efClubWrap .custom-select-btn.open,
+#efStatusWrap .custom-select-btn:hover, #efStatusWrap .custom-select-btn.open {
+  border-color: var(--green-accent); background-color: #fff;
+}
+#efClubWrap .custom-select-list,
+#efStatusWrap .custom-select-list {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+  background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  box-shadow: 0 8px 24px rgba(13,43,26,0.12); z-index: 1100;
+  flex-direction: column; max-height: 200px; overflow-y: auto;
+  scrollbar-width: none;
+}
+#efClubWrap .custom-select-list::-webkit-scrollbar,
+#efStatusWrap .custom-select-list::-webkit-scrollbar { display: none; }
+#efClubWrap .custom-select-list.open,
+#efStatusWrap .custom-select-list.open { display: flex; }
+#efClubWrap .custom-select-option,
+#efStatusWrap .custom-select-option {
+  padding: 10px 14px; font-size: 13px; color: var(--text-mid); cursor: pointer;
+}
+#efClubWrap .custom-select-option:hover,
+#efStatusWrap .custom-select-option:hover { background: #f0f7f3; color: var(--green-dark); }
+#efClubWrap .custom-select-option.selected,
+#efStatusWrap .custom-select-option.selected { background: #e4f0e8; color: var(--green-dark); font-weight: 700; }
+
+/* ── Fix dropdown buttons to white like other inputs ── */
+#efClubWrap .custom-select-btn,
+#efStatusWrap .custom-select-btn {
+  background-color: #fff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 12px center !important;
+}
+
+/* ── Minimal date & time input styling ── */
+#ef-date, #ef-start, #ef-end {
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 9px 13px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text-dark);
+  width: 100%;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+#ef-date:focus, #ef-start:focus, #ef-end:focus {
+  border-color: var(--green-accent);
+  box-shadow: 0 0 0 3px rgba(34,107,60,0.08);
+}
+#ef-date::-webkit-calendar-picker-indicator,
+#ef-start::-webkit-calendar-picker-indicator,
+#ef-end::-webkit-calendar-picker-indicator {
+  opacity: 0.4;
+  cursor: pointer;
+  filter: invert(30%) sepia(40%) saturate(400%) hue-rotate(100deg);
+}
+
+/* ── Match date/time inputs to dropdown style ── */
+#ef-date, #ef-start, #ef-end {
+  background: #fff !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-dark) !important;
+}
+#ef-date:focus, #ef-start:focus, #ef-end:focus {
+  border-color: var(--green-accent) !important;
+  box-shadow: 0 0 0 3px rgba(34,107,60,0.08) !important;
+}
+
+/* ── Custom date/time picker popups ── */
+#efDateList, #efStartList, #efEndList {
+  position: absolute !important;
+  top: calc(100% + 4px) !important;
+  left: 0 !important;
+  width: auto !important;
+  min-width: 260px !important;
+  z-index: 2000 !important;
+  background: #fff !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(13,43,26,0.15) !important;
+  padding: 12px !important;
+}
+#efStartList, #efEndList { min-width: 180px !important; }
+#efDateWrap, #efStartWrap, #efEndWrap { position: relative !important; }
+
+/* ── Date/time pickers hidden by default, show only when open ── */
+#efDateList, #efStartList, #efEndList {
+  display: none !important;
+}
+#efDateList.open, #efStartList.open, #efEndList.open {
+  display: block !important;
+}
+
+/* ── Date/time picker buttons match other inputs ── */
+#efDateBtn, #efStartBtn, #efEndBtn {
+  width: 100% !important;
+  height: 40px !important;
+  border: 1.5px solid var(--border) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0 32px 0 12px !important;
+  font-size: 13px !important;
+  color: var(--text-dark) !important;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center !important;
+  cursor: pointer !important;
+  outline: none !important;
+  font-family: inherit !important;
+  text-align: left !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: border-color 0.18s !important;
+}
+#efDateBtn:hover, #efDateBtn.open,
+#efStartBtn:hover, #efStartBtn.open,
+#efEndBtn:hover, #efEndBtn.open {
+  border-color: var(--green-accent) !important;
+}
+#efDateWrap, #efStartWrap, #efEndWrap {
+  width: 100% !important;
+  position: relative !important;
+}
+
+/* ── Allow date/time popups to overflow modal body ── */
+.modal-box { overflow: visible !important; }
+.modal-body { overflow: visible !important; }
+#efDateList, #efStartList, #efEndList {
+  position: absolute !important;
+  z-index: 3000 !important;
+}

@@ -11,7 +11,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/events.css" />
   <link rel="stylesheet" href="/assets/css/transitions.css" />
-  <link rel="stylesheet" href="/public/assets/css/topbar-mobile.css">
 </head>
 
 <body>
@@ -222,12 +221,16 @@
         <div class="modal-body">
           <div class="form-group">
             <label>Club <span class="req">*</span></label>
-            <select id="ef-club" required>
-              <option value="">Select club</option>
-              <?php foreach ($clubs as $c): ?>
-                <option value="<?= $c['id'] ?>"><?= htmlspecialchars($c['name']) ?></option>
-              <?php endforeach; ?>
-            </select>
+            <div class="custom-select-wrap" id="efClubWrap" style="position:relative;">
+              <button type="button" class="custom-select-btn" id="efClubBtn" onclick="toggleEvtDrop('efClub',event)">Select club</button>
+              <input type="hidden" id="ef-club" required />
+              <div class="custom-select-list" id="efClubList">
+                <div class="custom-select-option" onclick="setEvtDrop('efClub','','Select club')">Select club</div>
+                <?php foreach ($clubs as $c): ?>
+                  <div class="custom-select-option" onclick="setEvtDrop('efClub','<?= $c['id'] ?>','<?= htmlspecialchars($c['name']) ?>')"><?= htmlspecialchars($c['name']) ?></div>
+                <?php endforeach; ?>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label>Event Name <span class="req">*</span></label>
@@ -240,26 +243,48 @@
           <div class="form-row">
             <div class="form-group">
               <label>Date <span class="req">*</span></label>
-              <input type="date" id="ef-date" required />
+              <div class="custom-select-wrap" id="efDateWrap" style="position:relative;">
+              <button type="button" class="custom-select-btn" id="efDateBtn" onclick="toggleEvtDrop('efDate',event)">Select date</button>
+              <input type="hidden" id="ef-date" required />
+              <div class="custom-select-list" id="efDateList" style="padding:12px;min-width:260px;">
+                <div id="efCalendar"></div>
+              </div>
+            </div>
             </div>
             <div class="form-group">
               <label>Status</label>
-              <select id="ef-status">
-                <option value="upcoming">Upcoming</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-              </select>
+              <div class="custom-select-wrap" id="efStatusWrap" style="position:relative;">
+                <button type="button" class="custom-select-btn" id="efStatusBtn" onclick="toggleEvtDrop('efStatus',event)">Upcoming</button>
+                <input type="hidden" id="ef-status" value="upcoming" />
+                <div class="custom-select-list" id="efStatusList">
+                  <div class="custom-select-option selected" onclick="setEvtDrop('efStatus','upcoming','Upcoming')">Upcoming</div>
+                  <div class="custom-select-option" onclick="setEvtDrop('efStatus','ongoing','Ongoing')">Ongoing</div>
+                  <div class="custom-select-option" onclick="setEvtDrop('efStatus','completed','Completed')">Completed</div>
+                  <div class="custom-select-option" onclick="setEvtDrop('efStatus','cancelled','Cancelled')">Cancelled</div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label>Start Time</label>
-              <input type="time" id="ef-start" />
+              <div class="custom-select-wrap" id="efStartWrap" style="position:relative;">
+              <button type="button" class="custom-select-btn" id="efStartBtn" onclick="toggleEvtDrop('efStart',event)">Select time</button>
+              <input type="hidden" id="ef-start" />
+              <div class="custom-select-list" id="efStartList" style="padding:8px;min-width:160px;">
+                <div class="time-picker" id="efStartPicker"></div>
+              </div>
+            </div>
             </div>
             <div class="form-group">
               <label>End Time</label>
-              <input type="time" id="ef-end" />
+              <div class="custom-select-wrap" id="efEndWrap" style="position:relative;">
+              <button type="button" class="custom-select-btn" id="efEndBtn" onclick="toggleEvtDrop('efEnd',event)">Select time</button>
+              <input type="hidden" id="ef-end" />
+              <div class="custom-select-list" id="efEndList" style="padding:8px;min-width:160px;">
+                <div class="time-picker" id="efEndPicker"></div>
+              </div>
+            </div>
             </div>
           </div>
           <div class="form-group">
@@ -382,85 +407,19 @@
 function preventScroll(e) { e.preventDefault(); }
 function toggleSidebar() {
   const sidebar = document.getElementById('mainSidebar');
-  const open = sidebar.classList.toggle('open');
-  sidebar.style.setProperty('left', open ? '0px' : '-280px', 'important');
-  document.getElementById('sidebarOverlay').classList.toggle('open');
-  document.body.classList.toggle('sidebar-open', open);
-  const fab = document.getElementById('fabMenuBtn');
-  if (fab) { fab.style.opacity = open ? '0' : '1'; fab.style.pointerEvents = open ? 'none' : ''; }
-  const mainEl = document.querySelector('.main');
-  if (open) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.top = '-' + window.scrollY + 'px';
-    document.body.dataset.scrollY = window.scrollY;
-    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
-  } else {
-    const scrollY = document.body.dataset.scrollY || 0;
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.body.style.top = '';
-    window.scrollTo(0, parseInt(scrollY));
-    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
-  }
-}
-  const mainEl = document.querySelector('.main');
-  if (open) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.top = '-' + window.scrollY + 'px';
-    document.body.dataset.scrollY = window.scrollY;
-    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
-  } else {
-    const scrollY = document.body.dataset.scrollY || 0;
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.body.style.top = '';
-    window.scrollTo(0, parseInt(scrollY));
-    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
-  }
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
 }
 function closeSidebar() {
   const sidebar = document.getElementById('mainSidebar');
   sidebar.classList.remove('open');
-  sidebar.style.setProperty('left', '-280px', 'important');
   document.getElementById('sidebarOverlay').classList.remove('open');
   document.body.classList.remove('sidebar-open');
-  const scrollY = document.body.dataset.scrollY || 0;
-  document.body.style.overflow = '';
-  document.body.style.position = '';
-  document.body.style.width = '';
-  document.body.style.top = '';
-  window.scrollTo(0, parseInt(scrollY));
-  const mainEl = document.querySelector('.main');
-  if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
-  const fab = document.getElementById('fabMenuBtn');
-  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
-}  const fab = document.getElementById('fabMenuBtn');
-  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
 }
-var _tsx = 0, _tsy = 0, _swiping = false;
-document.addEventListener('touchstart', function(e) {
-  _tsx = e.touches[0].clientX;
-  _tsy = e.touches[0].clientY;
-  _swiping = _tsx < 80;
-  if (_swiping) e.preventDefault();
-}, {passive:false});
-document.addEventListener('touchmove', function(e) {
-  if (_swiping) e.preventDefault();
-}, {passive:false});
-document.addEventListener('touchend', function(e) {
-  var dx = e.changedTouches[0].clientX - _tsx;
-  var dy = e.changedTouches[0].clientY - _tsy;
-  if (Math.abs(dy) > Math.abs(dx)) return;
-  if (dx > 40 && _tsx < 80) toggleSidebar();
-  if (dx < -40) closeSidebar();
-  _swiping = false;
-}, {passive:true});
+
+
 </script>
 
 <button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
@@ -536,6 +495,147 @@ document.addEventListener('click', function(e) {
   var dd = document.getElementById('datePickerDropdown');
   var btn = document.getElementById('dateRangeBtn');
   if (dd && !dd.contains(e.target) && btn && !btn.contains(e.target)) dd.style.display = 'none';
+});
+</script>
+<script>
+function toggleEvtDrop(id, e) {
+  e.stopPropagation();
+  const list = document.getElementById(id + 'List');
+  const btn  = document.getElementById(id + 'Btn');
+  const isOpen = list.classList.contains('open');
+  document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) { list.classList.add('open'); btn.classList.add('open'); }
+}
+function setEvtDrop(id, val, label) {
+  document.getElementById(id).value = val;
+  document.getElementById(id + 'Btn').textContent = label;
+  document.getElementById(id + 'List').classList.remove('open');
+  document.getElementById(id + 'Btn').classList.remove('open');
+  document.querySelectorAll('#' + id + 'List .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent.trim() === label);
+  });
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  }
+});
+</script>
+<script>
+/* ── Custom Calendar ── */
+(function(){
+  let efCal = { year: new Date().getFullYear(), month: new Date().getMonth() };
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+
+  function renderCal() {
+    const { year, month } = efCal;
+    const today = new Date();
+    const first = new Date(year, month, 1).getDay();
+    const days  = new Date(year, month+1, 0).getDate();
+    const sel   = document.getElementById('ef-date').value;
+    let html = `<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <button type="button" onclick="efCalPrev()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--green-dark);">&#8249;</button>
+      <span style="font-size:13px;font-weight:700;color:var(--text-dark);">${MONTHS[month]} ${year}</span>
+      <button type="button" onclick="efCalNext()" style="background:none;border:none;cursor:pointer;font-size:16px;color:var(--green-dark);">&#8250;</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;">`;
+    DAYS.forEach(d => { html += `<div style="font-size:10px;font-weight:700;color:var(--text-mid);padding:4px 0;">${d}</div>`; });
+    for(let i=0;i<first;i++) html += '<div></div>';
+    for(let d=1;d<=days;d++){
+      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const isToday = d===today.getDate()&&month===today.getMonth()&&year===today.getFullYear();
+      const isSel   = dateStr===sel;
+      html += `<div onclick="efCalPick('${dateStr}','${d} ${MONTHS[month]} ${year}')" style="
+        cursor:pointer;border-radius:6px;padding:5px 2px;font-size:12px;
+        background:${isSel?'var(--green-dark)':isToday?'#e4f0e8':'transparent'};
+        color:${isSel?'#fff':isToday?'var(--green-dark)':'var(--text-dark)'};
+        font-weight:${isSel||isToday?'700':'400'};
+      ">${d}</div>`;
+    }
+    html += '</div>';
+    document.getElementById('efCalendar').innerHTML = html;
+  }
+  window.efCalPrev = function(){ if(efCal.month===0){efCal.month=11;efCal.year--;}else efCal.month--; renderCal(); }
+  window.efCalNext = function(){ if(efCal.month===11){efCal.month=0;efCal.year++;}else efCal.month++; renderCal(); }
+  window.efCalPick = function(val, label){
+    document.getElementById('ef-date').value = val;
+    document.getElementById('efDateBtn').textContent = label;
+    document.getElementById('efDateList').classList.remove('open');
+    document.getElementById('efDateBtn').classList.remove('open');
+    renderCal();
+  }
+  document.addEventListener('DOMContentLoaded', renderCal);
+  window._renderEfCal = renderCal;
+})();
+
+/* ── Custom Time Picker ── */
+function buildTimePicker(pickerId, hiddenId, btnId, listId) {
+  const wrap = document.getElementById(pickerId);
+  if (!wrap) return;
+  let selH = null, selM = null, selP = 'am';
+  function render() {
+    const hours   = Array.from({length:12},(_,i)=>String(i+1).padStart(2,'0'));
+    const minutes = ['00','05','10','15','20','25','30','35','40','45','50','55'];
+    let html = `<div style="display:flex;gap:6px;max-height:180px;">
+      <div style="flex:1;overflow-y:auto;scrollbar-width:none;">`;
+    hours.forEach(h => {
+      const sel = h===selH;
+      html += `<div onclick="efTimePick('${pickerId}','${hiddenId}','${btnId}','${listId}','h','${h}')" style="
+        padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;text-align:center;
+        background:${sel?'var(--green-dark)':'transparent'};
+        color:${sel?'#fff':'var(--text-dark)'};font-weight:${sel?'700':'400'};
+      ">${h}</div>`;
+    });
+    html += `</div><div style="flex:1;overflow-y:auto;scrollbar-width:none;">`;
+    minutes.forEach(m => {
+      const sel = m===selM;
+      html += `<div onclick="efTimePick('${pickerId}','${hiddenId}','${btnId}','${listId}','m','${m}')" style="
+        padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;text-align:center;
+        background:${sel?'var(--green-dark)':'transparent'};
+        color:${sel?'#fff':'var(--text-dark)'};font-weight:${sel?'700':'400'};
+      ">${m}</div>`;
+    });
+    html += `</div><div style="display:flex;flex-direction:column;gap:4px;">`;
+    ['am','pm'].forEach(p => {
+      const sel = p===selP;
+      html += `<div onclick="efTimePick('${pickerId}','${hiddenId}','${btnId}','${listId}','p','${p}')" style="
+        padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;text-align:center;
+        background:${sel?'var(--green-dark)':'transparent'};
+        color:${sel?'#fff':'var(--text-dark)'};font-weight:${sel?'700':'400'};
+      ">${p}</div>`;
+    });
+    html += '</div></div>';
+    wrap.innerHTML = html;
+    wrap.querySelectorAll('div[style*="scrollbar-width"]').forEach(el => { el.style.setProperty('scrollbar-width','none'); });
+  }
+  wrap._state = { get h(){return selH;}, get m(){return selM;}, get p(){return selP;},
+    set h(v){selH=v;}, set m(v){selM=v;}, set p(v){selP=v;}, render };
+  render();
+}
+
+window.efTimePick = function(pickerId, hiddenId, btnId, listId, type, val) {
+  const s = document.getElementById(pickerId)._state;
+  s[type] = val;
+  s.render();
+  if (s.h && s.m) {
+    const label = `${s.h}:${s.m} ${s.p}`;
+    document.getElementById(hiddenId).value = label;
+    document.getElementById(btnId).textContent = label;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  buildTimePicker('efStartPicker','ef-start','efStartBtn','efStartList');
+  buildTimePicker('efEndPicker','ef-end','efEndBtn','efEndList');
+  // re-render cal when date dropdown opens
+  const origToggle = window.toggleEvtDrop;
+  window.toggleEvtDrop = function(id, e) {
+    origToggle(id, e);
+    if (id === 'efDate') window._renderEfCal && window._renderEfCal();
+  }
 });
 </script>
 </body>
