@@ -2144,3 +2144,8 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   }
 }
 
+
+
+@media (max-width: 860px) { .topbar-date { display: none !important; } }
+
+.main { overflow-y: auto !important; height: calc(100vh - 20px) !important; }
