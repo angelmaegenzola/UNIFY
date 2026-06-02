@@ -761,3 +761,67 @@ body.sidebar-open { overflow: hidden !important; }
   position: absolute !important;
   z-index: 3000 !important;
 }
+
+/* ── Mobile toolbar layout: date range | filters spread | add event ── */
+@media (max-width: 768px) {
+  .events-toolbar {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    flex-wrap: nowrap !important;
+  }
+  .filter-tabs {
+    display: flex !important;
+    gap: 6px !important;
+    flex: 1 !important;
+    justify-content: space-around !important;
+  }
+  .filter-tab {
+    font-size: 11px !important;
+    padding: 6px 8px !important;
+    flex: 1 !important;
+    text-align: center !important;
+  }
+  .date-range-btn {
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    padding: 8px 10px !important;
+  }
+  .add-event-btn {
+    flex-shrink: 0 !important;
+    padding: 8px 12px !important;
+  }
+}
+
+/* ── Mobile: two-row toolbar ── */
+@media (max-width: 768px) {
+  .events-toolbar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .filter-tabs {
+    display: flex !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+  .filter-tab {
+    flex: 1 !important;
+    font-size: 11px !important;
+    padding: 8px 6px !important;
+    text-align: center !important;
+  }
+  .toolbar-right {
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+  .date-range-btn {
+    flex-shrink: 0 !important;
+    width: auto !important;
+  }
+  .add-event-btn {
+    flex-shrink: 0 !important;
+    margin-left: auto !important;
+  }
+}
