@@ -13,6 +13,7 @@
 
 .msg-layout {
   display: flex;
+  flex-direction: row;
   height: calc(100vh - 30px);
   max-height: calc(100vh - 70px);
   overflow: hidden;
@@ -523,9 +524,10 @@
   display: flex !important;
   flex-direction: column !important;
   position: fixed !important;
-  top: 0 !important;
-  right: 0 !important;
-  left: 250px !important;
+  top: 10px !important;
+  right: 10px !important;
+  left: 242px !important;
+  padding: 0 4px !important;
 }
 
 .hamburger-btn { display: none; }

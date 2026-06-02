@@ -2118,3 +2118,73 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   -ms-overflow-style: none !important;
 }
 .custom-select-list::-webkit-scrollbar { display: none !important; }
+
+@media (max-width: 768px) {
+  .topbar {
+    margin: 0 -16px !important;
+    padding: 10px 16px !important;
+    border-radius: 0 !important;
+    width: calc(100% + 32px) !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .main { padding-top: 0 !important; }
+  .topbar { margin-top: 0 !important; }
+}
+
+@media (max-width: 768px) {
+  .main { padding-left: 8px !important; padding-right: 8px !important; }
+}
+
+@media (max-width: 768px) {
+  body, .app, .main { overflow-x: hidden !important; }
+}
+
+@media (max-width: 768px) {
+  .wb-club-pill { max-width: 100% !important; white-space: normal !important; overflow: visible !important; text-overflow: unset !important; }
+}
+
+@media (max-width: 768px) {
+  .announce-card { overflow-x: auto !important; }
+  .ann-scroll-wrap { min-width: 500px !important; }
+}
+
+@media (max-width: 768px) {
+  .ann-scroll-wrap .table-header-row,
+  .ann-scroll-wrap .table-row {
+    gap: 16px !important;
+    padding: 9px 16px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .form-select {
+    background-color: #ffffff !important;
+    z-index: 1 !important;
+    position: relative !important;
+  }
+  .modal-box, .modal-overlay { z-index: 9999 !important; }
+  select option { background: #ffffff !important; }
+}
+
+@media (max-width: 768px) {
+  .form-select, .form-input {
+    background-color: #ffffff !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-box { overflow: visible !important; }
+  .modal-body { overflow: visible !important; }
+  .form-select, .form-input {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    opacity: 1 !important;
+  }
+}

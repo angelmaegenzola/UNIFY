@@ -666,7 +666,21 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Date <span class="req">*</span></label>
-          <input type="date" class="form-input" id="fDate" />
+          <div class="custom-select-wrap" id="oe-fDateWrap" style="position:relative;">
+            <button type="button" class="oe-picker-btn" id="oe-fDateBtn" onclick="oeToggleDrop('oe-fDate',event)">Select date</button>
+            <input type="hidden" id="fDate" />
+            <div class="oe-picker-list" id="oe-fDateList">
+              <div id="oe-fCalHeader" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <button type="button" onclick="oeCalPrev()" style="background:none;border:none;cursor:pointer;font-size:16px;">&#8249;</button>
+                <span id="oe-calMonthLabel" style="font-size:13px;font-weight:700;color:var(--text-dark);"></span>
+                <button type="button" onclick="oeCalNext()" style="background:none;border:none;cursor:pointer;font-size:16px;">&#8250;</button>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;font-size:10px;font-weight:700;color:var(--text-light);margin-bottom:4px;">
+                <span>Su</span><span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span>
+              </div>
+              <div id="oe-calDays" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;"></div>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">Location</label>
@@ -676,11 +690,23 @@
       <div class="form-row">
         <div class="form-group">
           <label class="form-label">Start Time</label>
-          <input type="time" class="form-input" id="fStart" />
+          <div class="custom-select-wrap" id="oe-fStartWrap" style="position:relative;">
+            <button type="button" class="oe-picker-btn" id="oe-fStartBtn" onclick="oeToggleDrop('oe-fStart',event)">Select time</button>
+            <input type="hidden" id="fStart" />
+            <div class="oe-picker-list" id="oe-fStartList">
+              <div class="oe-time-picker" id="oe-fStartPicker"></div>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">End Time</label>
-          <input type="time" class="form-input" id="fEnd" />
+          <div class="custom-select-wrap" id="oe-fEndWrap" style="position:relative;">
+            <button type="button" class="oe-picker-btn" id="oe-fEndBtn" onclick="oeToggleDrop('oe-fEnd',event)">Select time</button>
+            <input type="hidden" id="fEnd" />
+            <div class="oe-picker-list" id="oe-fEndList">
+              <div class="oe-time-picker" id="oe-fEndPicker"></div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="form-group">
@@ -956,6 +982,118 @@ function closeSidebar() {
 }
 /* swipe disabled */
 </script>
+
+<script>
+// ── OE Custom Date/Time Pickers ─────────────────────────
+let oeCalDate = new Date();
+
+function oeToggleDrop(id, ev) {
+  ev.stopPropagation();
+  const list = document.getElementById(id + 'List');
+  if (!list) return;
+  const isOpen = list.classList.contains('open');
+  document.querySelectorAll('.oe-picker-list.open').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.oe-picker-btn.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) {
+    list.classList.add('open');
+    document.getElementById(id + 'Btn').classList.add('open');
+    if (id === 'oe-fDate') oeRenderCal();
+    if (id === 'oe-fStart') oeRenderTime('oe-fStartPicker', 'fStart', 'oe-fStartBtn');
+    if (id === 'oe-fEnd') oeRenderTime('oe-fEndPicker', 'fEnd', 'oe-fEndBtn');
+  }
+}
+
+function oeRenderCal() {
+  const year = oeCalDate.getFullYear();
+  const month = oeCalDate.getMonth();
+  const label = document.getElementById('oe-calMonthLabel');
+  if (label) label.textContent = oeCalDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const today = new Date(); today.setHours(0,0,0,0);
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month+1, 0).getDate();
+  const prevDays = new Date(year, month, 0).getDate();
+  const total = Math.ceil((firstDay + daysInMonth) / 7) * 7;
+  const selected = document.getElementById('fDate').value;
+  let html = '';
+  for (let i = 0; i < total; i++) {
+    let day, dateStr, cls = 'oe-cal-day';
+    if (i < firstDay) {
+      day = prevDays - firstDay + i + 1;
+      dateStr = `${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      cls += ' other-month';
+    } else if (i >= firstDay + daysInMonth) {
+      day = i - firstDay - daysInMonth + 1;
+      dateStr = `${year}-${String(month+2).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      cls += ' other-month';
+    } else {
+      day = i - firstDay + 1;
+      dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      const d = new Date(year, month, day);
+      if (d.getTime() === today.getTime()) cls += ' today';
+    }
+    if (dateStr === selected) cls += ' selected';
+    html += `<div class="${cls}" onclick="oePickDate('${dateStr}')">${day}</div>`;
+  }
+  document.getElementById('oe-calDays').innerHTML = html;
+}
+
+function oePickDate(dateStr) {
+  document.getElementById('fDate').value = dateStr;
+  const d = new Date(dateStr + 'T00:00:00');
+  document.getElementById('oe-fDateBtn').textContent = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  document.getElementById('oe-fDateList').classList.remove('open');
+  document.getElementById('oe-fDateBtn').classList.remove('open');
+}
+
+function oeCalPrev() { oeCalDate.setMonth(oeCalDate.getMonth() - 1); oeRenderCal(); }
+function oeCalNext() { oeCalDate.setMonth(oeCalDate.getMonth() + 1); oeRenderCal(); }
+
+function oeRenderTime(pickerId, hiddenId, btnId) {
+  const picker = document.getElementById(pickerId);
+  if (!picker) return;
+  const hours = Array.from({length:12}, (_,i) => String(i+1).padStart(2,'0'));
+  const mins = ['00','05','10','15','20','25','30','35','40','45','50','55'];
+  const periods = ['am','pm'];
+  const cur = document.getElementById(hiddenId).value;
+  let curH = '', curM = '', curP = 'am';
+  if (cur) {
+    const [h, m] = cur.split(':');
+    const hi = parseInt(h);
+    curP = hi >= 12 ? 'pm' : 'am';
+    curH = String(hi > 12 ? hi - 12 : (hi === 0 ? 12 : hi)).padStart(2,'0');
+    curM = m;
+  }
+  picker.innerHTML = `
+    <div class="oe-time-col">${hours.map(h => `<div class="oe-time-opt${h===curH?' selected':''}" onclick="oePickTime('${pickerId}','${hiddenId}','${btnId}','h','${h}')">${h}</div>`).join('')}</div>
+    <div class="oe-time-col">${mins.map(m => `<div class="oe-time-opt${m===curM?' selected':''}" onclick="oePickTime('${pickerId}','${hiddenId}','${btnId}','m','${m}')">${m}</div>`).join('')}</div>
+    <div class="oe-time-col">${periods.map(p => `<div class="oe-time-opt${p===curP?' selected':''}" onclick="oePickTime('${pickerId}','${hiddenId}','${btnId}','p','${p}')">${p}</div>`).join('')}</div>
+  `;
+}
+
+function oePickTime(pickerId, hiddenId, btnId, type, val) {
+  const hidden = document.getElementById(hiddenId);
+  const cur = hidden.value || '12:00';
+  let [h, m] = cur.split(':');
+  let hi = parseInt(h); let mi = m || '00';
+  let period = hi >= 12 ? 'pm' : 'am';
+  let h12 = hi > 12 ? hi - 12 : (hi === 0 ? 12 : hi);
+  if (type === 'h') h12 = parseInt(val);
+  if (type === 'm') mi = val;
+  if (type === 'p') period = val;
+  let h24 = h12 % 12 + (period === 'pm' ? 12 : 0);
+  hidden.value = `${String(h24).padStart(2,'0')}:${mi}`;
+  document.getElementById(btnId).textContent = `${String(h12).padStart(2,'0')}:${mi} ${period}`;
+  oeRenderTime(pickerId, hiddenId, btnId);
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.oe-picker-list.open').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.oe-picker-btn.open').forEach(el => el.classList.remove('open'));
+  }
+});
+</script>
+
 </body>
 
 </html>

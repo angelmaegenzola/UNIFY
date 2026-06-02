@@ -1110,3 +1110,29 @@
     font-size: 9.5px !important;
   }
 }
+@media (max-width: 768px) {
+  .exp-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 768px) {
+  .exp-list-item { padding: 12px 14px !important; gap: 12px !important; }
+  .exp-list-logo { width: 44px !important; height: 44px !important; flex-shrink: 0 !important; }
+  .exp-list-name { font-size: 14px !important; font-weight: 700 !important; white-space: normal !important; overflow: visible !important; text-overflow: unset !important; }
+  .exp-list-abbr { font-size: 11px !important; }
+  .exp-list-cat { font-size: 11px !important; }
+  .exp-list-members { font-size: 12px !important; }
+}
+
+@media (max-width: 768px) {
+  .view-toggle { display: none !important; }
+  .exp-hero { min-height: 140px !important; padding: 28px 20px !important; border-radius: 16px !important; }
+  .exp-hero-title { font-size: 26px !important; font-weight: 800 !important; }
+  .exp-hero-sub { font-size: 13px !important; }
+  .exp-hero-pills { gap: 10px !important; margin-top: 14px !important; }
+}
+
+@media (max-width: 768px) {
+  .app { padding: 0 !important; }
+  .main { padding: 0 !important; margin: 0 !important; }
+  .topbar { margin: 0 !important; padding: 10px 16px !important; width: 100% !important; box-sizing: border-box !important; border-radius: 0 !important; }
+}
