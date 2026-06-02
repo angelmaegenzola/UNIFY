@@ -1,1 +1,0 @@
-<?php require_once __DIR__ . '/../../app/controllers/already_member_handler_controller.php'; ?>

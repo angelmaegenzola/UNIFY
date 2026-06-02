@@ -1,8 +1,0 @@
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0);   }
-}
-
-.app {
-  animation: pageFadeIn 0.08s ease-out both;
-}
