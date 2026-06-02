@@ -373,8 +373,7 @@ body {
 
 .members-table-header {
   display: grid;
-  grid-template-columns: 1.8fr 130px 160px 140px 120px;
-  gap: 12px;
+grid-template-columns: 4fr 160px 180px 100px 80px;  gap: 12px;
   padding: 10px 20px;
   background: var(--main-bg);
   font-size: 10px; font-weight: 700; color: var(--text-light);
@@ -394,8 +393,7 @@ body {
 
 .member-row {
   display: grid;
-  grid-template-columns: 1.8fr 130px 160px 140px 120px;
-  gap: 12px;
+grid-template-columns: 4fr 160px 180px 100px 80px;  gap: 12px;
   align-items: center;
   padding: 10px 20px;
   border-bottom: 1px solid var(--border);
@@ -1004,8 +1002,16 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(10,40,24,0.45); z-index: 998; }
   .sidebar-overlay.open { display: block !important; }
   body.sidebar-open { overflow: hidden !important; }
-  .stats-row { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-  .add-member-btn { display: none !important; }
+.stats-row {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+  gap: 8px !important;
+  padding-bottom: 4px !important;
+}
+.stats-row::-webkit-scrollbar { display: none !important; }
+.stat-pill { flex-shrink: 0 !important; }  .add-member-btn { display: none !important; }
   .members-layout { grid-template-columns: 1fr !important; }
   .right-panels { flex-direction: column !important; display: flex !important; }
   .members-table-header, .member-row { grid-template-columns: 1.8fr 120px 100px !important; min-width: unset !important; }
@@ -1241,4 +1247,132 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .topbar-profile {
     border-radius: 50% !important;
   }
+}
+
+@media (max-width: 768px) {
+  .member-row {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    row-gap: 2px !important;        /* was 6px — tightens date↔role and email↔icons */
+    column-gap: 8px !important;
+    padding: 10px 12px !important;
+  }
+
+  .member-row > *:nth-child(1) { order: 1; flex: 1 1 60%; min-width: 0; }
+  .member-row > *:nth-child(4) { order: 2; flex: 0 0 auto; text-align: right; margin-left: auto; line-height: 1.1; }
+  .member-row > *:nth-child(2) { order: 3; flex: 0 0 100%; text-align: right; margin-top: -2px; line-height: 1.1; }
+  .member-row > *:nth-child(3) { display: none !important; }
+  .member-row > *:nth-child(5) {
+    order: 4;
+    flex: 0 0 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-top: 4px;
+    padding-left: 52px; /* aligns icons under the name, past the avatar */
+  }
+
+  /* tighten the name/email stack too */
+  .member-row .member-name { line-height: 1.15 !important; margin: 0 !important; }
+  .member-row .member-email { line-height: 1.15 !important; margin: 0 !important; }
+}
+/* -- MOBILE: horizontal scroll members table -- */
+@media (max-width: 600px) {
+  /* turn the panel into the horizontal scroll container */
+  .members-panel {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* let the list flow inside the panel (no inner scroll) */
+  .members-list {
+    overflow: visible !important;
+    min-width: 560px !important;
+  }
+
+  /* header + rows share the same widths and scroll together */
+  .members-table-header,
+  .member-row {
+    display: grid !important;
+    grid-template-columns: 200px 110px 120px 110px !important;
+    min-width: 560px !important;
+    width: 560px !important;
+    gap: 12px !important;
+    padding: 10px 16px !important;
+    align-items: center !important;
+  }
+
+  /* hide the 3rd extra column */
+  .members-table-header > :nth-child(3),
+  .member-row > :nth-child(3) { display: none !important; }
+
+  /* reorder: identity(1) -> role(2) -> date(4) -> actions(5) */
+  .members-table-header > :nth-child(1),
+  .member-row > :nth-child(1) { order: 1 !important; flex: unset !important; text-align: left !important; margin: 0 !important; }
+  .members-table-header > :nth-child(2),
+  .member-row > :nth-child(2) { order: 2 !important; flex: unset !important; text-align: left !important; margin: 0 !important; }
+  .members-table-header > :nth-child(4),
+  .member-row > :nth-child(4) { order: 3 !important; flex: unset !important; text-align: left !important; margin: 0 !important; }
+  .members-table-header > :nth-child(5),
+  .member-row > :nth-child(5) {
+    order: 4 !important;
+    flex: unset !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    gap: 6px !important;
+  }
+
+  .members-table-header {
+  scrollbar-gutter: stable;        /* or: */
+  padding-right: calc(20px + 4px); /* match scrollbar width */
+}
+
+/* Allow the table to scroll horizontally on narrow screens */
+.members-table-wrap {
+  overflow-x: auto;
+}
+
+.members-table-header,
+.member-row {
+  min-width: 680px; /* sum of your columns + padding */
+}
+
+/* Keep header aligned with rows when vertical scrollbar appears */
+.members-table-header {
+  scrollbar-gutter: stable;
+}
+}/* -- MOBILE: stats row scroll fix -- */
+@media (max-width: 768px) {
+  .stats-row {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    scrollbar-width: none !important;
+    padding-bottom: 4px !important;
+  }
+  .stats-row::-webkit-scrollbar {
+    display: none !important;
+  }
+  .stat-pill {
+    flex-shrink: 0 !important;
+  }
+}/* ── FINAL stats fix (must be last) ── */
+@media (max-width: 768px) {
+  .stats-row {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    gap: 8px !important;
+    padding-bottom: 4px !important;
+    width: 100% !important;
+  }
+  .stats-row::-webkit-scrollbar { display: none !important; }
+  .stat-pill { flex-shrink: 0 !important; min-width: fit-content !important; }
 }
