@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/officer_dashboard_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/officer_dashboard_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +7,17 @@
   <title>UNIFY — Officer Dashboard</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/officer_dashboard.css" />
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/officer_dashboard.css" />
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">
 
   <!-- ── SIDEBAR ────────────────────────────────────────────── -->
-   <aside class="sidebar">
+   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-brand">
-        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -92,6 +93,9 @@
 
     <!-- Topbar -->
     <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left">
         <span class="topbar-page-title">Officer Dashboard</span>
         <span class="topbar-date" id="topbarDate"></span>
@@ -208,14 +212,16 @@
           </div>
 
           <div class="card announce-card">
-            <div class="table-header-row">
-              <span class="th-col">Title</span>
-              <span class="th-col">Category</span>
-              <span class="th-col">Status</span>
-              <span class="th-col th-right">Date</span>
-              <span class="th-col th-right">Actions</span>
+            <div class="ann-scroll-wrap">
+              <div class="table-header-row">
+                <span class="th-col">Title</span>
+                <span class="th-col">Category</span>
+                <span class="th-col">Status</span>
+                <span class="th-col th-right">Date</span>
+                <span class="th-col th-right">Actions</span>
+              </div>
+              <div class="table-body" id="announcementsBody"></div>
             </div>
-            <div class="table-body" id="announcementsBody"></div>
           </div>
 
           <!-- Members -->
@@ -259,14 +265,7 @@
             <div class="applicant-mini-list" id="applicantList"></div>
           </div>
 
-          <!-- Notification Panel -->
-          <div id="notifPanel" class="notif-panel" style="display:none;">
-            <div class="notif-panel-header">
-              <span>Notifications</span>
-              <button onclick="markAllRead()" class="notif-mark-all">Mark all read</button>
-            </div>
-            <div id="notifList" class="notif-list"><div class="notif-empty">Loading…</div></div>
-          </div>
+
 
         </div><!-- /right-col -->
 
@@ -295,22 +294,30 @@
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">Category</label>
-        <select class="form-select" id="aCategory">
-          <option value="General">General</option>
-          <option value="Events">Events</option>
-          <option value="Finance">Finance</option>
-          <option value="Members">Members</option>
-          <option value="Achievement">Achievement</option>
-          <option value="Admin">Admin</option>
-        </select>
+        <div class="custom-select-wrap" id="aCategoryWrap" style="position:relative;">
+          <button type="button" class="custom-select-btn" id="aCategoryBtn" onclick="toggleOfficerDrop('aCategory',event)">General</button>
+          <input type="hidden" id="aCategory" value="General" />
+          <div class="custom-select-list" id="aCategoryList">
+            <div class="custom-select-option selected" onclick="setOfficerDrop('aCategory','General','General')">General</div>
+            <div class="custom-select-option" onclick="setOfficerDrop('aCategory','Events','Events')">Events</div>
+            <div class="custom-select-option" onclick="setOfficerDrop('aCategory','Finance','Finance')">Finance</div>
+            <div class="custom-select-option" onclick="setOfficerDrop('aCategory','Members','Members')">Members</div>
+            <div class="custom-select-option" onclick="setOfficerDrop('aCategory','Achievement','Achievement')">Achievement</div>
+            <div class="custom-select-option" onclick="setOfficerDrop('aCategory','Admin','Admin')">Admin</div>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <label class="form-label">Status</label>
-        <select class="form-select" id="aStatus">
-          <option value="info">Info</option>
-          <option value="urgent">Urgent</option>
-          <option value="approved">Approved</option>
-        </select>
+        <div class="custom-select-wrap" id="aStatusWrap" style="position:relative;">
+          <button type="button" class="custom-select-btn" id="aStatusBtn" onclick="toggleOfficerDrop('aStatus',event)">Info</button>
+          <input type="hidden" id="aStatus" value="info" />
+          <div class="custom-select-list" id="aStatusList">
+            <div class="custom-select-option selected" onclick="setOfficerDrop('aStatus','info','Info')">Info</div>
+            <div class="custom-select-option" onclick="setOfficerDrop('aStatus','urgent','Urgent')">Urgent</div>
+            <div class="custom-select-option" onclick="setOfficerDrop('aStatus','approved','Approved')">Approved</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="form-group">
@@ -590,6 +597,120 @@ window.OD = {
   }, $dbApplicants, array_keys($dbApplicants)), JSON_HEX_TAG | JSON_HEX_APOS) ?>
 };
 </script>
-<script src="/assets/javascripts/officer_dashboard.js"></script>
+<script src="/public/assets/javascripts/officer_dashboard.js"></script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+/* swipe disabled */
+</script>
+<script>
+function toggleOfficerDrop(id, e) {
+  e.stopPropagation();
+  const list = document.getElementById(id + 'List');
+  const btn  = document.getElementById(id + 'Btn');
+  const isOpen = list.classList.contains('open');
+  document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) { list.classList.add('open'); btn.classList.add('open'); }
+}
+function setOfficerDrop(id, val, label) {
+  document.getElementById(id).value = val;
+  document.getElementById(id + 'Btn').textContent = label;
+  document.getElementById(id + 'List').classList.remove('open');
+  document.getElementById(id + 'Btn').classList.remove('open');
+  document.querySelectorAll('#' + id + 'List .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent.trim() === label);
+  });
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  }
+});
+</script>
+
+<!-- Notification Panel -->
+<div id="notifPanel" class="notif-panel" style="display:none;">
+  <div class="notif-panel-header">
+    <span><i class="fas fa-bell" style="margin-right:6px;"></i>Notifications</span>
+    <button onclick="dashMarkAllRead()" class="notif-mark-all">Mark all read</button>
+  </div>
+  <div id="notifList" class="notif-list">
+    <div class="notif-empty">Loading…</div>
+  </div>
+</div>
+
+<script>
+function toggleNotifPanel() {
+  const panel = document.getElementById('notifPanel');
+  const btn   = document.querySelector('[onclick="toggleNotifPanel()"]');
+  const show  = panel.style.display === 'none';
+  panel.style.display = show ? 'block' : 'none';
+  if (show) dashLoadNotifs();
+}
+
+function dashLoadNotifs() {
+  fetch('index.php?page=officer_dashboard&action=notif_list')
+    .then(r => r.json()).then(res => {
+      const list = document.getElementById('notifList');
+      if (!res.success || !res.data?.length) {
+        list.innerHTML = '<div class="notif-empty"><i class="fas fa-bell-slash" style="opacity:.4;margin-right:6px;"></i>No notifications</div>';
+        return;
+      }
+      list.innerHTML = res.data.map(n => {
+        const hasLink = n.link && n.link.trim() !== '';
+        const unread  = n.is_read == 0;
+        return `<div style="padding:12px 16px;border-bottom:1px solid var(--border);font-size:12.5px;cursor:${hasLink?'pointer':'default'};background:${unread?'#f0fdf4':'inherit'}"
+             onclick="dashMarkNotifRead(${n.id}, ${JSON.stringify(n.link||'')})">
+          <div style="font-weight:700;color:var(--text-dark,#0d2b1a);">${unread?'<span style=\"display:inline-block;width:7px;height:7px;background:#22c55e;border-radius:50%;margin-right:5px;\"></span>':''}${n.title}</div>
+          <div style="color:#6b7280;margin-top:2px;line-height:1.4;">${n.message||''}</div>
+          <div style="color:#9ca3af;font-size:11px;margin-top:3px;">${n.created_fmt||''}</div>
+        </div>`;
+      }).join('');
+      const badge = document.querySelector('[onclick="toggleNotifPanel()"] .badge');
+      if (badge) badge.style.display = 'none';
+    }).catch(() => {
+      document.getElementById('notifList').innerHTML = '<div class="notif-empty">Could not load notifications.</div>';
+    });
+}
+
+function dashMarkNotifRead(id, link) {
+  fetch('index.php?page=officer_dashboard&action=notif_read&id=' + id, { method: 'POST' })
+    .then(() => {
+      if (link && link.trim() !== '') window.location.href = link;
+      else dashLoadNotifs();
+    });
+}
+
+function dashMarkAllRead() {
+  fetch('index.php?page=officer_dashboard&action=notif_read_all', { method: 'POST' })
+    .then(() => {
+      const badge = document.querySelector('[onclick="toggleNotifPanel()"] .badge');
+      if (badge) badge.style.display = 'none';
+      dashLoadNotifs();
+    });
+}
+
+document.addEventListener('click', e => {
+  const panel = document.getElementById('notifPanel');
+  const btn   = document.querySelector('[onclick="toggleNotifPanel()"]');
+  if (panel && !panel.contains(e.target) && btn && !btn.contains(e.target)) {
+    panel.style.display = 'none';
+  }
+});
+</script>
 </body>
 </html>

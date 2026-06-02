@@ -28,10 +28,10 @@ if (empty($_SESSION['user_id'])) {
     exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 $user_id   = (int) $_SESSION['user_id'];
-$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/profile_pictures/';
+$uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/pictures/profile_pictures/';
 
 // ── Validation ───────────────────────────────────────────────
 if (empty($_FILES['avatar']) || $_FILES['avatar']['error'] !== UPLOAD_ERR_OK) {
@@ -70,7 +70,7 @@ $stmt->execute([$user_id]);
 $oldPic = $stmt->fetchColumn();
 
 if ($oldPic) {
-    $oldPath = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/profile_pictures/' . basename($oldPic);
+    $oldPath = $_SERVER['DOCUMENT_ROOT'] . '/public/assets/pictures/profile_pictures/' . basename($oldPic);
     if (file_exists($oldPath)) {
         @unlink($oldPath);
     }

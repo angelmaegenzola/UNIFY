@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/officer_members_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/officer_members_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,17 +10,18 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/officer_members.css" />
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/officer_members.css" />
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 
 <body>
   <div class="app">
 
     <!-- ── SIDEBAR ────────────────────────────────────────────── -->
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-brand">
-        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -96,7 +97,10 @@
 
       <!-- Topbar -->
       <header class="topbar">
-        <div class="topbar-left">
+        <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="topbar-left">
           <span class="topbar-page-title">Members</span>
           <span class="topbar-date" id="topbarDate"></span>
         </div>
@@ -468,7 +472,24 @@
       }, $dbApplicants, array_keys($dbApplicants)), JSON_HEX_TAG | JSON_HEX_APOS) ?>
     };
   </script>
-  <script src="/assets/javascripts/officer_members.js?v=2"></script>
+  <script src="/public/assets/javascripts/officer_members.js?v=2"></script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+/* swipe disabled */
+</script>
 </body>
 
 </html>

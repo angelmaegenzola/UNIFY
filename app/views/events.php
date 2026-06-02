@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/events_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/events_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,15 +11,17 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/assets/css/events.css" />
   <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/topbar-mobile.css">
 </head>
 
 <body>
   <div class="app">
 
     <!-- ── Sidebar ── -->
-    <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-brand">
-        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -62,34 +64,55 @@
 
       <!-- Topbar -->
       <header class="topbar">
-        <div class="topbar-left">
+      <div class="topbar-left">
+        <button class="topbar-hamburger" onclick="toggleSidebar()" title="Menu">
+          <img src="/assets/pictures/unifylogo.png" alt="Menu" class="topbar-logo-btn" />
+        </button>
+        <div class="topbar-title-group">
           <span class="topbar-page-title">Events</span>
-          <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+          <span class="topbar-date" id="topbarDate"></span>
+<script>const _d=new Date();document.getElementById("topbarDate").textContent=_d.toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});</script>
         </div>
-        <div class="topbar-center">
-          <div class="topbar-search">
-            <i class="fas fa-magnifying-glass"></i>
-            <input type="text" id="topbarSearch" placeholder="Search events, clubs…" />
+      </div>
+      <div class="topbar-center">
+        <div class="topbar-search">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="text" id="topbarSearch" placeholder="Search clubs, events, announcements…"/>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="notifBtn" title="Notifications" onclick="toggleNotif(event)">
+          <i class="fas fa-bell"></i>
+          <span class="badge red hidden" id="notifBadge">0</span>
+        </button>
+        <div class="notif-dropdown" id="notifDropdown">
+          <div class="notif-header">
+            <span class="notif-header-title"><i class="fas fa-bell"></i> Notifications</span>
+            <button class="notif-mark-btn" onclick="clearNotifs()">Mark all read</button>
           </div>
-        </div>
-        <div class="topbar-actions">
-          <button class="icon-btn"><i class="fas fa-bell"></i></button>
-          <div class="topbar-profile">
-            <div class="topbar-avatar">
-              <?php if (!empty($avatar_url)): ?>
-                <img src="<?= $avatar_url ?>" alt="Avatar" class="topbar-avatar-img" />
-              <?php else: ?>
-                <?= $adminInitial ?>
-              <?php endif; ?>
+          <div class="notif-list" id="notifList">
+            <div class="notif-item">
+              <div class="notif-content"><span class="notif-text">No new notifications.</span></div>
             </div>
-            <div class="topbar-profile-info">
-              <span class="tp-name"><?= htmlspecialchars($adminName) ?></span>
-              <span class="tp-role">Club Admin</span>
-            </div>
-            <i class="fas fa-chevron-down tp-caret"></i>
           </div>
+          <div class="notif-footer">Only showing recent notifications</div>
         </div>
-      </header>
+        <a href="index.php?page=studentprofile" class="topbar-profile" title="View Profile">
+          <div class="topbar-avatar">
+            <?php if (!empty($avatar_url)): ?>
+              <img src="<?= $avatar_url ?>" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;" />
+            <?php else: ?>
+              <?= $avatar ?>
+            <?php endif; ?>
+          </div>
+          <div class="topbar-profile-info">
+            <span class="tp-name"><?= htmlspecialchars($adminName) ?></span>
+            <span class="tp-role"><?= isset($my_role) ? ucfirst($my_role) : 'Student' ?></span>
+          </div>
+          <i class="fas fa-chevron-down tp-caret"></i>
+        </a>
+      </div>
+    </header>
 
       <div class="content">
 
@@ -156,10 +179,10 @@
             <div class="card">
               <div class="card-header">
                 <div class="calendar-nav">
-                  <button class="cal-nav-btn" id="calPrev"><i class="fas fa-chevron-left"></i></button>
-                  <span class="cal-month-label" id="calMonthLabel"></span>
-                  <button class="cal-nav-btn" id="calNext"><i class="fas fa-chevron-right"></i></button>
-                </div>
+  <span class="cal-month-label" id="calMonthLabel"></span>
+  <button class="cal-nav-btn" id="calPrev"><i class="fas fa-chevron-left"></i></button>
+  <button class="cal-nav-btn" id="calNext"><i class="fas fa-chevron-right"></i></button>
+</div>
               </div>
               <div class="mini-calendar">
                 <div class="cal-weekdays">
@@ -354,6 +377,167 @@
     ], $dbEvents), JSON_HEX_TAG) ?>;
   </script>
   <script src="/assets/javascripts/events.js"></script>
+
+<script>
+function preventScroll(e) { e.preventDefault(); }
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const open = sidebar.classList.toggle('open');
+  sidebar.style.setProperty('left', open ? '0px' : '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+  document.body.classList.toggle('sidebar-open', open);
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = open ? '0' : '1'; fab.style.pointerEvents = open ? 'none' : ''; }
+  const mainEl = document.querySelector('.main');
+  if (open) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = '-' + window.scrollY + 'px';
+    document.body.dataset.scrollY = window.scrollY;
+    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
+  } else {
+    const scrollY = document.body.dataset.scrollY || 0;
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY));
+    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  }
+}
+  const mainEl = document.querySelector('.main');
+  if (open) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = '-' + window.scrollY + 'px';
+    document.body.dataset.scrollY = window.scrollY;
+    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
+  } else {
+    const scrollY = document.body.dataset.scrollY || 0;
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY));
+    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  }
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  sidebar.style.setProperty('left', '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+  const scrollY = document.body.dataset.scrollY || 0;
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+  document.body.style.top = '';
+  window.scrollTo(0, parseInt(scrollY));
+  const mainEl = document.querySelector('.main');
+  if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
+}  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
+}
+var _tsx = 0, _tsy = 0, _swiping = false;
+document.addEventListener('touchstart', function(e) {
+  _tsx = e.touches[0].clientX;
+  _tsy = e.touches[0].clientY;
+  _swiping = _tsx < 80;
+  if (_swiping) e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchmove', function(e) {
+  if (_swiping) e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - _tsx;
+  var dy = e.changedTouches[0].clientY - _tsy;
+  if (Math.abs(dy) > Math.abs(dx)) return;
+  if (dx > 40 && _tsx < 80) toggleSidebar();
+  if (dx < -40) closeSidebar();
+  _swiping = false;
+}, {passive:true});
+</script>
+
+<button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
+  <i class="fas fa-bars"></i>
+</button>
+<!-- Date Range Picker -->
+<div id="datePickerDropdown" style="display:none;position:absolute;z-index:9999;background:var(--card-bg);border:1.5px solid var(--border);border-radius:var(--radius);box-shadow:0 8px 32px rgba(13,43,26,.18);padding:20px;width:288px;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
+    <div style="width:32px;height:32px;border-radius:8px;background:var(--green-light);display:flex;align-items:center;justify-content:center;">
+      <i class="fas fa-calendar" style="color:var(--green-accent);font-size:13px;"></i>
+    </div>
+    <div>
+      <div style="font-weight:700;font-size:13px;color:var(--text-dark);">Filter by Date Range</div>
+      <div style="font-size:11px;color:var(--text-light);">Select start and end dates</div>
+    </div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;">
+    <div style="background:var(--green-light);border-radius:var(--radius-sm);padding:10px 12px;">
+      <div style="font-size:10px;font-weight:700;color:var(--green-accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">From</div>
+      <input type="date" id="dateFrom" style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-dark);outline:none;box-sizing:border-box;" />
+    </div>
+    <div style="display:flex;justify-content:center;">
+      <i class="fas fa-arrow-down" style="color:var(--text-light);font-size:11px;"></i>
+    </div>
+    <div style="background:var(--green-light);border-radius:var(--radius-sm);padding:10px 12px;">
+      <div style="font-size:10px;font-weight:700;color:var(--green-accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">To</div>
+      <input type="date" id="dateTo" style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-dark);outline:none;box-sizing:border-box;" />
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button onclick="applyDateRange()" style="flex:1;padding:10px;background:var(--green-dark);color:#fff;border:none;border-radius:var(--radius-sm);font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;"><i class="fas fa-check"></i> Apply</button>
+      <button onclick="clearDateRange()" style="flex:1;padding:10px;background:transparent;color:var(--text-mid);border:1.5px solid var(--border);border-radius:var(--radius-sm);font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit;">Clear</button>
+    </div>
+  </div>
+</div>
+<script>
+function toggleDatePicker() {
+  var dd = document.getElementById('datePickerDropdown');
+  var btn = document.getElementById('dateRangeBtn');
+  if (dd.style.display === 'none') {
+    var rect = btn.getBoundingClientRect();
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    dd.style.top = (rect.bottom + scrollTop + 8) + 'px';
+    dd.style.left = Math.min(rect.left, window.innerWidth - 296) + 'px';
+    dd.style.display = 'block';
+  } else {
+    dd.style.display = 'none';
+  }
+}
+function applyDateRange() {
+  var from = document.getElementById('dateFrom').value;
+  var to   = document.getElementById('dateTo').value;
+  if (!from || !to) { alert('Please select both dates.'); return; }
+  window.dateRangeStart = new Date(from + 'T00:00:00');
+  window.dateRangeEnd   = new Date(to + 'T23:59:59');
+  if (typeof dateRangeStart !== 'undefined') { dateRangeStart = window.dateRangeStart; dateRangeEnd = window.dateRangeEnd; }
+  var fmt = function(s) { var d = new Date(s+'T00:00:00'); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); };
+  document.getElementById('dateRangeBtn').querySelector('span').textContent = fmt(from) + ' – ' + fmt(to) + ', ' + new Date(from).getFullYear();
+  document.getElementById('datePickerDropdown').style.display = 'none';
+  if (typeof renderEvents === 'function') renderEvents();
+}
+function clearDateRange() {
+  window.dateRangeStart = null; window.dateRangeEnd = null;
+  if (typeof dateRangeStart !== 'undefined') { dateRangeStart = null; dateRangeEnd = null; }
+  document.getElementById('dateFrom').value = '';
+  document.getElementById('dateTo').value = '';
+  var now = new Date(); var end = new Date(); end.setDate(end.getDate()+14);
+  var fmt = function(d) { return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); };
+  document.getElementById('dateRangeBtn').querySelector('span').textContent = fmt(now) + ' – ' + fmt(end) + ', ' + now.getFullYear();
+  document.getElementById('datePickerDropdown').style.display = 'none';
+  if (typeof renderEvents === 'function') renderEvents();
+}
+document.addEventListener('click', function(e) {
+  var dd = document.getElementById('datePickerDropdown');
+  var btn = document.getElementById('dateRangeBtn');
+  if (dd && !dd.contains(e.target) && btn && !btn.contains(e.target)) dd.style.display = 'none';
+});
+</script>
 </body>
 
 </html>

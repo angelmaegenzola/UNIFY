@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/officer_events_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/officer_events_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,16 +10,17 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/officer_events.css" />
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/officer_events.css" />
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 
 <body>
   <div class="app">
 
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-brand">
-        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -93,7 +94,10 @@
     <!-- MAIN -->
     <main class="main">
       <header class="topbar">
-        <div class="topbar-left">
+        <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="topbar-left">
           <span class="topbar-page-title">Events</span>
           <span class="topbar-date" id="topbarDate"></span>
         </div>
@@ -479,7 +483,13 @@
                       data-name="<?= htmlspecialchars(strtolower($m['first_name'] . ' ' . $m['last_name'])) ?>">
                       <td>
                         <div class="mem-cell-user">
-                          <div class="mem-avatar"><?= strtoupper(substr($m['first_name'], 0, 1)) ?></div>
+                          <div class="mem-avatar" <?= empty($m['profile_picture']) ? '' : 'style="background:none;padding:0;overflow:hidden;"' ?>>
+  <?php if (!empty($m['profile_picture'])): ?>
+    <img src="/public/assets/pictures/profile_pictures/<?= htmlspecialchars(basename($m['profile_picture'])) ?>" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+  <?php else: ?>
+    <?= strtoupper(substr($m['first_name'], 0, 1)) ?>
+  <?php endif; ?>
+</div>
                           <div>
                             <div class="mem-name"><?= htmlspecialchars($m['first_name'] . ' ' . $m['last_name']) ?></div>
                             <div class="mem-email"><?= htmlspecialchars($m['email'] ?? '') ?></div>
@@ -925,10 +935,27 @@
     console.log('incoming:', window._raw_incoming);
     console.log('club_id:', window.OE_DATA.club_id);
   </script>
-  <script src="/assets/javascripts/jsQR.min.js"></script>
-  <script src="/assets/javascripts/officer_events.js"></script>
+  <script src="/public/assets/javascripts/jsQR.min.js"></script>
+  <script src="/public/assets/javascripts/officer_events.js"></script>
 
 
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+/* swipe disabled */
+</script>
 </body>
 
 </html>

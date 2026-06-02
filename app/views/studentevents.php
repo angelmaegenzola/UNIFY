@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/studentevents_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/studentevents_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +7,17 @@
   <title>UNIFY — Events</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/studentevents.css" />
+  <link rel="stylesheet" href="/public/assets/css/studentevents.css" />
 </head>
 <body>
 
 <div class="app">
 
   <!-- ═══════════ SIDEBAR ═══════════ -->
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
-      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text">
         <div class="brand-name">UNIFY</div>
         <div class="brand-tagline">Club Management System</div>
@@ -74,25 +75,24 @@
 
     <!-- TOPBAR -->
     <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left">
-        <span class="topbar-page-title">Events</span>
-        <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+        <span class="topbar-page-title">Club Events</span>
+        <span class="topbar-date" id="topbarDate"></span>
       </div>
       <div class="topbar-center">
         <div class="topbar-search">
           <i class="fas fa-magnifying-glass"></i>
-          <input type="text" id="searchInput" placeholder="Search events…" oninput="filterEvents()" />
+          <input type="text" placeholder="Search clubs, events, announcements…"/>
         </div>
       </div>
       <div class="topbar-actions">
-
-        <!-- Bell button — loads real DB notifications -->
         <button class="icon-btn" id="notifBtn" title="Notifications" onclick="toggleNotif(event)">
           <i class="fas fa-bell"></i>
           <span class="badge red hidden" id="notifBadge">0</span>
         </button>
-
-        <!-- Notification Dropdown -->
         <div class="notif-dropdown" id="notifDropdown">
           <div class="notif-header">
             <span class="notif-header-title"><i class="fas fa-bell"></i> Notifications</span>
@@ -100,25 +100,11 @@
           </div>
           <div class="notif-list" id="notifList">
             <div class="notif-item">
-              <div class="notif-content">
-                <span class="notif-text">Loading…</span>
-              </div>
+              <div class="notif-content"><span class="notif-text">No new notifications.</span></div>
             </div>
           </div>
           <div class="notif-footer">Only showing recent notifications</div>
         </div>
-
-        <button class="icon-btn assignments-toggle-btn" id="assignmentsToggleBtn"
-                title="My Assignments" onclick="toggleAssignmentsPanel()"
-                style="position:relative;">
-          <i class="fas fa-clipboard-list"></i>
-          <?php if (!empty($pending_assignments_count) && $pending_assignments_count > 0): ?>
-            <span class="badge red" id="assignmentsBadge"><?= $pending_assignments_count ?></span>
-          <?php else: ?>
-            <span class="badge red hidden" id="assignmentsBadge">0</span>
-          <?php endif; ?>
-        </button>
-
         <a href="index.php?page=studentprofile" class="topbar-profile" title="View Profile">
           <div class="topbar-avatar">
             <?php if (!empty($avatar_url)): ?>
@@ -129,7 +115,7 @@
           </div>
           <div class="topbar-profile-info">
             <span class="tp-name"><?= $full_name ?></span>
-            <span class="tp-role"><?= ucfirst($my_role) ?></span>
+            <span class="tp-role"><?= isset($my_role) ? ucfirst($my_role) : 'Student' ?></span>
           </div>
           <i class="fas fa-chevron-down tp-caret"></i>
         </a>
@@ -781,6 +767,23 @@ function switchEventsClub(clubId) {
   if (window.UNIFY_CLUBS[clubId]) window.UNIFY = window.UNIFY_CLUBS[clubId];
 }
 </script>
-<script src="/assets/javascripts/studentevents.js"></script>
+<script src="/public/assets/javascripts/studentevents.js"></script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+
+</script>
 </body>
 </html>

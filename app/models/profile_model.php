@@ -1,7 +1,7 @@
 <?php
 // Model: page-load queries for profile
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
 $stmt = $pdo->prepare(

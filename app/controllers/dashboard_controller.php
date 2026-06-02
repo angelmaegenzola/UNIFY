@@ -7,7 +7,7 @@
 ob_start();
 session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header('Location: index.php?page=login'); exit;
@@ -295,8 +295,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // ── Page data (GET) ───────────────────────────────────────────
-$adminFirst   = $_SESSION['first_name'] ?? 'Admin';
-$adminLast    = $_SESSION['last_name']  ?? '';
+$adminStmt = $pdo->prepare('SELECT first_name, last_name FROM users WHERE id = ?');
+$adminStmt->execute([$_SESSION['user_id']]);
+$adminRow = $adminStmt->fetch(PDO::FETCH_ASSOC);
+$adminFirst   = $adminRow['first_name'] ?? 'Admin';
+$adminLast    = $adminRow['last_name']  ?? '';
 $adminName    = trim($adminFirst . ' ' . $adminLast);
 $adminInitial = strtoupper(substr($adminFirst, 0, 1));
 
@@ -307,7 +310,7 @@ $avatar_url   = $_sessionPic
     : '';
 
 // Load all dashboard data from the model
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/dashboard_model.php';
+require_once __DIR__ . '/../../app/models/dashboard_model.php';
 // Unread notifications count for admin
 $adminUnreadNotifs = 0;
 try {

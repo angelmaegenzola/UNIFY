@@ -8,7 +8,7 @@ ob_start();
 if (session_status() === PHP_SESSION_NONE) session_start();
 error_reporting(0);
 ini_set('display_errors', 0);
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 date_default_timezone_set('Asia/Manila');
 
@@ -750,7 +750,7 @@ $picStmt = $pdo->prepare('SELECT profile_picture FROM users WHERE id = ? LIMIT 1
 $picStmt->execute([$userId]);
 $picFile = $picStmt->fetchColumn();
 $avatar_url = $picFile
-    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 

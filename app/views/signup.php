@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/signup_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/signup_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sign Up — UNIFY</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/css/signup.css"/>
+  <link rel="stylesheet" href="/public/assets/css/signup.css"/>
 </head>
 <body>
 
@@ -17,7 +17,7 @@
 
     <div class="logo-row">
       <div class="logo-circle">
-        <img src="/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+        <img src="/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
       </div>
       <div class="logo-text">
         Club Management System
@@ -105,14 +105,17 @@
             <rect x="3" y="4" width="18" height="18" rx="2"/>
             <path d="M16 2v4M8 2v4M3 10h18"/>
           </svg>
-          <select name="year_level" required>
-            <option value="" disabled <?= empty($fields['year_level']) ? 'selected' : '' ?>>Year Level</option>
-            <option value="1st Year" <?= $fields['year_level']==='1st Year' ? 'selected' : '' ?>>1st Year</option>
-            <option value="2nd Year" <?= $fields['year_level']==='2nd Year' ? 'selected' : '' ?>>2nd Year</option>
-            <option value="3rd Year" <?= $fields['year_level']==='3rd Year' ? 'selected' : '' ?>>3rd Year</option>
-            <option value="4th Year" <?= $fields['year_level']==='4th Year' ? 'selected' : '' ?>>4th Year</option>
-            <option value="5th Year" <?= $fields['year_level']==='5th Year' ? 'selected' : '' ?>>5th Year</option>
-          </select>
+          <div class="custom-select-wrap" style="width:100%;">
+            <button type="button" class="custom-select-btn" id="yearBtn" onclick="toggleDrop('year')" style="width:100%;background-color:#f5f7f5;border:1.5px solid transparent;padding-left:34px;">Year Level</button>
+            <div class="custom-select-list" id="yearDropList">
+              <div class="custom-select-option" onclick="selectSignupDrop('1st Year')">1st Year</div>
+              <div class="custom-select-option" onclick="selectSignupDrop('2nd Year')">2nd Year</div>
+              <div class="custom-select-option" onclick="selectSignupDrop('3rd Year')">3rd Year</div>
+              <div class="custom-select-option" onclick="selectSignupDrop('4th Year')">4th Year</div>
+              <div class="custom-select-option" onclick="selectSignupDrop('5th Year')">5th Year</div>
+            </div>
+          </div>
+          <input type="hidden" name="year_level" id="yearInput" value="<?= htmlspecialchars($fields['year_level'] ?? '') ?>" required/>
         </div>
 
         <!-- FIXED: Section icon changed from hamburger/list (M4 6h16M4 12h16M4 18h7)
@@ -208,7 +211,7 @@
     </svg>
 
     <div class="emblem">
-      <img src="/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
+      <img src="/public/assets/pictures/chmsulogo.jpg" alt="CHMSU Logo"/>
     </div>
 
     <h2>UNIFY</h2>
@@ -254,6 +257,29 @@
 
 </div><!-- /wrapper -->
 
-<script src="/assets/javascripts/signup.js"></script>
+<script src="/public/assets/javascripts/signup.js"></script>
+
+<script>
+function toggleDrop(type) {
+  const btn = document.getElementById(type+'Btn');
+  const list = document.getElementById(type+'DropList');
+  const isOpen = list.classList.contains('open');
+  document.querySelectorAll('.custom-select-list').forEach(l => l.classList.remove('open'));
+  document.querySelectorAll('.custom-select-btn').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { list.classList.add('open'); btn.classList.add('open'); }
+}
+function selectSignupDrop(value) {
+  document.getElementById('yearInput').value = value;
+  document.getElementById('yearBtn').textContent = value;
+  document.getElementById('yearDropList').classList.remove('open');
+  document.getElementById('yearBtn').classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-list').forEach(l => l.classList.remove('open'));
+    document.querySelectorAll('.custom-select-btn').forEach(b => b.classList.remove('open'));
+  }
+});
+</script>
 </body>
 </html>

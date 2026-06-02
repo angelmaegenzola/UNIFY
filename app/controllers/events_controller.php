@@ -1,7 +1,7 @@
 <?php
 session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/events_model.php';
+require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../app/models/events_model.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header('Location: index.php?page=login');
@@ -115,8 +115,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 /* ══════════════════════════════════════════════════════════
    Page load — fetch data
 ══════════════════════════════════════════════════════════ */
-$adminFirst   = $_SESSION['first_name'] ?? 'Admin';
-$adminLast    = $_SESSION['last_name']  ?? '';
+$adminStmt = $pdo->prepare('SELECT first_name, last_name FROM users WHERE id = ?');
+$adminStmt->execute([$_SESSION['user_id']]);
+$adminRow = $adminStmt->fetch(PDO::FETCH_ASSOC);
+$adminFirst   = $adminRow['first_name'] ?? 'Admin';
+$adminLast    = $adminRow['last_name']  ?? '';
 $adminName    = trim($adminFirst . ' ' . $adminLast);
 $adminInitial = strtoupper(substr($adminFirst, 0, 1));
 $_sessionPic  = $_SESSION['profile_picture'] ?? '';

@@ -1,3 +1,4 @@
+function preventScroll(e) { e.preventDefault(); }
 /* ============================================================
    UNIFY — Explore & Apply JS
    explore.js
@@ -26,7 +27,8 @@ function setCat(btn, cat) {
 
 /* ── Combined Filter (search + category) ─────────────────── */
 function filterClubs() {
-  const query = document.getElementById('searchInput').value.toLowerCase().trim();
+  const searchEl = document.getElementById('searchInput');
+  const query = searchEl ? searchEl.value.toLowerCase().trim() : '';
   const cards  = document.querySelectorAll('.club-card');
   let visible  = 0;
 
@@ -74,11 +76,15 @@ function openApply(btn) {
   });
 
   document.getElementById('applyOverlay').classList.add('modal-open');
+  document.body.classList.add('modal-open');
+  document.addEventListener('touchmove', preventScroll, {passive:false});
 }
 
 function closeApply(e) {
   if (e && e.target !== document.getElementById('applyOverlay')) return;
   document.getElementById('applyOverlay').classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
+  document.removeEventListener('touchmove', preventScroll);
 }
 
 function closeSuccess() {
@@ -267,10 +273,18 @@ function openAlreadyMember(clubId, clubName) {
       document.getElementById('amCourse').value = '';
       document.getElementById('amYear').value = '';
       document.getElementById('amRole').value = 'member';
+      document.getElementById('amRoleBtn').textContent = 'Member';
+      document.querySelectorAll('#amRoleList .custom-select-option').forEach(o => {
+        o.classList.toggle('selected', o.textContent.trim() === 'Member');
+      });
       document.getElementById('alreadyMemberOverlay').classList.add('modal-open');
+      document.body.classList.add('modal-open');
+      document.addEventListener('touchmove', preventScroll, {passive:false});
     }
     function closeAlreadyMember() {
       document.getElementById('alreadyMemberOverlay').classList.remove('modal-open');
+      document.body.classList.remove('modal-open');
+      document.removeEventListener('touchmove', preventScroll);
     }
     function submitAlreadyMember() {
       const club_id = document.getElementById('amClubId').value;
@@ -362,3 +376,34 @@ function openAlreadyMember(clubId, clubName) {
           showToast('Something went wrong. Please try again.', 'warn');
         });
     }
+
+function toggleAmRoleDrop(e) {
+  e.stopPropagation();
+  const list = document.getElementById('amRoleList');
+  const btn  = document.getElementById('amRoleBtn');
+  const rect = btn.getBoundingClientRect();
+  const isOpen = list.style.display === 'flex';
+  list.style.display = isOpen ? 'none' : 'flex';
+  list.style.top   = (rect.bottom + 6) + 'px';
+  list.style.left  = rect.left + 'px';
+  list.style.width = rect.width + 'px';
+  list.style.minWidth = rect.width + 'px';
+  btn.classList.toggle('open', !isOpen);
+}
+function setAmRole(value, label) {
+  document.getElementById('amRole').value = value;
+  document.getElementById('amRoleBtn').textContent = label;
+  document.getElementById('amRoleList').style.display = 'none';
+  document.getElementById('amRoleBtn').classList.remove('open');
+  document.querySelectorAll('#amRoleList .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent.trim() === label);
+  });
+}
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('amRoleWrap');
+  const list = document.getElementById('amRoleList');
+  if (wrap && !wrap.contains(e.target) && list && !list.contains(e.target)) {
+    list.style.display = 'none';
+    document.getElementById('amRoleBtn')?.classList.remove('open');
+  }
+});

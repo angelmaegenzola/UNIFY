@@ -17,18 +17,19 @@ require_once __DIR__ . '/../controllers/officer_home_controller.php';
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/officer_dashboard.css" />
-  <link rel="stylesheet" href="/assets/css/officer_home.css" />
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/officer_dashboard.css" />
+  <link rel="stylesheet" href="/public/assets/css/officer_home.css" />
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 
 <body>
   <div class="app">
 
     <!-- ── SIDEBAR ────────────────────────────────────────────── -->
-     <aside class="sidebar">
+     <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-brand">
-        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -105,7 +106,10 @@ require_once __DIR__ . '/../controllers/officer_home_controller.php';
 
       <!-- TOPBAR -->
       <header class="topbar">
-        <div class="topbar-left">
+        <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="topbar-left">
           <span class="topbar-page-title">Home</span>
           <span class="topbar-date" id="topbarDate"></span>
         </div>
@@ -576,20 +580,28 @@ require_once __DIR__ . '/../controllers/officer_home_controller.php';
         <div class="mf-row2">
           <div class="mf-group">
             <label>Category</label>
-            <select id="annCategory">
-              <option value="General">General</option>
-              <option value="Event">Event</option>
-              <option value="Reminder">Reminder</option>
-              <option value="Achievement">Achievement</option>
-            </select>
+            <div class="custom-select-wrap" id="annCategoryWrap" style="position:relative;">
+              <button type="button" class="custom-select-btn" id="annCategoryBtn" onclick="toggleOfficerDrop('annCategory',event)">General</button>
+              <input type="hidden" id="annCategory" value="General" />
+              <div class="custom-select-list" id="annCategoryList">
+                <div class="custom-select-option selected" onclick="setOfficerDrop('annCategory','General','General')">General</div>
+                <div class="custom-select-option" onclick="setOfficerDrop('annCategory','Event','Event')">Event</div>
+                <div class="custom-select-option" onclick="setOfficerDrop('annCategory','Reminder','Reminder')">Reminder</div>
+                <div class="custom-select-option" onclick="setOfficerDrop('annCategory','Achievement','Achievement')">Achievement</div>
+              </div>
+            </div>
           </div>
           <div class="mf-group">
             <label>Status</label>
-            <select id="annStatus">
-              <option value="info">Info</option>
-              <option value="approved">Approved</option>
-              <option value="urgent">Urgent</option>
-            </select>
+            <div class="custom-select-wrap" id="annStatusWrap" style="position:relative;">
+              <button type="button" class="custom-select-btn" id="annStatusBtn" onclick="toggleOfficerDrop('annStatus',event)">Info</button>
+              <input type="hidden" id="annStatus" value="info" />
+              <div class="custom-select-list" id="annStatusList">
+                <div class="custom-select-option selected" onclick="setOfficerDrop('annStatus','info','Info')">Info</div>
+                <div class="custom-select-option" onclick="setOfficerDrop('annStatus','approved','Approved')">Approved</div>
+                <div class="custom-select-option" onclick="setOfficerDrop('annStatus','urgent','Urgent')">Urgent</div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -680,7 +692,7 @@ require_once __DIR__ . '/../controllers/officer_home_controller.php';
       unread: <?= $unreadNotifs ?>
     };
   </script>
-  <script src="/assets/javascripts/officer_home.js"></script>
+  <script src="/public/assets/javascripts/officer_home.js"></script>
 <script>
 // ── Respond to Collaboration Proposal ─────────────────────
 function respondCollab(requestId, response, btn) {
@@ -723,6 +735,49 @@ function respondCollab(requestId, response, btn) {
       if (item) { item.style.opacity = '1'; item.style.pointerEvents = ''; }
     });
 }
+</script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+/* swipe disabled */
+</script>
+<script>
+function toggleOfficerDrop(id, e) {
+  e.stopPropagation();
+  const list = document.getElementById(id + 'List');
+  const btn  = document.getElementById(id + 'Btn');
+  const isOpen = list.classList.contains('open');
+  document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+  document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) { list.classList.add('open'); btn.classList.add('open'); }
+}
+function setOfficerDrop(id, val, label) {
+  document.getElementById(id).value = val;
+  document.getElementById(id + 'Btn').textContent = label;
+  document.getElementById(id + 'List').classList.remove('open');
+  document.getElementById(id + 'Btn').classList.remove('open');
+  document.querySelectorAll('#' + id + 'List .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent.trim() === label);
+  });
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-list.open').forEach(el => el.classList.remove('open'));
+    document.querySelectorAll('.custom-select-btn.open').forEach(el => el.classList.remove('open'));
+  }
+});
 </script>
 </body>
 

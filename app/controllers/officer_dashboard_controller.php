@@ -1,11 +1,33 @@
 <?php
 ob_start();
 session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/officer_dashboard_model.php';
+require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../app/models/officer_dashboard_model.php';
 
 if (!isset($_SESSION['user_id']) || !in_array($_SESSION['role'], ['officer','lead','student','president','vice president'])) {
     header('Location: index.php?page=login'); exit;
+}
+
+
+// ── Notification GET AJAX ─────────────────────────────────
+$_action = $_GET['action'] ?? '';
+$_userId = (int)$_SESSION['user_id'];
+if (in_array($_action, ['notif_list','notif_read','notif_read_all'])) {
+    ob_clean();
+    header('Content-Type: application/json');
+    if ($_action === 'notif_list') {
+        $stmt = $pdo->prepare("SELECT id, type, title, message, link, is_read, DATE_FORMAT(created_at, '%b %d, %Y %h:%i %p') AS created_fmt FROM notifications WHERE user_id=? ORDER BY created_at DESC LIMIT 20");
+        $stmt->execute([$_userId]);
+        echo json_encode(['success'=>true,'data'=>$stmt->fetchAll(PDO::FETCH_ASSOC)]);
+    } elseif ($_action === 'notif_read') {
+        $nid = (int)($_GET['id'] ?? 0);
+        $pdo->prepare("UPDATE notifications SET is_read=1 WHERE id=? AND user_id=?")->execute([$nid, $_userId]);
+        echo json_encode(['success'=>true]);
+    } elseif ($_action === 'notif_read_all') {
+        $pdo->prepare("UPDATE notifications SET is_read=1 WHERE user_id=?")->execute([$_userId]);
+        echo json_encode(['success'=>true]);
+    }
+    exit;
 }
 
 // ── AJAX handler ──────────────────────────────────────────────
@@ -223,10 +245,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($file['size'] > 2 * 1024 * 1024)   { echo json_encode(['error' => 'File too large (max 2MB).']); break; }
                 $ext      = pathinfo($file['name'], PATHINFO_EXTENSION);
                 $fname    = 'club_' . uniqid() . '.' . $ext;
-                $dir      = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/clubs/';
+                $dir      = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/profile_pictures/clubs/';
                 if (!is_dir($dir)) mkdir($dir, 0755, true);
                 move_uploaded_file($file['tmp_name'], $dir . $fname);
-                $logoPath = '/assets/pictures/clubs/' . $fname;
+                $logoPath = '/assets/pictures/profile_pictures/clubs/' . $fname;
                 $pdo->prepare("UPDATE clubs SET logo_path = ? WHERE id = ?")->execute([$logoPath, $clubId]);
                 echo json_encode(['success' => true, 'logo' => $logoPath]);
                 break;

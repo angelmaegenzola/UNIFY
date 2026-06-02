@@ -317,6 +317,7 @@ const SM = (() => {
     isDM      = false;
     dmUserId  = 0;
     dmUserName = '';
+    var t = document.getElementById('mobileTopbarTitle'); if(t) t.textContent = 'Group Chat';
 
     // Update header
     $id('chatTitle') && ($id('chatTitle').textContent = 'general');
@@ -346,6 +347,8 @@ const SM = (() => {
 
     // Update header
     $id('chatTitle') && ($id('chatTitle').textContent = name);
+    var t = document.getElementById('mobileTopbarTitle'); if(t) t.textContent = name;
+    var s = document.getElementById('mobileTopbarSub'); if(s) s.textContent = 'Direct message';
     $id('chatSubtitle') && ($id('chatSubtitle').textContent = `Direct message · ${CFG.clubName}`);
     $id('msgInput') && ($id('msgInput').placeholder = `Message ${name.split(' ')[0]}…`);
 

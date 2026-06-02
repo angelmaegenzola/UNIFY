@@ -5,7 +5,7 @@
 //  Queries are aligned with dashboard_controller.php.
 // ============================================================
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 // ── Stat counters ────────────────────────────────────────────
 $totalMembers   = $pdo->query("SELECT COUNT(*) FROM members WHERE status='active'")->fetchColumn();

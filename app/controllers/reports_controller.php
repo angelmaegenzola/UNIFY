@@ -1,6 +1,6 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) session_start();
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
   header('Location: index.php?page=login');
@@ -8,8 +8,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 }
 
 // ── Admin sidebar variables ───────────────────────────────
-$adminFirst   = $_SESSION['first_name'] ?? 'Admin';
-$adminLast    = $_SESSION['last_name']  ?? '';
+$adminStmt = $pdo->prepare('SELECT first_name, last_name FROM users WHERE id = ?');
+$adminStmt->execute([$_SESSION['user_id']]);
+$adminRow = $adminStmt->fetch(PDO::FETCH_ASSOC);
+$adminFirst   = $adminRow['first_name'] ?? 'Admin';
+$adminLast    = $adminRow['last_name']  ?? '';
 $adminName    = trim($adminFirst . ' ' . $adminLast);
 $adminInitial = strtoupper(substr($adminFirst, 0, 1));
 $_sessionPic  = $_SESSION['profile_picture'] ?? '';
@@ -18,7 +21,7 @@ $avatar_url   = $_sessionPic
     : '';
 
 // ── All data comes from the model (with safe fallbacks) ───
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/reports_model.php';
+require_once __DIR__ . '/../../app/models/reports_model.php';
 
 // ── Derived variables ─────────────────────────────────────
 $topClubs       = array_slice($clubActivity, 0, 5);

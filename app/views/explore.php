@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/explore_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/explore_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,15 +10,17 @@
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/explore.css" />
+  <link rel="stylesheet" href="/public/assets/css/studenthome.css" />
+  <link rel="stylesheet" href="/public/assets/css/explore.css" />
 </head>
 
 <body>
   <div class="app">
 
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-brand">
-        <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+        <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
           <div class="brand-name">UNIFY</div>
           <div class="brand-tagline">Club Management System</div>
@@ -72,46 +74,52 @@
 
     <main class="main">
       <header class="topbar">
-        <div class="topbar-left">
-          <span class="topbar-page-title">Explore Clubs</span>
-          <span class="topbar-date" id="topbarDate"></span>
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="topbar-left">
+        <span class="topbar-page-title">Explore Clubs</span>
+        <span class="topbar-date" id="topbarDate"></span>
+      </div>
+      <div class="topbar-center">
+        <div class="topbar-search">
+          <i class="fas fa-magnifying-glass"></i>
+          <input type="text" placeholder="Search clubs, events, announcements…"/>
         </div>
-        <div class="topbar-center">
-          <div class="topbar-search">
-            <i class="fas fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" placeholder="Search clubs by name or category…"
-              oninput="filterClubs()" />
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="notifBtn" title="Notifications" onclick="toggleNotif(event)">
+          <i class="fas fa-bell"></i>
+          <span class="badge red hidden" id="notifBadge">0</span>
+        </button>
+        <div class="notif-dropdown" id="notifDropdown">
+          <div class="notif-header">
+            <span class="notif-header-title"><i class="fas fa-bell"></i> Notifications</span>
+            <button class="notif-mark-btn" onclick="clearNotifs()">Mark all read</button>
           </div>
-        </div>
-        <div class="topbar-actions">
-          <button class="icon-btn" id="notifBtn" title="Notifications" onclick="toggleNotif(event)">
-            <i class="fas fa-bell"></i><span class="badge red hidden" id="notifBadge">0</span>
-          </button>
-          <div class="notif-dropdown" id="notifDropdown">
-            <div class="notif-header"><span class="notif-header-title"><i class="fas fa-bell"></i>
-                Notifications</span><button class="notif-mark-btn" onclick="clearNotifs()">Mark all read</button></div>
-            <div class="notif-list" id="notifList">
-              <div class="notif-item">
-                <div class="notif-content"><span class="notif-text">No new notifications.</span></div>
-              </div>
+          <div class="notif-list" id="notifList">
+            <div class="notif-item">
+              <div class="notif-content"><span class="notif-text">No new notifications.</span></div>
             </div>
-            <div class="notif-footer">Only showing recent notifications</div>
           </div>
-          <a href="index.php?page=studentprofile" class="topbar-profile" title="View Profile">
-            <div class="topbar-avatar">
-              <?php if (!empty($avatar_url)): ?>
-                <img src="<?= $avatar_url ?>" alt="Avatar"
-                  style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;" />
-              <?php else: ?>
-                <?= $avatar ?>
-              <?php endif; ?>
-            </div>
-            <div class="topbar-profile-info"><span class="tp-name"><?= $full_name ?></span><span
-                class="tp-role">Student</span></div>
-            <i class="fas fa-chevron-down tp-caret"></i>
-          </a>
+          <div class="notif-footer">Only showing recent notifications</div>
         </div>
-      </header>
+        <a href="index.php?page=studentprofile" class="topbar-profile" title="View Profile">
+          <div class="topbar-avatar">
+            <?php if (!empty($avatar_url)): ?>
+              <img src="<?= $avatar_url ?>" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;" />
+            <?php else: ?>
+              <?= $avatar ?>
+            <?php endif; ?>
+          </div>
+          <div class="topbar-profile-info">
+            <span class="tp-name"><?= $full_name ?></span>
+            <span class="tp-role"><?= isset($my_role) ? ucfirst($my_role) : 'Student' ?></span>
+          </div>
+          <i class="fas fa-chevron-down tp-caret"></i>
+        </a>
+      </div>
+    </header>
 
       <?php if (isset($_GET['welcome']) && $_GET['welcome'] === '1'): ?>
         <div id="welcomeToast" style="
@@ -168,12 +176,9 @@
             <?php endforeach; ?>
           </div>
         </div>
-        <a href="index.php?page=club_request"
-          style="display:inline-flex;align-items:center;gap:6px;color:#1a5c38;font-size:13px;font-weight:700;text-decoration:none;">
-          <i class="fas fa-plus-circle"></i> Propose a Club
-        </a>
       </div>
-
+      <a href="index.php?page=club_request" class="propose-desktop-link" style="display:inline-flex;align-items:center;gap:6px;color:#1a5c38;font-size:13px;font-weight:700;text-decoration:none;padding:4px 16px 8px;"><i class="fas fa-plus-circle"></i> Propose a Club</a>
+      <div class="content">
       <div class="clubs-grid" id="clubsGrid">
         <?php foreach ($clubs as $club):
           $c_id = $club['id'];
@@ -249,6 +254,7 @@
         <i class="fas fa-face-meh-blank"></i>
         <p>No clubs match your search.</p><span>Try a different keyword or category.</span>
       </div>
+      </div><!-- /.content -->
     </main>
   </div>
 
@@ -368,13 +374,11 @@
           </div>
           <div class="field-group field-full">
             <label class="field-label">Role in Club <span class="field-required">*</span></label>
-            <select class="field-input" id="amRole">
-              <option value="member">Member</option>
-              <option value="officer">Officer</option>
-              <option value="lead">Lead</option>
-              <option value="vice president">Vice President</option>
-              <option value="president">President</option>
-            </select>
+            <div class="custom-select-wrap" id="amRoleWrap" style="width:100%;">
+              <button type="button" class="custom-select-btn" id="amRoleBtn" onclick="toggleAmRoleDrop(event)" style="width:100%;">Member</button>
+
+            </div>
+            <input type="hidden" id="amRole" value="member">
           </div>
         </div>
       </div>
@@ -406,8 +410,90 @@
   </div>
 
   <div class="crud-toast" id="crudToast"></div>
-  <script src="/assets/javascripts/explore.js"></script>
+  <script src="/public/assets/javascripts/explore.js"></script>
 
+
+<script>
+function preventScroll(e) { e.preventDefault(); }
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+
+  // force grid reflow on mobile
+  if (window.innerWidth <= 768) { var g = document.getElementById('clubsGrid'); g.style.display='block'; void g.offsetHeight; g.style.display=''; }
+</script>
+
+<div id="proposeToast" style="
+  display:none;
+  position:fixed;bottom:28px;right:24px;left:auto;
+  z-index:9000;
+  background:linear-gradient(135deg,#1a5c38,#2d8a57);
+  color:#fff;padding:14px 22px;border-radius:999px;
+  box-shadow:0 8px 32px rgba(13,43,26,.35);
+  align-items:center;gap:12px;
+  font-family:inherit;font-size:13px;font-weight:500;
+  white-space:nowrap;
+  animation:slideUpToast .35s cubic-bezier(.34,1.56,.64,1);
+">
+  <span style="color:rgba(255,255,255,.85);">Don't see your club?</span>
+  <a href="index.php?page=club_request"
+    style="color:#fff;font-weight:800;font-size:13px;text-decoration:none;">Propose one</a>
+  <button onclick="dismissToast()"
+    style="background:none;border:none;color:rgba(255,255,255,.7);cursor:pointer;font-size:16px;padding:0;line-height:1;">
+    &times;
+  </button>
+</div>
+<style>
+@keyframes slideUpToast {
+  from { opacity:0; transform:translateY(20px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+</style>
+<script>
+(function(){
+  var toast = document.getElementById('proposeToast');
+  var dismissed = false;
+  var shown = false;
+  function dismissToast() {
+    toast.style.display = 'none';
+    dismissed = true;
+  }
+  window.dismissToast = dismissToast;
+  function checkScroll(el) {
+    if (dismissed || shown) return;
+    var scrolled = el.scrollTop + el.clientHeight;
+    var total = el.scrollHeight;
+    if (scrolled >= total - 80) {
+      toast.style.display = 'flex';
+      shown = true;
+    }
+  }
+  var content = document.querySelector('.content');
+  if (content) {
+    content.addEventListener('scroll', function() { checkScroll(content); });
+  }
+  window.addEventListener('scroll', function() { checkScroll(document.documentElement); });
+})();
+</script>
+
+
+  <div class="custom-select-list" id="amRoleList" style="position:fixed;z-index:9999;display:none;flex-direction:column;background:#fff;border:1.5px solid var(--border);border-radius:12px;box-shadow:0 8px 24px rgba(13,43,26,0.12);overflow:hidden;">
+    <div class="custom-select-option selected" onclick="setAmRole('member','Member')">Member</div>
+    <div class="custom-select-option" onclick="setAmRole('officer','Officer')">Officer</div>
+    <div class="custom-select-option" onclick="setAmRole('lead','Lead')">Lead</div>
+    <div class="custom-select-option" onclick="setAmRole('vice president','Vice President')">Vice President</div>
+    <div class="custom-select-option" onclick="setAmRole('president','President')">President</div>
+  </div>
 </body>
 
 </html>

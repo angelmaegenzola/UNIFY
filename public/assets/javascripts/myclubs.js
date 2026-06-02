@@ -81,7 +81,8 @@ function renderClubs(clubs) {
         return;
     }
 
-    const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+    const searchEl = document.getElementById('searchInput');
+    const query = (searchEl ? searchEl.value : '').toLowerCase().trim();
     const visible = clubs.filter(club => {
         const matchCat  = currentCat === 'all' || club.cat === currentCat;
         const matchText = !query ||

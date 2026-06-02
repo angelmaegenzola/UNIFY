@@ -28,6 +28,7 @@ const OM = (() => {
 
   /* ── Init ────────────────────────────────────────────────── */
   document.addEventListener('DOMContentLoaded', () => {
+  if (!CFG.isDM) markGroupRead();
     const d = $id('topbarDate');
     if (d) d.textContent = new Date().toLocaleDateString('en-PH', {
       weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
@@ -320,6 +321,7 @@ const OM = (() => {
     clearTimeout(pollTimer);
     $msg() && ($msg().innerHTML = '<div class="msg-spinner"><i class="fas fa-spinner fa-spin"></i> Loading…</div>');
     loadMessages(true);
+    markGroupRead();
   }
 
   /* ── Open DM ─────────────────────────────────────────────── */
@@ -433,4 +435,73 @@ const OM = (() => {
     showToast,
   };
 
+
+  /* ── Mark group chat read ──────────────────────────────── */
+  function markGroupRead() {
+    fetch(`${BASE}&action=mark_group_read`, { method: 'POST', credentials: 'same-origin' });
+    const b = document.getElementById('groupChatBadge');
+    if (b) b.style.display = 'none';
+  }
 })();
+/* ── Notifications ───────────────────────────────────────── */
+let notifPanelOpen = false;
+
+function toggleNotifPanel() {
+  const panel = document.getElementById('notifPanel');
+  if (!panel) return;
+  notifPanelOpen = !notifPanelOpen;
+  panel.style.display = notifPanelOpen ? 'block' : 'none';
+  if (notifPanelOpen) loadNotifications();
+}
+
+async function loadNotifications() {
+  const list = document.getElementById('notifList');
+  if (!list) return;
+  try {
+    const res  = await fetch(`index.php?page=officer_messages&club_id=${CFG.clubId}&action=notif_list`);
+    const data = await res.json();
+    if (!data.notifications?.length) {
+      list.innerHTML = '<div class="notif-empty">No notifications</div>';
+      return;
+    }
+    const iconMap = {
+      app_approved:  'fa-circle-check',
+      app_rejected:  'fa-circle-xmark',
+      club_position: 'fa-id-badge',
+      info:          'fa-circle-info',
+    };
+    list.innerHTML = data.notifications.map(n => `
+      <div class="notif-item ${n.is_read ? '' : 'unread'}" onclick="readNotif(${n.id},'${esc(n.link)}')">
+        <div class="notif-title"><i class="fas ${iconMap[n.type] || 'fa-bell'}"></i> ${esc(n.title)}</div>
+        <div class="notif-msg">${esc(n.message||'')}</div>
+        <div class="notif-time">${esc(n.created_fmt)}</div>
+      </div>`).join('');
+  } catch {
+    list.innerHTML = '<div class="notif-empty">Failed to load</div>';
+  }
+}
+
+async function readNotif(id, link) {
+  await fetch(`index.php?page=officer_messages&club_id=${CFG.clubId}&action=notif_read&id=${id}`);
+  if (link) window.location = link;
+}
+
+async function markAllRead() {
+  await fetch(`index.php?page=officer_messages&club_id=${CFG.clubId}&action=notif_read_all`);
+  loadNotifications();
+}
+
+document.addEventListener('click', e => {
+  const panel = document.getElementById('notifPanel');
+  if (notifPanelOpen && panel && !panel.contains(e.target) && !e.target.closest('.icon-btn')) {
+    notifPanelOpen = false;
+    panel.style.display = 'none';
+  }
+});
+
+/* ── Mark group chat read ────────────────────────────────── */
+function markGroupRead() {
+  fetch(`${BASE}&action=mark_group_read`, { method: 'POST', credentials: 'same-origin' });
+  const b = document.getElementById('groupChatBadge');
+  if (b) b.style.display = 'none';
+}

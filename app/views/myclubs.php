@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/myclubs_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/myclubs_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +7,17 @@
   <title>UNIFY — My Clubs</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/myclubs.css" />
+  <link rel="stylesheet" href="/public/assets/css/myclubs.css" />
 </head>
 <body>
 
 <div class="app">
 
   <!-- ═══════════ SIDEBAR ═══════════ -->
-   <aside class="sidebar">
+   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
-      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text">
         <div class="brand-name">UNIFY</div>
         <div class="brand-tagline">Club Management System</div>
@@ -95,6 +96,9 @@
 
     <!-- TOPBAR -->
     <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left">
         <span class="topbar-page-title">My Clubs</span>
         <span class="topbar-date" id="topbarDate"></span>
@@ -102,57 +106,37 @@
       <div class="topbar-center">
         <div class="topbar-search">
           <i class="fas fa-magnifying-glass"></i>
-          <input type="text" id="searchInput" placeholder="Search your clubs…" oninput="filterMyClubs()" />
+          <input type="text" placeholder="Search clubs, events, announcements…"/>
         </div>
       </div>
       <div class="topbar-actions">
-        <button class="icon-btn" id="notifBtn" title="Notifications">
+        <button class="icon-btn" id="notifBtn" title="Notifications" onclick="toggleNotif(event)">
           <i class="fas fa-bell"></i>
-          <span class="badge red" id="notifBadge">3</span>
+          <span class="badge red hidden" id="notifBadge">0</span>
         </button>
-
         <div class="notif-dropdown" id="notifDropdown">
           <div class="notif-header">
             <span class="notif-header-title"><i class="fas fa-bell"></i> Notifications</span>
-            <button class="notif-mark-btn" id="markAllBtn">Mark all read</button>
+            <button class="notif-mark-btn" onclick="clearNotifs()">Mark all read</button>
           </div>
-          <div class="notif-list">
-            <div class="notif-item unread">
-              <div class="notif-dot"></div>
-              <div class="notif-content">
-                <span class="notif-text"><strong>ITS</strong> posted a new announcement.</span>
-                <span class="notif-time"><i class="fas fa-clock"></i> 30 mins ago</span>
-              </div>
-            </div>
-            <div class="notif-item unread">
-              <div class="notif-dot"></div>
-              <div class="notif-content">
-                <span class="notif-text">Upcoming event: <strong>Tech Talk</strong> on Apr 25.</span>
-                <span class="notif-time"><i class="fas fa-clock"></i> 2 hours ago</span>
-              </div>
-            </div>
-            <div class="notif-item unread">
-              <div class="notif-dot"></div>
-              <div class="notif-content">
-                <span class="notif-text"><strong>DPSF</strong> General Assembly this Friday!</span>
-                <span class="notif-time"><i class="fas fa-clock"></i> 5 hours ago</span>
-              </div>
+          <div class="notif-list" id="notifList">
+            <div class="notif-item">
+              <div class="notif-content"><span class="notif-text">No new notifications.</span></div>
             </div>
           </div>
           <div class="notif-footer">Only showing recent notifications</div>
         </div>
-
         <a href="index.php?page=studentprofile" class="topbar-profile" title="View Profile">
           <div class="topbar-avatar">
-  <?php if (!empty($avatar_url)): ?>
-    <img src="<?= $avatar_url ?>" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;" />
-  <?php else: ?>
-    <?= $avatar ?>
-  <?php endif; ?>
-</div>
+            <?php if (!empty($avatar_url)): ?>
+              <img src="<?= $avatar_url ?>" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;" />
+            <?php else: ?>
+              <?= $avatar ?>
+            <?php endif; ?>
+          </div>
           <div class="topbar-profile-info">
             <span class="tp-name"><?= $full_name ?></span>
-            <span class="tp-role"><?= ucwords($my_role) ?></span>
+            <span class="tp-role"><?= isset($my_role) ? ucfirst($my_role) : 'Student' ?></span>
           </div>
           <i class="fas fa-chevron-down tp-caret"></i>
         </a>
@@ -349,7 +333,7 @@
 <!-- Toast -->
 <div class="crud-toast" id="crudToast"></div>
 
-<script src="/assets/javascripts/myclubs.js"></script>
+<script src="/public/assets/javascripts/myclubs.js"></script>
 <?php
   // If redirected from explore with a specific club_id, auto-open that club
   $open_club_id = (int)($_GET['club_id'] ?? 0);
@@ -378,6 +362,23 @@
     }
     tryOpenClub(20); // try for up to 4 seconds
   });
+</script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/dashboard_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/dashboard_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +18,8 @@
   <div class="app">
 
     <!-- SIDEBAR -->
-    <aside class="sidebar">
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+ <aside class="sidebar" id="mainSidebar">
       <div class="sidebar-brand">
         <img src="assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
         <div class="brand-text">
@@ -59,8 +60,13 @@
 
       <header class="topbar">
         <div class="topbar-left">
-          <span class="topbar-page-title">Dashboard</span>
-          <span class="topbar-date" id="topbarDate"></span>
+          <button class="topbar-hamburger" onclick="toggleSidebar()" title="Menu">
+            <img src="/assets/pictures/unifylogo.png" alt="Menu" class="topbar-logo-btn" />
+          </button>
+          <div class="topbar-title-group">
+            <span class="topbar-page-title">Dashboard</span>
+            <span class="topbar-date" id="topbarDate"></span>
+<script>const _d=new Date();document.getElementById("topbarDate").textContent=_d.toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});</script>
         </div>
         <div class="topbar-center">
           <div class="topbar-search">
@@ -107,6 +113,7 @@
             <i class="fas fa-chevron-down tp-caret"></i>
           </div>
         </div>
+        <button class="hamburger-btn" onclick="toggleSidebar()" title="Menu"><i class="fas fa-bars"></i></button>
       </header>
 
       <div class="content">
@@ -697,7 +704,7 @@
     }, $dbApplicants), JSON_HEX_TAG | JSON_HEX_APOS) ?>;
   </script>
 
-  <script src="/assets/javascripts/dashboard.js"></script>
+  <script src="/public/assets/javascripts/dashboard.js"></script>
 
 <script>
 // ── ADMIN NOTIFICATION DROPDOWN ────────────────────────────
@@ -781,13 +788,13 @@
       }
 
       list.innerHTML = items.map((n, i) => `
-        <div class="notif-item unread" id="nadmin-${i}" onclick="${n.action ? `_notifAction(${i})` : ''}">
+        <div class="notif-item unread" id="nadmin-${i}" onclick="${n.action ? '_notifAction(' + i + ')' : ''}">
           <div class="notif-icon ${n.iconClass}"><i class="${n.icon}"></i></div>
           <div class="notif-content">
             <div class="notif-title">${n.title}</div>
             <div class="notif-msg">${n.msg}</div>
             <div class="notif-time">${n.time}</div>
-            ${n.action ? `<button class="notif-review-btn" onclick="event.stopPropagation();_notifAction(${i})"><i class="fas fa-eye"></i> ${n.actionLabel}</button>` : ''}
+            ${n.action ? '<button class="notif-review-btn" onclick="event.stopPropagation();_notifAction(' + i + ')"><i class="fas fa-eye"></i> ' + n.actionLabel + '</button>' : ''}
           </div>
         </div>
       `).join('');
@@ -897,6 +904,72 @@ function confirmApproveEvent() {
         }).catch(() => showToast('Network error.', 'error'));
     }
 </script>
+<script>
+function preventScroll(e) { e.preventDefault(); }
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const open = sidebar.classList.toggle('open');
+  sidebar.style.setProperty('left', open ? '0px' : '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+  document.body.classList.toggle('sidebar-open', open);
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) {
+    fab.style.opacity = open ? '0' : '1';
+    fab.style.pointerEvents = open ? 'none' : '';
+  }
+  const mainEl = document.querySelector('.main');
+  if (open) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = '-' + window.scrollY + 'px';
+    document.body.dataset.scrollY = window.scrollY;
+    if (mainEl) mainEl.style.overflow = 'hidden';
+    if (mainEl) mainEl.style.pointerEvents = 'none';
+  } else {
+    const scrollY = document.body.dataset.scrollY || 0;
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY));
+    if (mainEl) mainEl.style.overflow = '';
+    if (mainEl) mainEl.style.pointerEvents = '';
+  }
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  sidebar.style.setProperty('left', '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+  const scrollY = document.body.dataset.scrollY || 0;
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+  document.body.style.top = '';
+  window.scrollTo(0, parseInt(scrollY));
+  const mainEl = document.querySelector('.main');
+  if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
+}
+var _tsx = 0, _tsy = 0;
+document.addEventListener('touchstart', function(e) {
+  _tsx = e.touches[0].clientX;
+  _tsy = e.touches[0].clientY;
+}, {passive:true});
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - _tsx;
+  var dy = e.changedTouches[0].clientY - _tsy;
+  if (Math.abs(dy) > Math.abs(dx)) return; // ignore vertical swipes
+  if (dx > 40 && _tsx < 80) toggleSidebar();  // swipe right from left 80px
+  if (dx < -40) closeSidebar();               // swipe left anywhere
+}, {passive:true});
+</script>
+<button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
+  <i class="fas fa-bars"></i>
+</button>
 </body>
 
 </html>

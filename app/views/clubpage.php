@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/clubpage_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/clubpage_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +7,18 @@
   <title>UNIFY — Clubs</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/css/clubpage.css"/>
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/clubpage.css"/>
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">
 
 
-    <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+    <aside class="sidebar" id="mainSidebar">
 <div class="sidebar-brand">
-  <img src="assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+  <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
   <div class="brand-text">
     <div class="brand-name">UNIFY</div>
     <div class="brand-tagline">Club Management System</div>
@@ -54,8 +56,13 @@
   <main class="main">
     <header class="topbar">
       <div class="topbar-left">
-        <span class="topbar-page-title">Clubs</span>
-        <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+        <button class="topbar-hamburger" onclick="toggleSidebar()" title="Menu">
+          <img src="/assets/pictures/unifylogo.png" alt="Menu" class="topbar-logo-btn" />
+        </button>
+        <div class="topbar-title-group">
+          <span class="topbar-page-title">Clubs</span>
+          <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+        </div>
       </div>
       <div class="topbar-center">
         <div class="topbar-search">
@@ -65,6 +72,7 @@
       </div>
       <div class="topbar-actions">
         <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i></button>
+        <button class="hamburger-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         <div class="topbar-profile">
             <div class="topbar-avatar">
               <?php if (!empty($avatar_url)): ?>
@@ -138,6 +146,7 @@
 
 
         <div class="clubs-right-panel" id="rightPanel">
+          <div class="sheet-handle"></div>
 
           <?php if (!empty($clubs)): $c = $clubs[0]; ?>
           <div class="club-detail-hero" id="detailHero">
@@ -506,6 +515,7 @@ function bindItem(item) {
     getAllItems().forEach(i => i.classList.remove('selected'));
     item.classList.add('selected');
     updateRightPanel(item);
+    if (window.innerWidth <= 768) openSheet();
   });
 }
 
@@ -549,5 +559,85 @@ if (firstItem) { currentClub = firstItem; updateRightPanel(firstItem); }
 })();
 <?php endif; ?>
 </script>
+
+<script>
+function preventScroll(e) {
+  if (document.getElementById('rightPanel') && document.getElementById('rightPanel').contains(e.target)) return;
+  e.preventDefault();
+}
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const open = sidebar.classList.toggle('open');
+  sidebar.style.setProperty('left', open ? '0px' : '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+  document.body.classList.toggle('sidebar-open', open);
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = open ? '0' : '1'; fab.style.pointerEvents = open ? 'none' : ''; }
+  const mainEl = document.querySelector('.main');
+  if (open) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = '-' + window.scrollY + 'px';
+    document.body.dataset.scrollY = window.scrollY;
+    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
+  } else {
+    const scrollY = document.body.dataset.scrollY || 0;
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY));
+    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  }
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  sidebar.style.setProperty('left', '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+  const scrollY = document.body.dataset.scrollY || 0;
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+  document.body.style.top = '';
+  window.scrollTo(0, parseInt(scrollY));
+  const mainEl = document.querySelector('.main');
+  if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
+}
+var _tsx = 0;
+document.addEventListener('touchstart', function(e) { _tsx = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - _tsx;
+  if (dx > 60 && _tsx < 40) toggleSidebar();
+  if (dx < -60) closeSidebar();
+}, {passive:true});
+</script>
+
+<script>
+function openSheet() {
+  document.getElementById('rightPanel').classList.add('mobile-visible');
+  document.getElementById('sheetOverlay').classList.add('open');
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = '0'; fab.style.pointerEvents = 'none'; }
+  document.body.classList.add('sidebar-open');
+  document.addEventListener('touchmove', preventScroll, {passive: false});
+}
+function closeSheet() {
+  document.getElementById('rightPanel').classList.remove('mobile-visible');
+  const fab2 = document.getElementById('fabMenuBtn');
+  if (fab2) { fab2.style.opacity = '1'; fab2.style.pointerEvents = ''; }
+  document.body.classList.remove('sidebar-open');
+  document.removeEventListener('touchmove', preventScroll);
+  document.getElementById('sheetOverlay').classList.remove('open');
+}
+
+</script>
+<button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
+  <i class="fas fa-bars"></i>
+</button>
 </body>
 </html>

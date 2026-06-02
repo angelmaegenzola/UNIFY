@@ -1,4 +1,5 @@
 <?php
+define('BASE_URL', '/unify');
 $page = $_GET['page'] ?? 'landing-page';
 
 $allowed_pages = [

@@ -2,7 +2,7 @@
 // Model: page-load queries for reports
 // All queries wrapped safely — a missing table returns 0 instead of crashing.
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 
 function rq(PDO $pdo, string $sql, int $default = 0): int {
     try { return (int) $pdo->query($sql)->fetchColumn(); }

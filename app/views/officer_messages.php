@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/officer_messages_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/officer_messages_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,17 +7,18 @@
   <title>UNIFY — Club Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/officer_dashboard.css" />
-  <link rel="stylesheet" href="/assets/css/officer_messages.css" />
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/officer_dashboard.css" />
+  <link rel="stylesheet" href="/public/assets/css/officer_messages.css" />
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">
 
   <!-- ── SIDEBAR ────────────────────────────────────────── -->
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
-      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text">
         <div class="brand-name">UNIFY</div>
         <div class="brand-tagline">Club Management System</div>
@@ -89,18 +90,16 @@
   <main class="main">
 
     <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left">
         <span class="topbar-page-title">Club Chat</span>
         <span class="topbar-date" id="topbarDate"></span>
       </div>
       <div class="topbar-center"></div>
       <div class="topbar-actions">
-        <button class="icon-btn" title="Notifications" onclick="toggleNotifPanel()">
-          <i class="fas fa-bell"></i>
-          <?php if ($unreadNotifs > 0): ?>
-            <span class="badge"><?= $unreadNotifs ?></span>
-          <?php endif; ?>
-        </button>
+
         <a href="index.php?page=profile" class="topbar-profile" style="text-decoration:none;cursor:pointer;">
           <div class="topbar-avatar">
             <?php if (!empty($avatar_url)): ?>
@@ -188,7 +187,11 @@
                  onclick="OM.switchToGroup()">
               <i class="fas fa-hashtag"></i>
               <span>Group Chat</span>
-              <span class="msg-online-dot"></span>
+              <?php if ($groupUnread > 0): ?>
+                <span class="dm-unread-badge" id="groupChatBadge"><?= $groupUnread ?></span>
+              <?php else: ?>
+                <span class="dm-unread-badge" id="groupChatBadge" style="display:none;"></span>
+              <?php endif; ?>
             </div>
           </div>
 
@@ -296,6 +299,16 @@
   </div>
 </div>
 
+  <div id="notifPanel" class="notif-panel" style="display:none;">
+    <div class="notif-panel-header">
+      <span>Notifications</span>
+      <button onclick="markAllRead()" class="notif-mark-all">Mark all read</button>
+    </div>
+    <div id="notifList" class="notif-list">
+      <div class="notif-empty">Loading…</div>
+    </div>
+  </div>
+
 <script>
 window.OM_CONFIG = {
   userId:     <?= (int)$userId ?>,
@@ -311,6 +324,23 @@ window.OM_CONFIG = {
   pageBase:   'index.php?page=officer_messages&club_id=<?= $clubId ?>',
 };
 </script>
-<script src="/assets/javascripts/officer_messages.js"></script>
+<script src="/public/assets/javascripts/officer_messages.js"></script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+/* swipe disabled */
+</script>
 </body>
 </html>

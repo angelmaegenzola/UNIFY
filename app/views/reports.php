@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/reports_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/reports_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +7,17 @@
   <title>UNIFY — Reports</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/css/reports.css"/>
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/reports.css"/>
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">
 
   <!-- ── Sidebar ── -->
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
 <div class="sidebar-brand">
-  <img src="assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+  <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
   <div class="brand-text">
     <div class="brand-name">UNIFY</div>
     <div class="brand-tagline">Club Management System</div>
@@ -55,8 +56,13 @@
     <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <span class="topbar-page-title">Reports &amp; Analytics</span>
-        <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+        <button class="topbar-hamburger" onclick="toggleSidebar()" title="Menu">
+          <img src="/assets/pictures/unifylogo.png" alt="Menu" class="topbar-logo-btn" />
+        </button>
+        <div class="topbar-title-group">
+          <span class="topbar-page-title">Reports &amp; Analytics</span>
+          <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+        </div>
       </div>
       <div class="topbar-center">
         <div class="topbar-search">
@@ -82,6 +88,7 @@
           <i class="fas fa-chevron-down tp-caret"></i>
         </div>
       </div>
+            <button class="hamburger-btn" onclick="toggleSidebar()" title="Menu"><i class="fas fa-bars"></i></button>
     </header>
 
     <div class="content">
@@ -95,20 +102,28 @@
           <button class="period-tab" onclick="setTab(this)">Yearly</button>
         </div>
         <div class="toolbar-filters">
-          <select class="filter-select">
-            <option>All Clubs</option>
-            <?php foreach ($clubActivity as $c): ?>
-              <option><?= htmlspecialchars($c['name']) ?></option>
-            <?php endforeach; ?>
-          </select>
-          <select class="filter-select">
-            <option><?= date('F Y') ?></option>
-            <option><?= date('F Y', strtotime('-1 month')) ?></option>
-            <option><?= date('F Y', strtotime('-2 months')) ?></option>
-          </select>
+          <div class="custom-select-wrap">
+            <button class="custom-select-btn" id="rptClubBtn" onclick="toggleDrop('rptClub')">All Clubs</button>
+            <div class="custom-select-list" id="rptClubDropList">
+              <div class="custom-select-option selected" onclick="selectDrop('rptClub','','All Clubs',this)">All Clubs</div>
+              <?php foreach ($clubActivity as $c): ?>
+                <div class="custom-select-option" onclick="selectDrop('rptClub','<?= htmlspecialchars($c['name']) ?>','<?= htmlspecialchars($c['name']) ?>',this)"><?= htmlspecialchars($c['name']) ?></div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+          <input type="hidden" id="rptClubFilter" value=""/>
+          <div class="custom-select-wrap">
+            <button class="custom-select-btn" id="rptMonthBtn" onclick="toggleDrop('rptMonth')"><?= date('F Y') ?></button>
+            <div class="custom-select-list" id="rptMonthDropList">
+              <div class="custom-select-option selected" onclick="selectDrop('rptMonth','<?= date('F Y') ?>','<?= date('F Y') ?>',this)"><?= date('F Y') ?></div>
+              <div class="custom-select-option" onclick="selectDrop('rptMonth','<?= date('F Y', strtotime('-1 month')) ?>','<?= date('F Y', strtotime('-1 month')) ?>',this)"><?= date('F Y', strtotime('-1 month')) ?></div>
+              <div class="custom-select-option" onclick="selectDrop('rptMonth','<?= date('F Y', strtotime('-2 months')) ?>','<?= date('F Y', strtotime('-2 months')) ?>',this)"><?= date('F Y', strtotime('-2 months')) ?></div>
+            </div>
+          </div>
+          <input type="hidden" id="rptMonthFilter" value=""/>
         </div>
         <div class="toolbar-right">
-          <button class="export-btn"><i class="fas fa-download"></i> Export</button>
+          
           <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
         </div>
       </div>
@@ -349,6 +364,90 @@
   </main>
 </div>
 
-<script src="/assets/javascripts/reports.js"></script>
+<script src="/public/assets/javascripts/reports.js"></script>
+
+<script>
+function toggleDrop(type) {
+  const btn = document.getElementById(type+'Btn');
+  const list = document.getElementById(type+'DropList');
+  const isOpen = list.classList.contains('open');
+  document.querySelectorAll('.custom-select-list').forEach(l => l.classList.remove('open'));
+  document.querySelectorAll('.custom-select-btn').forEach(b => b.classList.remove('open'));
+  if (!isOpen) { list.classList.add('open'); btn.classList.add('open'); }
+}
+function selectDrop(type, value, label, el) {
+  const hiddenInput = document.getElementById(type+'Filter');
+  if (hiddenInput) hiddenInput.value = value;
+  document.getElementById(type+'Btn').textContent = label;
+  document.querySelectorAll('#'+type+'DropList .custom-select-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById(type+'DropList').classList.remove('open');
+  document.getElementById(type+'Btn').classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-list').forEach(l => l.classList.remove('open'));
+    document.querySelectorAll('.custom-select-btn').forEach(b => b.classList.remove('open'));
+  }
+});
+</script>
+
+<script>
+function preventScroll(e) { e.preventDefault(); }
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+  const mainEl = document.querySelector('.main');
+  if (open) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = '-' + window.scrollY + 'px';
+    document.body.dataset.scrollY = window.scrollY;
+    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
+  } else {
+    const scrollY = document.body.dataset.scrollY || 0;
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY));
+    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  }
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
+}
+var _tsx = 0, _tsy = 0, _swiping = false;
+document.addEventListener('touchstart', function(e) {
+  _tsx = e.touches[0].clientX;
+  _tsy = e.touches[0].clientY;
+  _swiping = _tsx < 80;
+  if (_swiping) e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchmove', function(e) {
+  if (_swiping) e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - _tsx;
+  var dy = e.changedTouches[0].clientY - _tsy;
+  if (Math.abs(dy) > Math.abs(dx)) return;
+  if (dx > 40 && _tsx < 80) toggleSidebar();
+  if (dx < -40) closeSidebar();
+  _swiping = false;
+}, {passive:true});
+</script>
+<button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
+  <i class="fas fa-bars"></i>
+</button>
 </body>
 </html>

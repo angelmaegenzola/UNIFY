@@ -1,7 +1,7 @@
   <?php
   // Model: page-load queries for events
 
-  require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+  require_once __DIR__ . '/../../config/db.php';
 
   $eventsStmt = $pdo->query("
     SELECT e.*, c.name AS club_name, c.acronym AS club_acronym

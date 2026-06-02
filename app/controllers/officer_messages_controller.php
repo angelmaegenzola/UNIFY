@@ -21,8 +21,8 @@ ob_start();
 
 if (session_status() === PHP_SESSION_NONE) session_start();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/officer_dashboard_model.php';
+require_once __DIR__ . '/../../config/db.php';
+require_once __DIR__ . '/../../app/models/officer_dashboard_model.php';
 
 if (empty($_SESSION['user_id'])) {
     if (!empty($_GET['action'])) {
@@ -120,6 +120,10 @@ $mbrStmt->execute([$clubId]);
 $dbMembers = $mbrStmt->fetchAll(PDO::FETCH_ASSOC);
 
 $totalMembers = count($dbMembers);
+$groupUnread = 0;
+$groupUnreadStmt = $pdo->prepare("SELECT COUNT(*) FROM club_messages WHERE club_id=? AND sender_id!=? AND is_deleted=0 AND sent_at > COALESCE((SELECT last_read FROM club_message_reads WHERE user_id=? AND club_id=?), '2000-01-01')");
+$groupUnreadStmt->execute([$clubId, $userId, $userId, $clubId]);
+$groupUnread = (int)$groupUnreadStmt->fetchColumn();
 $unreadNotifs = getUnreadNotifCount($pdo, $userId);
 
 // ── Helper ─────────────────────────────────────────────────
@@ -139,6 +143,34 @@ function buildMessageRow($r, $myUserId) {
         'avatar'    => $pic,
     ];
 }
+
+// ── GET: Notifications ─────────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && in_array($_GET['action'], ['notif_list','notif_read','notif_read_all'])) {
+    ob_end_clean();
+    header('Content-Type: application/json');
+    $uid    = (int)$_SESSION['user_id'];
+    $action = $_GET['action'];
+    if ($action === 'notif_list') {
+        $stmt = $pdo->prepare("SELECT * FROM notifications WHERE user_id=? ORDER BY created_at DESC LIMIT 20");
+        $stmt->execute([$uid]);
+        $notifs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($notifs as &$n) $n['created_fmt'] = date('M j, g:i a', strtotime($n['created_at']));
+        $unread = $pdo->prepare("SELECT COUNT(*) FROM notifications WHERE user_id=? AND is_read=0");
+        $unread->execute([$uid]);
+        echo json_encode(['notifications' => $notifs, 'unread' => (int)$unread->fetchColumn()]);
+        exit;
+    }
+    if ($action === 'notif_read') {
+        $pdo->prepare("UPDATE notifications SET is_read=1 WHERE id=? AND user_id=?")->execute([$_GET['id'] ?? 0, $uid]);
+        echo json_encode(['success' => true]); exit;
+    }
+    if ($action === 'notif_read_all') {
+        $pdo->prepare("UPDATE notifications SET is_read=1 WHERE user_id=?")->execute([$uid]);
+        echo json_encode(['success' => true]); exit;
+    }
+    exit;
+}
+
 
 $action = $_GET['action'] ?? '';
 
@@ -355,6 +387,13 @@ if ($action === 'dm_unread') {
 }
 
 // ── dm_mark_read ───────────────────────────────────────────
+if ($action === 'mark_group_read') {
+    ob_end_clean();
+    header('Content-Type: application/json');
+    $pdo->prepare("INSERT INTO club_message_reads (user_id, club_id, last_read) VALUES (?,?,NOW()) ON DUPLICATE KEY UPDATE last_read=NOW()")->execute([$userId, $clubId]);
+    echo json_encode(['success' => true]);
+    exit;
+}
 if ($action === 'dm_mark_read') {
     ob_end_clean();
     header('Content-Type: application/json');

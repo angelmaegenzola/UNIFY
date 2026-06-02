@@ -10,10 +10,10 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 $_vendorPath = dirname(__DIR__, 2) . '/vendor/autoload.php';
 if (!file_exists($_vendorPath)) {
-    $_vendorPath = $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/vendor/autoload.php';
+    $_vendorPath = $_SERVER['DOCUMENT_ROOT'] . '/unify/vendor/autoload.php';
 }
 if (file_exists($_vendorPath)) {
     require_once $_vendorPath;

@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/studenthome_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/studenthome_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +7,7 @@
   <title>UNIFY — <?= $has_club ? 'Home' : 'Explore' ?></title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/css/studenthome.css"/>
+  <link rel="stylesheet" href="/public/assets/css/studenthome.css"/>
   <?php if ($has_club): ?>
   <?php endif; ?>
 </head>
@@ -15,9 +15,10 @@
 <div class="app">
 
   <!-- ═══════ SIDEBAR ═══════ -->
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
-      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text">
         <div class="brand-name">UNIFY</div>
         <div class="brand-tagline">Club Management System</div>
@@ -96,6 +97,9 @@
 
     <!-- TOPBAR -->
     <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left">
         <span class="topbar-page-title"><?= $has_club ? 'Home' : 'Explore' ?></span>
         <span class="topbar-date" id="topbarDate"></span>
@@ -546,7 +550,7 @@
 </div><!-- /app -->
 
 <div class="crud-toast" id="crudToast"></div>
-<script src="/assets/javascripts/studenthome.js"></script>
+<script src="/public/assets/javascripts/studenthome.js"></script>
 
 
 <script>
@@ -577,6 +581,23 @@ function switchClub(clubId) {
   if (cid) switchClub(cid);
 })();
 <?php endif; ?>
+</script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+/* swipe disabled */
 </script>
 </body>
 </html>

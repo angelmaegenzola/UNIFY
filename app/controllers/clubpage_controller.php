@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) session_start();
 if (!isset($_SESSION['user_id'])) { header('Location: index.php?page=login'); exit; }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 $me = $pdo->prepare('SELECT * FROM users WHERE id = ? LIMIT 1');
 $me->execute([$_SESSION['user_id']]);
 $me = $me->fetch(PDO::FETCH_ASSOC);
@@ -25,12 +25,12 @@ function handleLogoUpload(string $field): ?string {
 
     $ext     = pathinfo($file['name'], PATHINFO_EXTENSION);
     $fname   = 'club_' . uniqid() . '.' . $ext;
-    $dir     = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/clubs/';
+    $dir     = $_SERVER['DOCUMENT_ROOT'] . '/assets/pictures/profile_pictures/clubs/';
     if (!is_dir($dir)) mkdir($dir, 0755, true);
     $dest    = $dir . $fname;
 
     if (!move_uploaded_file($file['tmp_name'], $dest)) return null;
-    return '/assets/pictures/clubs/' . $fname;
+    return '/assets/pictures/profile_pictures/clubs/' . $fname;
 }
 $toast = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $toast = $_GET['toast'] ?? '';
 $pdo->exec("UPDATE events SET status='completed' WHERE status='upcoming' AND event_date < CURDATE()");
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/models/clubpage_model.php';
+require_once __DIR__ . '/../../app/models/clubpage_model.php';
 $avatarColors = ['oa-blue','oa-teal','oa-green','oa-yellow','oa-orange','oa-purple'];
 $eventColors  = ['cev-blue','cev-teal','cev-green','cev-yellow','cev-orange'];
 

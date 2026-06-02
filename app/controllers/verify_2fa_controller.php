@@ -20,11 +20,11 @@ if (isset($_SESSION['user_id'])) {
     exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../config/db.php';
+require_once __DIR__ . '/../../config/db.php';
 $_vendorPath = dirname(__DIR__, 2) . '/vendor/autoload.php';
 if (!file_exists($_vendorPath)) {
     // Fallback: try DOCUMENT_ROOT path
-    $_vendorPath = $_SERVER['DOCUMENT_ROOT'] . '/UNIFY(db)/vendor/autoload.php';
+    $_vendorPath = $_SERVER['DOCUMENT_ROOT'] . '/unify/vendor/autoload.php';
 }
 if (!file_exists($_vendorPath)) {
     die('<div style="font-family:sans-serif;padding:40px;color:#c0291b;background:#fdecea;border-radius:8px;margin:40px auto;max-width:600px;">

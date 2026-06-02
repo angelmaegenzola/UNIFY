@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/student_messages_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/student_messages_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,16 +7,18 @@
   <title>UNIFY — Club Chat</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/studentevents.css" />
-  <link rel="stylesheet" href="/assets/css/student_messages.css" />
+  <link rel="stylesheet" href="/public/assets/css/studentevents.css" />
+  <link rel="stylesheet" href="/public/assets/css/studenthome.css" />
+  <link rel="stylesheet" href="/public/assets/css/student_messages.css" />
 </head>
 <body>
 <div class="app">
 
   <!-- ── SIDEBAR ────────────────────────────────────────── -->
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
-      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text">
         <div class="brand-name">UNIFY</div>
         <div class="brand-tagline">Club Management System</div>
@@ -70,9 +72,11 @@
   <main class="main">
 
     <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left">
         <span class="topbar-page-title">Club Chat</span>
-        <span class="topbar-date" id="topbarDate"></span>
       </div>
       <div class="topbar-center"></div>
       <div class="topbar-actions">
@@ -86,7 +90,7 @@
             <span class="badge"><?= $unreadNotifs ?></span>
           <?php endif; ?>
         </button>
-        <a href="index.php?page=studentprofile" class="topbar-profile">
+        <a href="index.php?page=studentprofile" class="topbar-profile" onclick="if(window.innerWidth<=768){event.preventDefault();toggleMsgPanel();}">
           <div class="topbar-avatar">
             <?php if (!empty($avatar_url)): ?>
               <img src="<?= $avatar_url ?>" alt="Avatar" style="width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;" />
@@ -102,7 +106,48 @@
       </div>
     </header>
 
-    <div class="content">
+    <!-- Mobile chat label -->
+    <div class="mobile-chat-label" id="mobileChatLabel">
+      <div class="mcl-icon" id="mclIcon">
+        <i class="fas <?= $isDM ? 'fa-user' : 'fa-hashtag' ?>"></i>
+      </div>
+      <div class="mcl-info">
+        <div class="mcl-title" id="mobileTopbarTitle"><?= $isDM ? htmlspecialchars($dmUserName ?? 'DM') : 'Group Chat' ?></div>
+        <div class="mcl-sub" id="mobileTopbarSub"><?= $isDM ? 'Direct message · '.htmlspecialchars($clubName) : 'All '.$totalMembers.' members · '.htmlspecialchars($clubName) ?></div>
+      </div>
+    </div>
+
+    <!-- Mobile members bar -->
+    <div class="mobile-members-bar" id="mobileMembersBar">
+      <div class="mobile-members-scroll">
+        <?php
+          $colors = ['av-green','av-teal','av-red','av-yellow','av-purple'];
+          foreach ($dbMembers as $i => $m):
+            if ((int)$m['user_id'] === $userId) continue;
+            $color    = $colors[$i % 5];
+            $init     = strtoupper(substr($m['first_name'], 0, 1));
+            $fullName = htmlspecialchars($m['first_name'] . ' ' . $m['last_name']);
+            $memberPic = !empty($m['profile_picture'])
+              ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($m['profile_picture']))
+              : '';
+            $isActiveDM = ($isDM && (int)$m['user_id'] === $dmUserId);
+        ?>
+        <div class="mobile-member-item <?= $isActiveDM ? 'active' : '' ?>"
+             onclick="SM.openDM(<?= (int)$m['user_id'] ?>, '<?= $fullName ?>')">
+          <div class="mobile-member-avatar <?= $color ?>" style="overflow:hidden;">
+            <?php if ($memberPic): ?>
+              <img src="<?= $memberPic ?>" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+            <?php else: ?>
+              <?= $init ?>
+            <?php endif; ?>
+          </div>
+          <span><?= htmlspecialchars($m['first_name']) ?></span>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
+        <div class="content">
       <div class="msg-layout">
 
         <!-- ── LEFT SIDEBAR ─────────────────────────────── -->
@@ -295,6 +340,41 @@ window.SM_CONFIG = {
   pageBase: 'index.php?page=student_messages&club_id=<?= $clubId ?>',
 };
 </script>
-<script src="/assets/javascripts/student_messages.js"></script>
+<script src="/public/assets/javascripts/student_messages.js"></script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  const isOpen = sidebar.classList.toggle('open');
+  overlay.classList.toggle('open', isOpen);
+  document.body.classList.toggle('sidebar-open', isOpen);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+
+
+// Mobile msg-sidebar panel toggle
+function updateMobileTitle(name) {
+  var el = document.getElementById('mobileTopbarTitle');
+  if (el) el.textContent = name;
+}
+function toggleMsgPanel() {
+  const panel = document.querySelector('.msg-sidebar');
+  panel.classList.toggle('mobile-open');
+}
+document.addEventListener('click', function(e) {
+  const panel = document.querySelector('.msg-sidebar');
+  if (panel && panel.classList.contains('mobile-open') &&
+      !panel.contains(e.target) &&
+      !e.target.closest('.mobile-panel-btn')) {
+    panel.classList.remove('mobile-open');
+  }
+});
+</script>
 </body>
 </html>

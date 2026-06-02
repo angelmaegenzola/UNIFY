@@ -1,1 +1,1 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/already_member_handler_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/already_member_handler_controller.php'; ?>

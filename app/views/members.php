@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/members_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/members_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,14 +7,15 @@
   <title>UNIFY — Members</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/css/members.css"/>
-  <link rel="stylesheet" href="/assets/css/transitions.css" />
+  <link rel="stylesheet" href="/public/assets/css/members.css"/>
+  <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
 <div class="app">
 
 
- <aside class="sidebar">
+ <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+ <aside class="sidebar" id="mainSidebar">
 <div class="sidebar-brand">
   <img src="assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
   <div class="brand-text">
@@ -55,8 +56,13 @@
 
     <header class="topbar">
       <div class="topbar-left">
-        <span class="topbar-page-title">Members</span>
-        <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+        <button class="topbar-hamburger" onclick="toggleSidebar()" title="Menu">
+          <img src="/assets/pictures/unifylogo.png" alt="Menu" class="topbar-logo-btn" />
+        </button>
+        <div class="topbar-title-group">
+          <span class="topbar-page-title">Members</span>
+          <span class="topbar-date"><?= date('l, F j, Y') ?></span>
+        </div>
       </div>
       <div class="topbar-center">
         <div class="topbar-search">
@@ -81,6 +87,7 @@
             <i class="fas fa-chevron-down tp-caret"></i>
           </div>
       </div>
+            <button class="hamburger-btn" onclick="toggleSidebar()" title="Menu"><i class="fas fa-bars"></i></button>
     </header>
 
 
@@ -120,19 +127,27 @@
             <i class="fas fa-magnifying-glass"></i>
             <input type="text" id="tableSearch" placeholder="Search by name, course, club…" oninput="filterTable()"/>
           </div>
-          <select class="filter-select" id="clubFilter" onchange="filterTable()">
-            <option value="">All Clubs</option>
-            <?php foreach ($clubs as $c): ?>
-              <option value="<?= htmlspecialchars($c['name']) ?>"><?= htmlspecialchars($c['name']) ?></option>
-            <?php endforeach; ?>
-          </select>
-          <select class="filter-select" id="roleFilter" onchange="filterTable()">
-            <option value="">All Roles</option>
-            <option>member</option>
-            <option>officer</option>
-            <option>vice president</option>
-            <option>president</option>
-          </select>
+          <div class="custom-select-wrap" id="clubSelectWrap">
+            <button class="custom-select-btn" id="clubSelectBtn" onclick="toggleDrop('club')">All Clubs</button>
+            <div class="custom-select-list" id="clubDropList">
+              <div class="custom-select-option selected" onclick="setFilter('club','')">All Clubs</div>
+              <?php foreach ($clubs as $c): ?>
+              <div class="custom-select-option" onclick="setFilter('club','<?= htmlspecialchars($c['name']) ?>')"><?= htmlspecialchars($c['name']) ?></div>
+              <?php endforeach; ?>
+            </div>
+            <input type="hidden" id="clubFilter" value=""/>
+          </div>
+          <div class="custom-select-wrap" id="roleSelectWrap">
+            <button class="custom-select-btn" id="roleSelectBtn" onclick="toggleDrop('role')">All Roles</button>
+            <div class="custom-select-list" id="roleDropList">
+              <div class="custom-select-option selected" onclick="setFilter('role','')">All Roles</div>
+              <div class="custom-select-option" onclick="setFilter('role','member')">Member</div>
+              <div class="custom-select-option" onclick="setFilter('role','officer')">Officer</div>
+              <div class="custom-select-option" onclick="setFilter('role','vice president')">Vice President</div>
+              <div class="custom-select-option" onclick="setFilter('role','president')">President</div>
+            </div>
+            <input type="hidden" id="roleFilter" value=""/>
+          </div>
           <button class="btn-add" onclick="openAdd()">
             <i class="fas fa-plus"></i> Add Member
           </button>
@@ -527,5 +542,103 @@ function filterTable() {
 })();
 <?php endif; ?>
 </script>
+<script>
+function preventScroll(e) { e.preventDefault(); }
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const open = sidebar.classList.toggle('open');
+  sidebar.style.setProperty('left', open ? '0px' : '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+  document.body.classList.toggle('sidebar-open', open);
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = open ? '0' : '1'; fab.style.pointerEvents = open ? 'none' : ''; }
+  const mainEl = document.querySelector('.main');
+  if (open) {
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+    document.body.style.top = '-' + window.scrollY + 'px';
+    document.body.dataset.scrollY = window.scrollY;
+    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
+  } else {
+    const scrollY = document.body.dataset.scrollY || 0;
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.width = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY));
+    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  }
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  sidebar.style.setProperty('left', '-280px', 'important');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+  const scrollY = document.body.dataset.scrollY || 0;
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+  document.body.style.top = '';
+  window.scrollTo(0, parseInt(scrollY));
+  const mainEl = document.querySelector('.main');
+  if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
+  const fab = document.getElementById('fabMenuBtn');
+  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
+}
+document.querySelectorAll('.nav-item').forEach(function(item) {
+  item.addEventListener('click', function() {
+    if (window.innerWidth <= 768) closeSidebar();
+  });
+});
+var _tsx = 0, _tsy = 0;
+document.addEventListener('touchstart', function(e) {
+  _tsx = e.touches[0].clientX;
+  _tsy = e.touches[0].clientY;
+}, {passive: true});
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - _tsx;
+  var dy = e.changedTouches[0].clientY - _tsy;
+  if (Math.abs(dx) < Math.abs(dy)) return;
+  if (dx > 60 && _tsx < 40) toggleSidebar();
+  if (dx < -60) closeSidebar();
+}, {passive: true});
+</script>
+
+<script>
+function toggleDrop(type) {
+  var listId = type === 'club' ? 'clubDropList' : 'roleDropList';
+  var btnId  = type === 'club' ? 'clubSelectBtn' : 'roleSelectBtn';
+  var list = document.getElementById(listId);
+  var btn  = document.getElementById(btnId);
+  var isOpen = list.classList.contains('open');
+  document.querySelectorAll('.custom-select-list').forEach(function(l) { l.classList.remove('open'); });
+  document.querySelectorAll('.custom-select-btn').forEach(function(b) { b.classList.remove('open'); });
+  if (!isOpen) { list.classList.add('open'); btn.classList.add('open'); }
+}
+function setFilter(type, value) {
+  var inputId = type === 'club' ? 'clubFilter' : 'roleFilter';
+  var btnId   = type === 'club' ? 'clubSelectBtn' : 'roleSelectBtn';
+  var listId  = type === 'club' ? 'clubDropList' : 'roleDropList';
+  document.getElementById(inputId).value = value;
+  document.getElementById(btnId).textContent = value || (type === 'club' ? 'All Clubs' : 'All Roles');
+  document.getElementById(listId).querySelectorAll('.custom-select-option').forEach(function(o) {
+    o.classList.toggle('selected', o.textContent.toLowerCase() === (value || ('all ' + type + 's')).toLowerCase() || (!value && o.textContent.includes('All')));
+  });
+  document.getElementById(listId).classList.remove('open');
+  document.getElementById(btnId).classList.remove('open');
+  filterTable();
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-list').forEach(function(l) { l.classList.remove('open'); });
+    document.querySelectorAll('.custom-select-btn').forEach(function(b) { b.classList.remove('open'); });
+  }
+});
+</script>
+<button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
+  <i class="fas fa-bars"></i>
+</button>
 </body>
 </html>

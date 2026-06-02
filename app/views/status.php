@@ -1,4 +1,4 @@
-<?php require_once $_SERVER['DOCUMENT_ROOT'] . '/../app/controllers/status_controller.php'; ?>
+<?php require_once __DIR__ . '/../../app/controllers/status_controller.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,15 +7,16 @@
   <title>UNIFY — Application Status</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
-  <link rel="stylesheet" href="/assets/css/status.css"/>
+  <link rel="stylesheet" href="/public/assets/css/status.css"/>
 </head>
 <body>
 <div class="app">
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+  <aside class="sidebar" id="mainSidebar">
     <div class="sidebar-brand">
-      <img src="/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
+      <img src="/public/assets/pictures/unifylogo.png" alt="UNIFY" class="brand-icon-img" />
       <div class="brand-text"><div class="brand-name">UNIFY</div><div class="brand-tagline">Club Management System</div></div>
     </div>
     <nav class="sidebar-nav">
@@ -55,6 +56,9 @@
   <!-- MAIN -->
   <main class="main">
     <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left"><span class="topbar-page-title">Application Status</span></div>
       <div class="topbar-actions">
         <a href="index.php?page=studentprofile" class="topbar-profile" title="View Profile">
@@ -97,17 +101,6 @@
               <div class="shc-club-name"><?= $a_club ?></div>
               <div class="shc-club-cat"><i class="fas fa-tag"></i> <?= $a_cat ?> &nbsp;·&nbsp; <i class="fas fa-users"></i> <?= $a_members ?> members</div>
             </div>
-          </div>
-
-          <!-- Status Badge -->
-          <div class="shc-status-badge <?= $a_status ?>">
-            <?php if ($a_status === 'approved'): ?>
-              <i class="fas fa-circle-check"></i> Approved
-            <?php elseif ($a_status === 'rejected'): ?>
-              <i class="fas fa-circle-xmark"></i> Not Approved
-            <?php else: ?>
-              <i class="fas fa-hourglass-half"></i> Under Review
-            <?php endif; ?>
           </div>
 
           <div class="shc-meta-grid">
@@ -278,6 +271,41 @@
 <script>
 const APP_ID = <?= $app ? (int)$app['id'] : 'null' ?>;
 </script>
+
+<script>
+function toggleSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  const open = sidebar.classList.toggle('open');
+  sidebar.style.setProperty('left', open ? '0px' : '-240px', 'important');
+  document.getElementById('sidebarOverlay').classList.toggle('open');
+  document.body.classList.toggle('sidebar-open', open);
+}
+function closeSidebar() {
+  const sidebar = document.getElementById('mainSidebar');
+  sidebar.classList.remove('open');
+  sidebar.style.setProperty('left', '-240px', 'important');
+  document.getElementById('sidebarOverlay').classList.remove('open');
+  document.body.classList.remove('sidebar-open');
+}
+var _tsx = 0, _tsy = 0, _swiping = false;
+document.addEventListener('touchstart', function(e) {
+  _tsx = e.touches[0].clientX;
+  _tsy = e.touches[0].clientY;
+  _swiping = _tsx < 80;
+  if (_swiping) e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchmove', function(e) {
+  if (_swiping) e.preventDefault();
+}, {passive:false});
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - _tsx;
+  var dy = e.changedTouches[0].clientY - _tsy;
+  if (Math.abs(dy) > Math.abs(dx)) return;
+  if (dx > 40 && _tsx < 80) toggleSidebar();
+  if (dx < -40) closeSidebar();
+  _swiping = false;
+}, {passive:true});
+</script>
 </body>
 </html>
-<script src="/assets/javascripts/status.js"></script>
+<script src="/public/assets/javascripts/status.js"></script>

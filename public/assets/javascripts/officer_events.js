@@ -590,7 +590,7 @@ function openEditModal(dbId) {
                onclick="markNotifRead(${n.id}, ${JSON.stringify(n.link||'')})">
             <div style="font-weight:700;color:var(--text-dark);">${unread?'<span style=\"display:inline-block;width:7px;height:7px;background:var(--primary,#4f6ef7);border-radius:50%;margin-right:5px;\"></span>':''}${esc(n.title)}</div>
             <div style="color:var(--text-light);margin-top:2px;">${esc(n.message)}</div>
-            ${hasLink ? '<div style=\"font-size:10px;color:#888;margin-top:3px;\"><i class=\"fas fa-arrow-right\"></i> click to view</div>' : ''}
+            
           </div>`}).join('');
         const badge = document.getElementById('notifBadge');
         if (badge) { badge.style.display = 'none'; }
