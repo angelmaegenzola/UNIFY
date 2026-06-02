@@ -1341,3 +1341,8 @@ body {
     flex-shrink: 0 !important;
   }
 }
+
+/* Hide propose club button - handled by modal elsewhere */
+.propose-club-btn, a[href*='propose'], button.propose { display: none !important; }
+
+.propose-desktop-link { display: none !important; }
