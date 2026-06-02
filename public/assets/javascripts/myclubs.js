@@ -382,7 +382,7 @@ function initNotifications() {
 
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        dropdown.classList.toggle('open');
+        dropdown.classList.toggle('open'); if (dropdown.classList.contains('open')) loadNotifs();
         btn.classList.toggle('active');
     });
 
@@ -428,4 +428,47 @@ function showToast(msg, type = 'info') {
     t.classList.add('crud-toast-show');
     clearTimeout(t._timer);
     t._timer = setTimeout(() => t.classList.remove('crud-toast-show'), 3400);
+}
+
+/* ══════════════════════════════════════════════════════════
+
+/* ══ NOTIF: load & mark read ══ */
+function loadNotifs() {
+  fetch('index.php?page=notifications&action=list')
+    .then(r => r.json())
+    .then(res => {
+      if (!res.success) return;
+      const list  = document.getElementById('notifList');
+      const badge = document.getElementById('notifBadge');
+      if (!list) return;
+      if (badge) {
+        badge.textContent = res.unread || 0;
+        badge.classList.toggle('hidden', !res.unread);
+      }
+      if (!res.notifications || !res.notifications.length) {
+        list.innerHTML = `
+          <div class="notif-item">
+            <div class="notif-content">
+              <span class="notif-text">No new notifications.</span>
+            </div>
+          </div>`;
+        return;
+      }
+      list.innerHTML = res.notifications.map(n => `
+        <div class="notif-item ${n.is_read == 0 ? 'unread' : ''}"
+             onclick="markNotifRead(${n.id}, '${n.link || ''}', this)">
+          <div class="notif-dot"></div>
+          <div class="notif-content">
+            <span class="notif-text"><strong>${n.title}</strong></span>
+            <span class="notif-text" style="font-weight:400;margin-top:2px;">${n.message || ''}</span>
+            ${n.created_fmt ? `<span class="notif-time">${n.created_fmt}</span>` : ''}
+          </div>
+        </div>`).join('');
+    })
+    .catch(() => {});
+}
+function markNotifRead(id, link, el) {
+  fetch('index.php?page=notifications&action=read&id=' + id, { method: 'POST' });
+  el.classList.remove('unread');
+  if (link) setTimeout(() => window.location = link, 150);
 }
