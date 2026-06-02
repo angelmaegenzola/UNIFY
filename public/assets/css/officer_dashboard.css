@@ -2118,3 +2118,18 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   -ms-overflow-style: none !important;
 }
 .custom-select-list::-webkit-scrollbar { display: none !important; }
+
+@media (max-width: 768px) {
+  .topbar {
+    margin: 0 -16px !important;
+    padding: 10px 16px !important;
+    border-radius: 0 !important;
+    width: calc(100% + 32px) !important;
+    border-bottom: 1px solid var(--border) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .main { padding-top: 0 !important; }
+  .topbar { margin-top: 0 !important; }
+}
