@@ -1947,3 +1947,35 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--main-bg);color:
   .main { margin: 0 !important; padding: 0 !important; }
   .topbar { margin: 0 !important; padding: 10px 16px !important; width: 100% !important; box-sizing: border-box !important; }
 }
+
+.oe-picker-btn {
+  width: 100% !important; height: 40px !important;
+  border: 1.5px solid var(--border) !important; border-radius: var(--radius-sm) !important;
+  padding: 0 32px 0 12px !important; font-size: 13px !important; color: var(--text-dark) !important;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23aaa' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center !important;
+  cursor: pointer !important; outline: none !important; font-family: inherit !important;
+  text-align: left !important; display: flex !important; align-items: center !important;
+  transition: border-color 0.18s !important;
+}
+.oe-picker-btn:hover, .oe-picker-btn.open { border-color: var(--green-accent) !important; }
+.oe-picker-list {
+  display: none; position: absolute; top: calc(100% + 4px); left: 0;
+  min-width: 260px; z-index: 3000; background: #fff;
+  border: 1.5px solid var(--border); border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(13,43,26,0.15); padding: 12px;
+}
+.oe-picker-list.open { display: block; }
+.oe-cal-day {
+  text-align: center; padding: 5px 2px; font-size: 12px; border-radius: 6px;
+  cursor: pointer; color: var(--text-dark);
+}
+.oe-cal-day:hover { background: var(--green-light); }
+.oe-cal-day.today { font-weight: 700; color: var(--green-accent); }
+.oe-cal-day.selected { background: var(--green-accent); color: #fff; border-radius: 6px; }
+.oe-cal-day.other-month { color: var(--text-light); }
+.oe-time-picker { display: flex; gap: 8px; }
+.oe-time-col { display: flex; flex-direction: column; gap: 2px; max-height: 180px; overflow-y: auto; scrollbar-width: none; }
+.oe-time-col::-webkit-scrollbar { display: none; }
+.oe-time-opt { padding: 6px 12px; font-size: 12px; border-radius: 6px; cursor: pointer; color: var(--text-dark); text-align: center; }
+.oe-time-opt:hover { background: var(--green-light); }
+.oe-time-opt.selected { background: var(--green-accent); color: #fff; }
