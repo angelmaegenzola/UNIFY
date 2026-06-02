@@ -2158,3 +2158,33 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
     padding: 9px 16px !important;
   }
 }
+
+@media (max-width: 768px) {
+  .form-select {
+    background-color: #ffffff !important;
+    z-index: 1 !important;
+    position: relative !important;
+  }
+  .modal-box, .modal-overlay { z-index: 9999 !important; }
+  select option { background: #ffffff !important; }
+}
+
+@media (max-width: 768px) {
+  .form-select, .form-input {
+    background-color: #ffffff !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-box { overflow: visible !important; }
+  .modal-body { overflow: visible !important; }
+  .form-select, .form-input {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    opacity: 1 !important;
+  }
+}
