@@ -89,7 +89,13 @@ function getFiltered() {
     if (activeFilter === 'upcoming')  matchFilter = ['upcoming','ongoing','pending_approval'].includes(e.status) && !isPast(e.event_date);
     if (activeFilter === 'completed') matchFilter = e.status === 'completed' || e.status === 'rejected' || (isPast(e.event_date) && e.status !== 'upcoming' && e.status !== 'ongoing');
 
-    return matchSearch && matchFilter;
+    // Date range filter
+    let matchDateRange = true;
+    if (window.dateRangeStart && window.dateRangeEnd) {
+      const eventDate = new Date(e.event_date + "T00:00:00");
+      matchDateRange = eventDate >= window.dateRangeStart && eventDate <= window.dateRangeEnd;
+    }
+    return matchSearch && matchFilter && matchDateRange;
   });
 }
 

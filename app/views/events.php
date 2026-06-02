@@ -156,7 +156,7 @@
             <button class="filter-tab" data-filter="completed">Past</button>
           </div>
           <div class="toolbar-right">
-            <button class="date-range-btn">
+            <button class="date-range-btn" id="dateRangeBtn" onclick="toggleDatePicker()">
               <i class="fas fa-calendar"></i>
               <span><?= date('M j') ?> – <?= date('M j', strtotime('+14 days')) ?>, <?= date('Y') ?></span>
               <i class="fas fa-chevron-down" style="font-size:9px;"></i>
@@ -437,16 +437,26 @@ function closeSidebar() {
     </div>
   </div>
   <div style="display:flex;flex-direction:column;gap:12px;">
-    <div style="background:var(--green-light);border-radius:var(--radius-sm);padding:10px 12px;">
+    <div style="position:relative;">
       <div style="font-size:10px;font-weight:700;color:var(--green-accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">From</div>
-      <input type="date" id="dateFrom" style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-dark);outline:none;box-sizing:border-box;" />
+      <button type="button" id="dateFromBtn" onclick="toggleDrCal('from',event)" style="width:100%;padding:10px 12px;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:600;color:var(--text-dark);cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;">
+        <span>Select date</span>
+        <i class="fas fa-calendar" style="font-size:12px;opacity:0.5;"></i>
+      </button>
+      <input type="hidden" id="dateFrom" />
+      <div id="dateFromCal" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:12px;min-width:260px;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.12);"></div>
     </div>
     <div style="display:flex;justify-content:center;">
       <i class="fas fa-arrow-down" style="color:var(--text-light);font-size:11px;"></i>
     </div>
-    <div style="background:var(--green-light);border-radius:var(--radius-sm);padding:10px 12px;">
+    <div style="position:relative;">
       <div style="font-size:10px;font-weight:700;color:var(--green-accent);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">To</div>
-      <input type="date" id="dateTo" style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--text-dark);outline:none;box-sizing:border-box;" />
+      <button type="button" id="dateToBtn" onclick="toggleDrCal('to',event)" style="width:100%;padding:10px 12px;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:inherit;font-size:13px;font-weight:600;color:var(--text-dark);cursor:pointer;text-align:left;display:flex;align-items:center;justify-content:space-between;">
+        <span>Select date</span>
+        <i class="fas fa-calendar" style="font-size:12px;opacity:0.5;"></i>
+      </button>
+      <input type="hidden" id="dateTo" />
+      <div id="dateToCal" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--border);border-radius:12px;padding:12px;min-width:260px;z-index:3000;box-shadow:0 8px 24px rgba(0,0,0,0.12);"></div>
     </div>
     <div style="display:flex;gap:8px;margin-top:4px;">
       <button onclick="applyDateRange()" style="flex:1;padding:10px;background:var(--green-dark);color:#fff;border:none;border-radius:var(--radius-sm);font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;"><i class="fas fa-check"></i> Apply</button>
@@ -637,6 +647,79 @@ document.addEventListener('DOMContentLoaded', function(){
     if (id === 'efDate') window._renderEfCal && window._renderEfCal();
   }
 });
+</script>
+
+<script>
+(function(){
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let drCal = { from: null, to: null };
+
+  function renderCal(which) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const first = new Date(year, month, 1).getDay();
+    const days = new Date(year, month+1, 0).getDate();
+    const sel = document.getElementById('date' + (which==='from'?'From':'To')).value;
+    
+    let html = `<div style="margin-bottom:8px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <button type="button" onclick="window.drCalPrev('${which}')" style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--green-dark);padding:4px;">‹</button>
+        <span style="font-size:12px;font-weight:700;color:var(--text-dark);">${MONTHS[month]} ${year}</span>
+        <button type="button" onclick="window.drCalNext('${which}')" style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--green-dark);padding:4px;">›</button>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;">`;
+    
+    DAYS.forEach(d => html += `<div style="font-size:10px;font-weight:700;color:var(--text-mid);padding:4px;">${d}</div>`);
+    for(let i=0;i<first;i++) html += '<div></div>';
+    for(let d=1;d<=days;d++){
+      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const isSel = dateStr===sel;
+      html += `<button type="button" onclick="window.drPickDate('${which}','${dateStr}')" style="
+        padding:6px 2px;border:none;border-radius:6px;font-size:11px;cursor:pointer;
+        background:${isSel?'var(--green-dark)':'transparent'};
+        color:${isSel?'#fff':'var(--text-dark)'};
+        font-weight:${isSel?'700':'400'};
+      ">${d}</button>`;
+    }
+    html += '</div></div>';
+    document.getElementById('date' + (which==='from'?'From':'To') + 'Cal').innerHTML = html;
+  }
+
+  window.toggleDrCal = function(which, e) {
+    e.stopPropagation();
+    const cal = document.getElementById('date' + (which==='from'?'From':'To') + 'Cal');
+    document.getElementById('dateFromCal').style.display = 'none';
+    document.getElementById('dateToCal').style.display = 'none';
+    cal.style.display = 'block';
+    renderCal(which);
+  }
+
+  window.drCalPrev = function(which) {
+    renderCal(which);
+  }
+
+  window.drCalNext = function(which) {
+    renderCal(which);
+  }
+
+  window.drPickDate = function(which, val) {
+    const field = document.getElementById('date' + (which==='from'?'From':'To'));
+    const btn = document.getElementById('date' + (which==='from'?'From':'To') + 'Btn');
+    field.value = val;
+    const d = new Date(val);
+    btn.innerHTML = `<span>${d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}</span><i class="fas fa-calendar" style="font-size:12px;opacity:0.5;"></i>`;
+    document.getElementById('date' + (which==='from'?'From':'To') + 'Cal').style.display = 'none';
+  }
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('[id*="Cal"], [id*="Btn"]')) {
+      document.getElementById('dateFromCal').style.display = 'none';
+      document.getElementById('dateToCal').style.display = 'none';
+    }
+  });
+})();
 </script>
 </body>
 
