@@ -2133,3 +2133,20 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .main { padding-top: 0 !important; }
   .topbar { margin-top: 0 !important; }
 }
+
+@media (max-width: 768px) {
+  .main { padding-left: 8px !important; padding-right: 8px !important; }
+}
+
+@media (max-width: 768px) {
+  body, .app, .main { overflow-x: hidden !important; }
+}
+
+@media (max-width: 768px) {
+  .wb-club-pill { max-width: 100% !important; white-space: normal !important; overflow: visible !important; text-overflow: unset !important; }
+}
+
+@media (max-width: 768px) {
+  .announce-card { overflow-x: auto !important; }
+  .ann-scroll-wrap { min-width: 500px !important; }
+}
