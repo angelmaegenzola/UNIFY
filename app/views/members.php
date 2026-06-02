@@ -142,12 +142,9 @@
             <div class="custom-select-list" id="roleDropList">
               <div class="custom-select-option selected" onclick="setFilter('role','')">All Roles</div>
               <div class="custom-select-option" onclick="setFilter('role','member')">Member</div>
-              <div class="custom-select-option" onclick="setFilter('role','president')">President</div>
-              <div class="custom-select-option" onclick="setFilter('role','vice president')">Vice President</div>
-              <div class="custom-select-option" onclick="setFilter('role','senator')">Senator</div>
-              <div class="custom-select-option" onclick="setFilter('role','representative')">Representative</div>
-              <div class="custom-select-option" onclick="setFilter('role','pio')">PIO</div>
               <div class="custom-select-option" onclick="setFilter('role','officer')">Officer</div>
+              <div class="custom-select-option" onclick="setFilter('role','vice president')">Vice President</div>
+              <div class="custom-select-option" onclick="setFilter('role','president')">President</div>
             </div>
             <input type="hidden" id="roleFilter" value=""/>
           </div>
