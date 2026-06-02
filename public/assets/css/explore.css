@@ -1218,3 +1218,126 @@ body {
     justify-content: center !important;
   }
 }
+
+/* ══ MOBILE: Make apply modal scrollable ══ */
+@media (max-width: 768px) {
+  .modal-box {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .modal-body {
+    overflow-y: auto !important;
+    flex: 1 !important;
+  }
+}
+
+/* ══ MOBILE: Fix modal scroll, remove already-link underline ══ */
+@media (max-width: 768px) {
+  .modal-box {
+    max-height: 85vh !important;
+    height: 85vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .modal-body {
+    flex: 1 !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .already-link:hover {
+    text-decoration: none !important;
+  }
+
+  .already-link {
+    text-decoration: none !important;
+  }
+}
+
+/* ══ FINAL FIX: Apply modal scroll on mobile ══ */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-end !important;
+  }
+
+  .modal-box {
+    max-height: 92vh !important;
+    height: auto !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  .modal-body {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    min-height: 0 !important;
+  }
+
+  .modal-footer {
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ══ FINAL FIX: Already member modal - no empty gap ══ */
+@media (max-width: 768px) {
+  #alreadyMemberOverlay .modal-box {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: 92vh !important;
+  }
+}
+
+/* ══ FINAL FIX: Center all modals, only apply modal slides from bottom ══ */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: center !important;
+  }
+
+  .modal-box {
+    height: auto !important;
+    max-height: 92vh !important;
+    border-radius: var(--radius) !important;
+  }
+}
+
+/* ══ FINAL MOBILE MODAL SCROLL FIX ══ */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: center !important;
+    overflow: hidden !important;
+  }
+
+  .modal-box {
+    width: calc(100vw - 24px) !important;
+    max-height: 88vh !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .modal-header {
+    flex-shrink: 0 !important;
+  }
+
+  .modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+
+  .modal-footer {
+    flex-shrink: 0 !important;
+  }
+}

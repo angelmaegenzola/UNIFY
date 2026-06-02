@@ -1,4 +1,4 @@
-function preventScroll(e) { e.preventDefault(); }
+function preventScroll(e) { if (e.target.closest(".modal-body")) return; e.preventDefault(); }
 /* ============================================================
    UNIFY — Explore & Apply JS
    explore.js
@@ -268,7 +268,7 @@ setTimeout(() => { const t = document.getElementById('welcomeToast'); if (t) t.s
 function openAlreadyMember(clubId, clubName) {
       document.getElementById('amClubId').value = clubId;
       document.getElementById('amClubName').textContent = clubName;
-      document.getElementById('amFirstName').value = '';
+      document.getElementById('amFirstName').value = document.getElementById('amFirstName').defaultValue;
       document.getElementById('amLastName').value = document.getElementById('amLastName').defaultValue;
       document.getElementById('amCourse').value = document.getElementById('amCourse').defaultValue;
       document.getElementById('amYear').value = document.getElementById('amYear').defaultValue;
