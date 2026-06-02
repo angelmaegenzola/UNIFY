@@ -249,22 +249,37 @@
       </div>
       <div class="form-group">
         <label class="form-label">Category</label>
-        <select class="form-select" id="aCategory">
-          <option value="General">General</option>
-          <option value="Events">Events</option>
-          <option value="Finance">Finance</option>
-          <option value="Members">Members</option>
-          <option value="Achievement">Achievement</option>
-          <option value="Admin">Admin</option>
-        </select>
+        <div class="custom-select-wrap" id="aCategoryWrap">
+          <button type="button" class="custom-select-btn" id="aCategoryBtn" onclick="toggleAnnCategoryDrop()">
+            <span id="aCategoryLabel">General</span>
+            <i class="fas fa-chevron-down" style="font-size:10px;margin-left:auto;"></i>
+          </button>
+          <div class="custom-select-list" id="aCategoryList">
+            <div class="custom-select-option selected" onclick="selectAnnCategory('General')">General</div>
+            <div class="custom-select-option" onclick="selectAnnCategory('Events')">Events</div>
+            <div class="custom-select-option" onclick="selectAnnCategory('Finance')">Finance</div>
+            <div class="custom-select-option" onclick="selectAnnCategory('Members')">Members</div>
+            <div class="custom-select-option" onclick="selectAnnCategory('Achievement')">Achievement</div>
+            <div class="custom-select-option" onclick="selectAnnCategory('Reminder')">Reminder</div>
+            <div class="custom-select-option" onclick="selectAnnCategory('Admin')">Admin</div>
+          </div>
+        </div>
+        <input type="hidden" id="aCategory" value="General" />
       </div>
       <div class="form-group">
         <label class="form-label">Status</label>
-        <select class="form-select" id="aStatus">
-          <option value="urgent">Urgent</option>
-          <option value="approved">Approved</option>
-          <option value="info">Info</option>
-        </select>
+        <div class="custom-select-wrap" id="aStatusWrap">
+          <button type="button" class="custom-select-btn" id="aStatusBtn" onclick="toggleAnnStatusDrop()">
+            <span id="aStatusLabel">Urgent</span>
+            <i class="fas fa-chevron-down" style="font-size:10px;margin-left:auto;"></i>
+          </button>
+          <div class="custom-select-list" id="aStatusList">
+            <div class="custom-select-option selected" onclick="selectAnnStatus('urgent','Urgent')">Urgent</div>
+            <div class="custom-select-option" onclick="selectAnnStatus('approved','Approved')">Approved</div>
+            <div class="custom-select-option" onclick="selectAnnStatus('info','Info')">Info</div>
+          </div>
+        </div>
+        <input type="hidden" id="aStatus" value="urgent" />
       </div>
       <div class="form-group">
         <label class="form-label">Description</label>
@@ -971,6 +986,50 @@ document.addEventListener('touchend', function(e) {
 <button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
   <i class="fas fa-bars"></i>
 </button>
+<script>
+function toggleAnnStatusDrop() {
+  const list = document.getElementById('aStatusList');
+  const btn = document.getElementById('aStatusBtn');
+  // Close category first
+  document.getElementById('aCategoryList').classList.remove('open');
+  document.getElementById('aCategoryBtn').classList.remove('open');
+  const isOpen = list.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+function selectAnnStatus(val, label) {
+  document.getElementById('aStatus').value = val;
+  document.getElementById('aStatusLabel').textContent = label;
+  document.querySelectorAll('#aStatusList .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent === label);
+  });
+  document.getElementById('aStatusList').classList.remove('open');
+  document.getElementById('aStatusBtn').classList.remove('open');
+}
+function toggleAnnCategoryDrop() {
+  const list = document.getElementById('aCategoryList');
+  const btn = document.getElementById('aCategoryBtn');
+  // Close status first
+  document.getElementById('aStatusList').classList.remove('open');
+  document.getElementById('aStatusBtn').classList.remove('open');
+  const isOpen = list.classList.toggle('open');
+  btn.classList.toggle('open', isOpen);
+}
+function selectAnnCategory(val) {
+  document.getElementById('aCategory').value = val;
+  document.getElementById('aCategoryLabel').textContent = val;
+  document.querySelectorAll('#aCategoryList .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent === val);
+  });
+  document.getElementById('aCategoryList').classList.remove('open');
+  document.getElementById('aCategoryBtn').classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#aCategoryWrap')) {
+    document.getElementById('aCategoryList')?.classList.remove('open');
+    document.getElementById('aCategoryBtn')?.classList.remove('open');
+  }
+});
+</script>
 </body>
 
 </html>
