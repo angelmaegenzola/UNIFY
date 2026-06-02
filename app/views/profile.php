@@ -67,7 +67,7 @@ if (!function_exists('roleBadge')) {
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/public/assets/css/profile.css" />
+<link rel="stylesheet" href="/assets/css/profile.css" />
   <link rel="stylesheet" href="/public/assets/css/setup_2fa.css" />
 </head>
 
@@ -146,14 +146,19 @@ if (!function_exists('roleBadge')) {
     </aside>
 
     <!-- MAIN -->
-    <main class="main">
-
-      <!-- Topbar -->
-  <header class="topbar">
-  <button type="button" class="back-btn" onclick="history.back()">
-    <span>&lt;</span>
-  </button>
-</header>
+<main class="main">
+ <!-- BACK BUTTON -->
+<div id="profile-back-btn">
+  <a href="index.php?page=officer_dashboard"
+     style="display:inline-flex;align-items:center;justify-content:center;
+            width:36px;height:36px;
+            color:#fff;text-decoration:none;
+            transition:opacity 0.15s,transform 0.15s;"
+     onmouseover="this.style.opacity='0.7';this.style.transform='translateX(-2px)'"
+     onmouseout="this.style.opacity='1';this.style.transform='translateX(0)'">
+    <i class="fas fa-chevron-left" style="font-size:20px;font-weight:900;"></i>
+  </a>
+</div>
 
       <!-- Content -->
       <div class="content">
