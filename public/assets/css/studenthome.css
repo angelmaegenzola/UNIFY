@@ -1162,3 +1162,96 @@ body, .app {
     margin-top: -16px !important;
   }
 }
+
+/* ══ NOTIF DROPDOWN REDESIGN ══ */
+.notif-dropdown {
+  width: 300px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(13,43,26,0.18) !important;
+  overflow: hidden !important;
+}
+
+.notif-header {
+  padding: 14px 16px 12px !important;
+  background: var(--card-bg) !important;
+}
+
+.notif-header-title {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+}
+
+.notif-list {
+  max-height: 320px !important;
+}
+
+.notif-item {
+  padding: 10px 14px !important;
+  gap: 10px !important;
+  align-items: flex-start !important;
+  transition: background 0.15s !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+
+.notif-item:hover {
+  background: var(--main-bg) !important;
+}
+
+/* Icon bubble */
+.notif-item::before {
+  content: '🔔';
+  font-size: 14px;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: var(--green-light);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notif-content {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+.notif-text {
+  font-size: 12px !important;
+  color: var(--text-dark) !important;
+  font-weight: 500 !important;
+  line-height: 1.45 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+}
+
+.notif-time {
+  font-size: 10px !important;
+  color: var(--text-light) !important;
+  font-weight: 500 !important;
+  margin-top: 2px !important;
+}
+
+.notif-footer {
+  font-size: 10.5px !important;
+  color: var(--text-light) !important;
+  padding: 10px 16px !important;
+  background: var(--main-bg) !important;
+}
+
+@media (max-width: 768px) {
+  .notif-dropdown {
+    width: calc(100vw - 24px) !important;
+    right: -8px !important;
+  }
+}
+
+/* ══ NOTIF: Remove emoji bell icon ══ */
+.notif-item::before {
+  display: none !important;
+}
