@@ -1,3 +1,5 @@
+/* hamburger hidden on desktop */
+.hamburger-btn { display: none !important; }
 /* ============================================================
    UNIFY — My Clubs
    assets/css/myclubs.css
