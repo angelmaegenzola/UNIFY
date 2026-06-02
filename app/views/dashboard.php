@@ -67,6 +67,7 @@
             <span class="topbar-page-title">Dashboard</span>
             <span class="topbar-date" id="topbarDate"></span>
 <script>const _d=new Date();document.getElementById("topbarDate").textContent=_d.toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});</script>
+          </div>
         </div>
         <div class="topbar-center">
           <div class="topbar-search">
