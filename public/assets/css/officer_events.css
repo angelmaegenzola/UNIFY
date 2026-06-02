@@ -1991,3 +1991,29 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--main-bg);color:
 /* Hide optional text */
 .assignee-col .form-label span[style*="text-light"],
 .collab-col .form-label span[style*="text-light"] { display: none !important; }
+
+@media (max-width: 768px) {
+  .assignee-collab-row { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+  .form-label { font-size: 11px !important; }
+  .assignee-search-input, .collab-search-input { font-size: 11px !important; padding: 6px 8px 6px 28px !important; }
+  .asn-chip { padding: 5px 7px !important; gap: 6px !important; border-radius: 8px !important; }
+  .asn-chip-avatar { width: 24px !important; height: 24px !important; font-size: 10px !important; }
+  .asn-chip-name { font-size: 11px !important; }
+  .asn-chip-role { font-size: 10px !important; }
+  .collab-picker-trigger { font-size: 11px !important; padding: 6px 8px !important; }
+}
+
+.collab-chip {
+  border: 1.5px solid var(--border) !important;
+  border-radius: 10px !important;
+  padding: 8px 10px !important;
+  background: #f4f9f6 !important;
+  font-size: 12px !important;
+  margin-bottom: 6px !important;
+}
+.collab-chip-pending { border-color: var(--border) !important; }
+.collab-chip-accepted { border-color: var(--green-accent) !important; background: #edf7f1 !important; }
+.collab-chip-rejected { border-color: var(--red) !important; background: #fdf2f2 !important; }
+.collab-chip-top { display: flex !important; align-items: center !important; justify-content: space-between !important; gap: 8px !important; }
+.collab-chip-club { font-weight: 700 !important; font-size: 12px !important; color: var(--text-dark) !important; }
+.collab-chip-status { font-size: 11px !important; color: var(--text-mid) !important; }
