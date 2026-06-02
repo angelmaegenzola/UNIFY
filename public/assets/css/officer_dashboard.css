@@ -2077,3 +2077,10 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
     z-index: 100 !important;
   }
 }
+
+/* ── Remove all dropdown scrollbars ── */
+.custom-select-list {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+.custom-select-list::-webkit-scrollbar { display: none !important; }
