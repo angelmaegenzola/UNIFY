@@ -47,7 +47,7 @@ $picStmt = $pdo->prepare('SELECT profile_picture FROM users WHERE id = ? LIMIT 1
 $picStmt->execute([$userId]);
 $picFile    = $picStmt->fetchColumn();
 $avatar_url = $picFile
-    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 // ── All active clubs this student belongs to ───────────────
@@ -89,6 +89,10 @@ $clubName    = $studentClub['club_name'];
 $clubInitial = strtoupper(substr($clubName, 0, 1));
 $studentRole = $studentClub['role'];
 $isMod       = in_array($studentRole, ['officer', 'lead', 'president', 'vice president']);
+
+// ── Sidebar nav variables (matching studenthome_controller) ─
+$has_club  = !empty($allClubs);
+$is_officer = in_array($studentRole, ['president', 'vice president', 'officer', 'lead']);
 
 // ── DM: resolve target user (for direct messages) ─────────
 $dmUserId = (int) ($_GET['dm_user'] ?? $_POST['dm_user'] ?? 0);
@@ -132,7 +136,7 @@ $action = $_GET['action'] ?? '';
 // ── helper: build message row ──────────────────────────────
 function buildMessageRow($r, $myUserId) {
     $pic = !empty($r['profile_picture'])
-        ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($r['profile_picture']))
+        ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($r['profile_picture']))
         : '';
     return [
         'id'        => (int) $r['id'],

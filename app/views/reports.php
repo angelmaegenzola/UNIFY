@@ -401,50 +401,13 @@ function toggleSidebar() {
   overlay.classList.toggle('open', isOpen);
   document.body.classList.toggle('sidebar-open', isOpen);
 }
-  const mainEl = document.querySelector('.main');
-  if (open) {
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.top = '-' + window.scrollY + 'px';
-    document.body.dataset.scrollY = window.scrollY;
-    if (mainEl) { mainEl.style.overflow = 'hidden'; mainEl.style.pointerEvents = 'none'; }
-  } else {
-    const scrollY = document.body.dataset.scrollY || 0;
-    document.body.style.overflow = '';
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.body.style.top = '';
-    window.scrollTo(0, parseInt(scrollY));
-    if (mainEl) { mainEl.style.overflow = ''; mainEl.style.pointerEvents = ''; }
-  }
-}
 function closeSidebar() {
   const sidebar = document.getElementById('mainSidebar');
   sidebar.classList.remove('open');
   document.getElementById('sidebarOverlay').classList.remove('open');
   document.body.classList.remove('sidebar-open');
-}  const fab = document.getElementById('fabMenuBtn');
-  if (fab) { fab.style.opacity = '1'; fab.style.pointerEvents = ''; }
 }
-var _tsx = 0, _tsy = 0, _swiping = false;
-document.addEventListener('touchstart', function(e) {
-  _tsx = e.touches[0].clientX;
-  _tsy = e.touches[0].clientY;
-  _swiping = _tsx < 80;
-  if (_swiping) e.preventDefault();
-}, {passive:false});
-document.addEventListener('touchmove', function(e) {
-  if (_swiping) e.preventDefault();
-}, {passive:false});
-document.addEventListener('touchend', function(e) {
-  var dx = e.changedTouches[0].clientX - _tsx;
-  var dy = e.changedTouches[0].clientY - _tsy;
-  if (Math.abs(dy) > Math.abs(dx)) return;
-  if (dx > 40 && _tsx < 80) toggleSidebar();
-  if (dx < -40) closeSidebar();
-  _swiping = false;
-}, {passive:true});
+/* Swipe disabled */
 </script>
 <button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
   <i class="fas fa-bars"></i>

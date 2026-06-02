@@ -995,3 +995,118 @@
     z-index: 100 !important;
   }
 }
+/* -- MOBILE: explore page fixes -- */
+@media (max-width: 768px) {
+  /* Show hamburger */
+  .hamburger-btn {
+    display: flex !important;
+    background: none !important;
+    border: none !important;
+    color: var(--green-dark, #0d2b1a) !important;
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 18px !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* 2 column grid on mobile */
+  .exp-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  /* Make cards fit in 2 columns */
+  .exp-card-name {
+    font-size: 12px !important;
+  }
+  .exp-card-desc {
+    -webkit-line-clamp: 2 !important;
+    font-size: 11px !important;
+  }
+}
+/* -- FINAL MOBILE FIX -- */
+@media (max-width: 768px) {
+  /* Force 2 column grid */
+  .exp-grid:not(.list-view) {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .exp-card-name { font-size: 12px !important; }
+  .exp-card-desc { font-size: 11px !important; }
+
+  /* Force hamburger visible */
+  .hamburger-btn,
+  button.hamburger-btn {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 36px !important;
+    height: 36px !important;
+    background: none !important;
+    border: none !important;
+    color: var(--green-dark, #0d2b1a) !important;
+    font-size: 18px !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 4px !important;
+  }
+}
+/* -- GRID: square cards + shorter list cards -- */
+@media (max-width: 768px) {
+  /* Square cards in grid view */
+  .exp-grid:not(.list-view) {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+  .exp-grid:not(.list-view) .exp-card {
+    aspect-ratio: 1 / 1 !important;
+    padding: 12px !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+  }
+  .exp-grid:not(.list-view) .exp-card-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+  .exp-grid:not(.list-view) .exp-cat-badge {
+    margin-top: 2px !important;
+  }
+  .exp-grid:not(.list-view) .exp-card-desc {
+    -webkit-line-clamp: 2 !important;
+    font-size: 11px !important;
+    overflow: hidden !important;
+  }
+
+  /* List view — 1 column, shorter rows */
+  .exp-grid.list-view {
+    grid-template-columns: 1fr !important;
+  }
+ .exp-grid.list-view .exp-card {
+    padding: 6px 10px !important;
+    gap: 6px !important;
+    aspect-ratio: unset !important;
+    min-height: unset !important;
+    max-height: 54px !important;
+    overflow: hidden !important;
+  }
+  .exp-grid.list-view .exp-card-logo {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 8px !important;
+  }
+  .exp-grid.list-view .exp-card-name {
+    font-size: 12px !important;
+  }
+  .exp-grid.list-view .exp-card-acronym {
+    font-size: 9.5px !important;
+  }
+}

@@ -93,7 +93,10 @@
   <main class="main">
 
     <!-- TOPBAR -->
-    <header class="topbar">
+ <header class="topbar">
+      <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
+        <i class="fas fa-bars"></i>
+      </button>
       <div class="topbar-left">
         <span class="topbar-page-title">Explore Clubs</span>
         <span class="topbar-date" id="topbarDate"></span>

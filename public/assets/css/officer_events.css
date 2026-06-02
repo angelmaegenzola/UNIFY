@@ -1766,3 +1766,139 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--main-bg);color:
     border-radius: 50% !important;
   }
 }
+
+/* ── Mobile horizontal breathing room ── */
+@media (max-width: 768px) {
+  .content,
+  .events-scroll,
+  .overview-scroll,
+  .members-scroll,
+  .reports-scroll {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .tabs-bar {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+  .topbar {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+@media (max-width: 600px) {
+  .rpt-summary-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* -- MOBILE: members table horizontal scroll -- */
+@media (max-width: 768px) {
+  .mem-table-wrap {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .mem-table {
+    min-width: 480px !important;
+  }
+  .members-scroll {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .mem-header-row {
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+  }
+}
+/* ══════════════════════════════════════════════
+   EVENTS PAGE — MOBILE
+══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Scanner: stack vertically */
+  .scanner-wrap {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  .scanner-qr-card {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* QR viewport shorter on mobile */
+  .sqc-viewport {
+    height: 220px !important;
+  }
+
+  /* Fullscreen scanner viewport */
+  .fs-viewport {
+    height: 300px !important;
+    max-width: 100% !important;
+  }
+
+  /* Event rows: stack actions below info */
+  .event-card-row {
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+    padding: 12px 14px !important;
+    align-items: flex-start !important;
+  }
+  .evt-info { width: 100% !important; }
+  .evt-actions {
+    width: 100% !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  .btn-evt {
+    flex: 1 !important;
+    justify-content: center !important;
+    min-width: 80px !important;
+  }
+
+  /* Overview stat grid: 2 col */
+  .ov-stat-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Reports summary: 2 col */
+  .rpt-summary-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Assignee + collab side-by-side → stacked */
+  .assignee-collab-row {
+    flex-direction: column !important;
+  }
+
+  /* Give scrollable sections proper padding */
+  .events-scroll,
+  .overview-scroll,
+  .members-scroll,
+  .reports-scroll {
+    padding: 14px 14px 60px !important;
+  }
+
+  /* Tabs: allow horizontal scroll if too many */
+  .tabs-bar {
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+  .tabs-bar::-webkit-scrollbar { display: none !important; }
+  .tab-btn { flex-shrink: 0 !important; }
+
+  /* Modal full width */
+  .modal-box {
+    width: calc(100vw - 28px) !important;
+    max-height: 85dvh !important;
+    padding: 18px 16px !important;
+  }
+
+  /* Notif panel full width */
+  .notif-panel {
+    left: 8px !important;
+    right: 8px !important;
+    width: auto !important;
+  }
+}

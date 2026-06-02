@@ -46,7 +46,7 @@ $picStmt->bind_result($picFile);
 $picStmt->fetch();
 $picStmt->close();
 $avatar_url = $picFile
-    ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
+    ? '/public/assets/pictures/profile_pictures/' . htmlspecialchars(basename($picFile))
     : '';
 
 

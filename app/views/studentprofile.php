@@ -159,6 +159,7 @@ $sidebarRole = $officerRole ?? ($user['role'] ?? 'member');
 $sidebarOfficerClub = $officerClub ?? [];
 $sidebarUserInit = strtoupper(substr($user['first_name'] ?? 'U', 0, 1));
 $sidebarUserName = $full_name;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -240,7 +241,19 @@ $sidebarUserName = $full_name;
   ═══════════════════════════════════════════════════════════ -->
     <main class="main">
 
-
+<!-- BACK BUTTON -->
+<div style="position:absolute;top:34px;left:18px;z-index:100;">
+  <a href="javascript:history.back()"
+     style="display:inline-flex;align-items:center;justify-content:center;
+            width:36px;height:36px;border-radius:50%;
+            background:none;border:none;
+            color:#fff;text-decoration:none;
+            transition:opacity 0.15s,transform 0.15s;"
+     onmouseover="this.style.opacity='0.7';this.style.transform='translateX(-2px)'"
+     onmouseout="this.style.opacity='1';this.style.transform='translateX(0)'">
+    <i class="fas fa-chevron-left" style="font-size:18px;"></i>
+  </a>
+</div>
 
       <!-- Content -->
       <div class="profile-content">
@@ -267,6 +280,7 @@ $sidebarUserName = $full_name;
     <i class="fas fa-camera"></i>
   </button>
 </div>
+
             <div class="avatar-name"><?= $full_name ?></div>
             <div class="avatar-role-badge">
               <i class="fas fa-user-graduate"></i>
@@ -290,6 +304,8 @@ $sidebarUserName = $full_name;
               </div>
             </div>
           </div>
+
+
 
           <!-- Account Status Card -->
           <div class="info-card">

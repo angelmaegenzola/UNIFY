@@ -149,38 +149,11 @@ if (!function_exists('roleBadge')) {
     <main class="main">
 
       <!-- Topbar -->
-      <header class="topbar">
-        <button class="hamburger-btn" onclick="event.stopPropagation();toggleSidebar();" aria-label="Menu">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="topbar-left">
-          <span class="topbar-page-title">My Profile</span>
-          <span class="topbar-date"><?= date('l, F j, Y') ?></span>
-        </div>
-        <div class="topbar-center"></div>
-        <div class="topbar-actions">
-          <button class="icon-btn" title="Notifications">
-            <i class="fas fa-bell"></i>
-          </button>
-          <a href="index.php?page=profile" class="topbar-profile" style="text-decoration:none;cursor:pointer;">
-            <div class="topbar-avatar" id="of-topbar-avatar">
-              <?php if ($avatar_url): ?>
-                <img src="<?= $avatar_url ?>" alt="Avatar"
-                  style="width:100%;height:100%;border-radius:50%;object-fit:cover;object-position:center;display:block;" />
-              <?php else: ?>
-                <?= strtoupper(substr($user['first_name'] ?? 'U', 0, 1)) ?>
-              <?php endif; ?>
-            </div>
-            <div class="topbar-profile-info">
-              <span class="tp-name">
-                <?= htmlspecialchars(trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ''))) ?>
-              </span>
-              <span class="tp-role"><?= htmlspecialchars(ucfirst($user['role'] ?? 'User')) ?></span>
-            </div>
-            <i class="fas fa-chevron-down tp-caret"></i>
-          </a>
-        </div>
-      </header>
+  <header class="topbar">
+  <button type="button" class="back-btn" onclick="history.back()">
+    <span>&lt;</span>
+  </button>
+</header>
 
       <!-- Content -->
       <div class="content">
