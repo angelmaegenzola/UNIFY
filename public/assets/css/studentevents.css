@@ -41,6 +41,7 @@ body {
 }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.hamburger-btn { display: none; }
 .hidden { display: none !important; }
 
 .app {
@@ -885,7 +886,7 @@ margin-bottom: 18px;
 }
 @media (max-width: 860px) {
   .app { padding: 0; gap: 0; }
-  .sidebar { border-radius: 0; width: 64px; min-width: 64px; }
+  .sidebar { display: none; }
   .nav-item span, .brand-text, .profile-info,
   .sidebar-logout, .nav-section-label, .nav-lock-icon { display: none; }
   .sidebar-brand { justify-content: center; padding: 18px 0; }
@@ -2093,6 +2094,34 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
     max-width: calc(100vw - 32px) !important;
     margin: 0 16px !important;
   }
+  .filter-label { display: none !important; }
+  .view-toggle, .grid-toggle { display: none !important; }
+  .events-count, .events-count-label, .filter-count { display: none !important; }
+  .filter-bar {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 4px 0 8px !important;
+  }
+  .filter-pills {
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+  .pill {
+    flex: 1 !important;
+    justify-content: center !important;
+    text-align: center !important;
+    border: 1.5px solid var(--border) !important;
+    background: var(--card-bg) !important;
+    color: var(--text-mid) !important;
+  }
+  .pill.active {
+    background: linear-gradient(135deg, var(--green-accent), var(--green-mid)) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+  }
 }
 
 @media (max-width: 768px) {
@@ -2116,103 +2145,3 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   }
 }
 
-/* ══ LAYOUT POLISH ══ */
-
-/* Stat cards — horizontal icon+text, less padding */
-.stat-card {
-  display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  padding: 11px 13px !important;
-}
-.stat-icon {
-  width: 34px !important;
-  height: 34px !important;
-  border-radius: 8px !important;
-  flex-shrink: 0 !important;
-  font-size: 14px !important;
-}
-.stat-val  { font-size: 18px !important; line-height: 1 !important; }
-.stat-label { font-size: 10px !important; margin-top: 2px !important; }
-.stats-banner { gap: 8px !important; margin-bottom: 10px !important; }
-
-/* Filter bar — tighter, single row feel */
-.filter-bar {
-  padding: 9px 12px !important;
-  gap: 8px !important;
-  margin-bottom: 10px !important;
-  align-items: center !important;
-}
-.filter-label { font-size: 11px !important; white-space: nowrap !important; }
-.filter-pills { gap: 6px !important; align-items: center !important; }
-
-/* Club context banner — compact */
-.club-context-banner {
-  padding: 10px 14px !important;
-  margin-bottom: 10px !important;
-  gap: 10px !important;
-}
-.ccb-logo { width: 40px !important; height: 40px !important; border-radius: 10px !important; }
-.ccb-title { font-size: 13px !important; }
-.ccb-sub   { font-size: 11px !important; margin-top: 2px !important; }
-
-/* Next event strip — less bulky */
-.next-event-strip { padding: 12px 14px !important; margin-bottom: 10px !important; }
-
-/* Event cards — tighter body padding */
-.event-card { margin-bottom: 10px !important; border-radius: 14px !important; }
-
-@media (max-width: 768px) {
-  .stats-banner { grid-template-columns: repeat(2, minmax(0,1fr)) !important; gap: 8px !important; }
-  .stat-card    { padding: 10px 12px !important; }
-  .club-events-panel.active { padding: 0 12px 40px !important; }
-}
-
-/* ══ FILTER BAR: transparent bg, no border, hide count+grid toggle ══ */
-.filter-bar {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 4px 0 !important;
-}
-.events-count-label,
-.view-toggle,
-.grid-toggle,
-.events-count { display: none !important; }
-
-/* ══ FILTER BAR: pretty + evenly spread ══ */
-.filter-bar {
-  display: flex !important;
-  align-items: center !important;
-  gap: 0 !important;
-  padding: 4px 0 8px !important;
-  background: transparent !important;
-  border: none !important;
-}
-.filter-label {
-  display: none !important;
-}
-.filter-pills {
-  display: flex !important;
-  width: 100% !important;
-  gap: 8px !important;
-  justify-content: stretch !important;
-}
-.filter-pill {
-  flex: 1 !important;
-  justify-content: center !important;
-  text-align: center !important;
-  padding: 8px 0 !important;
-  border-radius: 20px !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  border: 1.5px solid var(--border) !important;
-  background: var(--card-bg) !important;
-  color: var(--text-mid) !important;
-  transition: all 0.15s !important;
-}
-.filter-pill.active {
-  background: var(--green-dark) !important;
-  color: #fff !important;
-  border-color: var(--green-dark) !important;
-}
