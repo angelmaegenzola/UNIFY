@@ -1682,3 +1682,16 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
     overflow: visible !important;
   }
 }
+/* Back button — hidden on desktop */
+#profile-back-btn {
+  display: none;
+}
+@media (max-width: 768px) {
+  #profile-back-btn {
+    display: block;
+    position: absolute;
+    top: 40px;
+    left: 16px;
+    z-index: 200;
+  }
+}
