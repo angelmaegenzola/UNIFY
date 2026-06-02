@@ -1376,3 +1376,21 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .stats-row::-webkit-scrollbar { display: none !important; }
   .stat-pill { flex-shrink: 0 !important; min-width: fit-content !important; }
 }
+@media (max-width: 768px) {
+  /* Fix 1: notification dropdown full width on mobile */
+  .notif-dropdown {
+    width: calc(100vw - 32px) !important;
+    right: -8px !important;
+    left: auto !important;
+  }
+  .notif-item { display: flex !important; flex-direction: column !important; gap: 3px !important; }
+  .notif-text { font-size: 12px !important; }
+
+  /* Fix 2: members table header full width, no cutoff */
+  .members-table-wrap { overflow-x: auto !important; }
+  .members-table-header, .member-row { min-width: 600px !important; }
+  .members-table-header {
+    border-radius: 0 !important;
+    width: 100% !important;
+  }
+}
