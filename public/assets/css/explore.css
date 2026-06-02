@@ -1346,3 +1346,12 @@ body {
 .propose-club-btn, a[href*='propose'], button.propose { display: none !important; }
 
 .propose-desktop-link { display: none !important; }
+/* ══ MOBILE: Show lock icon on nav items ══ */
+@media (max-width: 768px) {
+  .nav-lock-icon {
+    display: flex !important;
+    margin-left: auto !important;
+    font-size: 9px !important;
+    opacity: 0.6 !important;
+  }
+}

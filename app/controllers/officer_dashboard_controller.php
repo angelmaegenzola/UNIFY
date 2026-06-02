@@ -156,17 +156,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     UPDATE applications SET status = 'approved', reviewed_at = NOW() WHERE id = ?
                 ")->execute([$appId]);
 
-                // Add to members (IGNORE prevents duplicate if somehow called twice)
-                $pdo->prepare("
-                    INSERT IGNORE INTO members (user_id, club_id, course, year, section, role, status, joined_at)
-                    VALUES (?, ?, ?, ?, ?, 'member', 'active', NOW())
-                ")->execute([
-                    $app['user_id'],
-                    $app['club_id'],
-                    $app['course']  ?? null,
-                    $app['year']    ?? null,
-                    $app['section'] ?? null,
-                ]);
+// Add to members (upsert handles existing inactive rows)
+$pdo->prepare("
+    INSERT INTO members (user_id, club_id, course, year, section, role, status, joined_at)
+    VALUES (?, ?, ?, ?, ?, 'member', 'active', NOW())
+    ON DUPLICATE KEY UPDATE
+        status    = 'active',
+        role      = 'member',
+        course    = VALUES(course),
+        year      = VALUES(year),
+        section   = VALUES(section),
+        joined_at = NOW()
+")->execute([
+    $app['user_id'],
+    $app['club_id'],
+    $app['course']  ?? null,
+    $app['year']    ?? null,
+    $app['section'] ?? null,
+]);
 
                 // Notify the applicant
                 $clubNameRow = $pdo->prepare("SELECT name FROM clubs WHERE id = ? LIMIT 1");
