@@ -1059,3 +1059,106 @@ body, .app {
     padding-top: 8px !important;
   }
 }
+
+/* ══ MOBILE: Reduce gap between club switcher and welcome card ══ */
+@media (max-width: 768px) {
+  .panel-scroll {
+    padding-top: 8px !important;
+  }
+}
+
+/* ══ MOBILE: Less gap between club switcher and welcome card ══ */
+@media (max-width: 768px) {
+  .panel-scroll {
+    padding-top: 0px !important;
+  }
+}
+
+/* ══ MOBILE: Reduce club switcher padding ══ */
+@media (max-width: 768px) {
+  .club-switcher {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+  }
+}
+
+/* ══ MOBILE: Reduce club switcher padding more ══ */
+@media (max-width: 768px) {
+  .club-switcher {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+}
+
+/* ══ MOBILE: Negative margin to pull content up 10px more ══ */
+@media (max-width: 768px) {
+  .club-switcher {
+    margin-top: -10px !important;
+  }
+}
+
+/* ══ MOBILE: Fix gap between switcher and welcome card ══ */
+@media (max-width: 768px) {
+  .club-switcher {
+    margin-top: 0 !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+  .panel-scroll {
+    padding-top: 4px !important;
+  }
+}
+
+/* ══ MOBILE: Fix switcher visibility and content spacing ══ */
+@media (max-width: 768px) {
+  .club-switcher {
+    margin-top: 0 !important;
+    padding-top: 8px !important;
+    padding-bottom: 4px !important;
+  }
+  .panel-scroll {
+    padding-top: 6px !important;
+  }
+  .content-with-switcher {
+    margin-top: -8px !important;
+  }
+}
+
+/* ══ MOBILE: Switcher spacing fix ══ */
+@media (max-width: 768px) {
+  .club-switcher {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* ══ MOBILE: Fix switcher spacing - more gap from topbar, less gap to banner ══ */
+@media (max-width: 768px) {
+  .content-with-switcher {
+    margin-top: 0 !important;
+  }
+  .club-switcher {
+    padding-top: 14px !important;
+    padding-bottom: 6px !important;
+    margin-top: 0 !important;
+  }
+  .panel-scroll {
+    padding-top: 2px !important;
+  }
+}
+
+/* ══ MOBILE: Pull banner and content closer to switcher ══ */
+@media (max-width: 768px) {
+  .panel-scroll {
+    padding-top: 0px !important;
+    margin-top: -8px !important;
+  }
+}
+
+/* ══ MOBILE: Pull banner even closer to switcher ══ */
+@media (max-width: 768px) {
+  .panel-scroll {
+    margin-top: -16px !important;
+  }
+}
