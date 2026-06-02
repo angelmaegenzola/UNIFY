@@ -2280,3 +2280,8 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   border-color: var(--green-dark) !important;
 }
 .filter-pill.active i { color: #fff !important; }
+
+/* ══ FILTER BAR: gap between label and pills ══ */
+.filter-bar {
+  gap: 12px !important;
+}
