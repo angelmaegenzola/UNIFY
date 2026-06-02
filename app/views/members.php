@@ -263,21 +263,31 @@
       <div class="form-row">
         <div class="fg" style="grid-column:1/-1">
           <label>User</label>
-          <select name="user_id" required>
-            <option value="">— Select user —</option>
-            <?php foreach ($users as $u): ?>
-              <option value="<?= $u['id'] ?>"><?= htmlspecialchars($u['first_name'].' '.$u['last_name']) ?> (@<?= htmlspecialchars($u['username']) ?>)</option>
-            <?php endforeach; ?>
-          </select>
+          <div class="custom-select-wrap" id="addUserWrap">
+            <button type="button" class="custom-select-btn" id="addUserBtn" onclick="toggleAddDrop('user')">— Select user —</button>
+            <div class="custom-select-list" id="addUserList">
+              <?php foreach ($users as $u): ?>
+                <div class="custom-select-option" onclick="selectAddOpt('user', '<?= $u['id'] ?>', '<?= htmlspecialchars($u['first_name'].' '.$u['last_name']) ?> (@<?= htmlspecialchars($u['username']) ?>)')">
+                  <?= htmlspecialchars($u['first_name'].' '.$u['last_name']) ?> (@<?= htmlspecialchars($u['username']) ?>)
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+          <input type="hidden" name="user_id" id="addUserVal" required />
         </div>
         <div class="fg" style="grid-column:1/-1">
           <label>Club</label>
-          <select name="club_id" required>
-            <option value="">— Select club —</option>
-            <?php foreach ($clubs as $c): ?>
-              <option value="<?= $c['id'] ?>"><?= htmlspecialchars($c['name']) ?></option>
-            <?php endforeach; ?>
-          </select>
+          <div class="custom-select-wrap" id="addClubWrap">
+            <button type="button" class="custom-select-btn" id="addClubBtn" onclick="toggleAddDrop('club')">— Select club —</button>
+            <div class="custom-select-list" id="addClubList">
+              <?php foreach ($clubs as $c): ?>
+                <div class="custom-select-option" onclick="selectAddOpt('club', '<?= $c['id'] ?>', '<?= htmlspecialchars($c['name']) ?>')">
+                  <?= htmlspecialchars($c['name']) ?>
+                </div>
+              <?php endforeach; ?>
+            </div>
+          </div>
+          <input type="hidden" name="club_id" id="addClubVal" required />
         </div>
       </div>
       <div class="form-row cols-3">
@@ -297,20 +307,31 @@
       <div class="form-row">
         <div class="fg">
           <label>Role</label>
-          <select name="role">
-            <option value="member">Member</option>
-            <option value="officer">Officer</option>
-            <option value="vice president">Vice President</option>
-            <option value="president">President</option>
-          </select>
+          <div class="custom-select-wrap" id="addRoleWrap">
+            <button type="button" class="custom-select-btn" id="addRoleBtn" onclick="toggleAddDrop('role')">Member</button>
+            <div class="custom-select-list" id="addRoleList">
+              <div class="custom-select-option selected" onclick="selectAddOpt('role','member','Member')">Member</div>
+              <div class="custom-select-option" onclick="selectAddOpt('role','president','President')">President</div>
+              <div class="custom-select-option" onclick="selectAddOpt('role','vice president','Vice President')">Vice President</div>
+              <div class="custom-select-option" onclick="selectAddOpt('role','senator','Senator')">Senator</div>
+              <div class="custom-select-option" onclick="selectAddOpt('role','representative','Representative')">Representative</div>
+              <div class="custom-select-option" onclick="selectAddOpt('role','pio','PIO')">PIO</div>
+              <div class="custom-select-option" onclick="selectAddOpt('role','officer','Officer')">Officer</div>
+            </div>
+          </div>
+          <input type="hidden" name="role" id="addRoleVal" value="member" />
         </div>
         <div class="fg">
           <label>Status</label>
-          <select name="status">
-            <option value="active">Active</option>
-            <option value="pending">Pending</option>
-            <option value="inactive">Inactive</option>
-          </select>
+          <div class="custom-select-wrap" id="addStatusWrap">
+            <button type="button" class="custom-select-btn" id="addStatusBtn" onclick="toggleAddDrop('status')">Active</button>
+            <div class="custom-select-list" id="addStatusList">
+              <div class="custom-select-option selected" onclick="selectAddOpt('status','active','Active')">Active</div>
+              <div class="custom-select-option" onclick="selectAddOpt('status','pending','Pending')">Pending</div>
+              <div class="custom-select-option" onclick="selectAddOpt('status','inactive','Inactive')">Inactive</div>
+            </div>
+          </div>
+          <input type="hidden" name="status" id="addStatusVal" value="active" />
         </div>
       </div>
       <div class="modal-footer">
@@ -354,20 +375,31 @@
       <div class="form-row">
         <div class="fg">
           <label>Role</label>
-          <select name="role" id="editRole">
-            <option value="member">Member</option>
-            <option value="officer">Officer</option>
-            <option value="vice president">Vice President</option>
-            <option value="president">President</option>
-          </select>
+          <div class="custom-select-wrap" id="editRoleWrap">
+            <button type="button" class="custom-select-btn" id="editRoleBtn" onclick="toggleEditDrop('role')">Member</button>
+            <div class="custom-select-list" id="editRoleList">
+              <div class="custom-select-option" onclick="selectEditOpt('role','member','Member')">Member</div>
+              <div class="custom-select-option" onclick="selectEditOpt('role','president','President')">President</div>
+              <div class="custom-select-option" onclick="selectEditOpt('role','vice president','Vice President')">Vice President</div>
+              <div class="custom-select-option" onclick="selectEditOpt('role','senator','Senator')">Senator</div>
+              <div class="custom-select-option" onclick="selectEditOpt('role','representative','Representative')">Representative</div>
+              <div class="custom-select-option" onclick="selectEditOpt('role','pio','PIO')">PIO</div>
+              <div class="custom-select-option" onclick="selectEditOpt('role','officer','Officer')">Officer</div>
+            </div>
+          </div>
+          <input type="hidden" name="role" id="editRole" value="member" />
         </div>
         <div class="fg">
           <label>Status</label>
-          <select name="status" id="editStatus">
-            <option value="active">Active</option>
-            <option value="pending">Pending</option>
-            <option value="inactive">Inactive</option>
-          </select>
+          <div class="custom-select-wrap" id="editStatusWrap">
+            <button type="button" class="custom-select-btn" id="editStatusBtn" onclick="toggleEditDrop('status')">Active</button>
+            <div class="custom-select-list" id="editStatusList">
+              <div class="custom-select-option" onclick="selectEditOpt('status','active','Active')">Active</div>
+              <div class="custom-select-option" onclick="selectEditOpt('status','pending','Pending')">Pending</div>
+              <div class="custom-select-option" onclick="selectEditOpt('status','inactive','Inactive')">Inactive</div>
+            </div>
+          </div>
+          <input type="hidden" name="status" id="editStatus" value="active" />
         </div>
       </div>
       <div class="modal-footer">
@@ -434,8 +466,8 @@ function openEdit(m) {
   document.getElementById('editCourse').value  = m.course   || '';
   document.getElementById('editYear').value    = m.year     || '';
   document.getElementById('editSection').value = m.section  || '';
-  document.getElementById('editRole').value    = m.role;
-  document.getElementById('editStatus').value  = m.status;
+  selectEditOpt('role', m.role, m.role.charAt(0).toUpperCase() + m.role.slice(1));
+  selectEditOpt('status', m.status, m.status.charAt(0).toUpperCase() + m.status.slice(1));
   openModal('editModal');
 }
 
@@ -640,5 +672,37 @@ document.addEventListener('click', function(e) {
 <button class="fab-menu-btn" id="fabMenuBtn" onclick="toggleSidebar()" title="Menu">
   <i class="fas fa-bars"></i>
 </button>
+<script>
+function toggleAddDrop(type) {
+  const ids = { user: 'addUserList', club: 'addClubList', role: 'addRoleList', status: 'addStatusList' };
+  const btnIds = { user: 'addUserBtn', club: 'addClubBtn', role: 'addRoleBtn', status: 'addStatusBtn' };
+  Object.keys(ids).forEach(t => {
+    if (t !== type) {
+      document.getElementById(ids[t])?.classList.remove('open');
+      document.getElementById(btnIds[t])?.classList.remove('open');
+    }
+  });
+  const isOpen = document.getElementById(ids[type]).classList.toggle('open');
+  document.getElementById(btnIds[type]).classList.toggle('open', isOpen);
+}
+function selectAddOpt(type, val, label) {
+  const ids = { user: 'addUserList', club: 'addClubList', role: 'addRoleList', status: 'addStatusList' };
+  const btnIds = { user: 'addUserBtn', club: 'addClubBtn', role: 'addRoleBtn', status: 'addStatusBtn' };
+  const valIds = { user: 'addUserVal', club: 'addClubVal', role: 'addRoleVal', status: 'addStatusVal' };
+  document.getElementById(valIds[type]).value = val;
+  document.getElementById(btnIds[type]).textContent = label;
+  document.querySelectorAll('#' + ids[type] + ' .custom-select-option').forEach(o => {
+    o.classList.toggle('selected', o.textContent.trim() === label.trim());
+  });
+  document.getElementById(ids[type]).classList.remove('open');
+  document.getElementById(btnIds[type]).classList.remove('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#addUserWrap') && !e.target.closest('#addClubWrap') && !e.target.closest('#addRoleWrap') && !e.target.closest('#addStatusWrap')) {
+    ['addUserList','addClubList','addRoleList','addStatusList'].forEach(id => document.getElementById(id)?.classList.remove('open'));
+    ['addUserBtn','addClubBtn','addRoleBtn','addStatusBtn'].forEach(id => document.getElementById(id)?.classList.remove('open'));
+  }
+});
+</script>
 </body>
 </html>
