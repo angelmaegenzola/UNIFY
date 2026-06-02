@@ -322,7 +322,7 @@
     <div class="modal-body" id="evModalBody"></div>
     <div class="modal-footer" style="justify-content:flex-end;">
       <button class="modal-btn-cancel" onclick="closeModal('eventsOverlay')">Close</button>
-      <a href="index.php?page=events" class="modal-btn-primary" style="text-decoration:none;">
+      <a href="index.php?page=studentevents" class="modal-btn-primary" style="text-decoration:none;">
         <i class="fas fa-calendar-days"></i> All Events
       </a>
     </div>
