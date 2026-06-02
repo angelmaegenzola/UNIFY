@@ -284,7 +284,7 @@ body {
 
 .sidebar-nav {
   display: flex; flex-direction: column;
-  padding: 16px 12px 8px; gap: 1px;
+  padding: 60px 12px 8px; gap: 1px;
   flex: 1; overflow-y: auto;
   position: relative; z-index: 1;
 }
@@ -2212,3 +2212,5 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .modal-when { font-size: 10px !important; margin-top: 3px !important; }
   .modal-close { width: 28px !important; height: 28px !important; flex-shrink: 0 !important; }
 }
+
+.sidebar-nav { padding-top: 60px !important; }
