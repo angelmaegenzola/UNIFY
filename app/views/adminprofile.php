@@ -11,7 +11,24 @@
   <link rel="stylesheet" href="/public/assets/css/transitions.css" />
 </head>
 <body>
-<div class="app">
+<main class="main" style="position:relative;">
+
+  <!-- BACK BUTTON -->
+  <div style="position:absolute;top:60px;left:50px;z-index:100;">
+    <a href="javascript:history.back()"
+       style="display:inline-flex;align-items:center;justify-content:center;
+              width:36px;height:36px;
+              background:none;border:none;
+              color:#fff;text-decoration:none;
+              transition:opacity 0.15s,transform 0.15s;"
+       onmouseover="this.style.opacity='0.7';this.style.transform='translateX(-2px)'"
+       onmouseout="this.style.opacity='1';this.style.transform='translateX(0)'">
+      <i class="fas fa-chevron-left" style="font-size:18px;"></i>
+    </a>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
 
   <!-- ── Sidebar ── -->
  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
