@@ -2285,3 +2285,11 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
 .filter-bar {
   gap: 12px !important;
 }
+
+/* ══ NOTIF DROPDOWN: fixed position, doesn't scroll with page ══ */
+.notif-dropdown {
+  position: fixed !important;
+  top: 60px !important;
+  right: 16px !important;
+  z-index: 9999 !important;
+}
