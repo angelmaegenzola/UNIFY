@@ -2149,3 +2149,66 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
 @media (max-width: 860px) { .topbar-date { display: none !important; } }
 
 .main { overflow-y: auto !important; height: calc(100vh - 20px) !important; }
+
+@media (max-width: 600px) {
+  .events-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px;
+  }
+  .events-grid.list-view .event-card {
+    flex-direction: column !important;
+  }
+  .events-grid.list-view .ec-banner {
+    min-width: unset !important;
+    flex-direction: row !important;
+    padding: 14px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .ec-banner { padding: 10px 12px !important; }
+  .ec-date-chip { padding: 4px 10px !important; min-width: 48px !important; }
+  .ec-date-day { font-size: 16px !important; }
+  .ec-date-month { font-size: 9px !important; }
+  .ec-body { padding: 10px 12px 12px !important; gap: 6px !important; }
+  .ec-title { font-size: 14px !important; }
+  .ec-meta { gap: 4px !important; font-size: 11.5px !important; }
+  .ec-desc { font-size: 11.5px !important; -webkit-line-clamp: 1 !important; }
+}
+
+@media (max-width: 600px) {
+  .modal-overlay { padding: 12px !important; align-items: flex-end !important; }
+  .modal-box {
+    max-width: 100% !important;
+    max-height: 88vh !important;
+    margin: 0 !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+  .modal-header { padding: 14px 16px !important; }
+  .modal-title { font-size: 15px !important; }
+  .modal-subtitle { font-size: 12px !important; }
+  .modal-body { padding: 14px 16px !important; }
+  .modal-stats-strip { grid-template-columns: repeat(2, 1fr) !important; gap: 6px !important; }
+  .modal-footer { padding: 10px 16px !important; }
+}
+
+@media (max-width: 600px) {
+  .modal-overlay { align-items: center !important; }
+  .modal-box {
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-header { padding: 12px 14px !important; gap: 10px !important; }
+  .modal-header-left { gap: 10px !important; align-items: center !important; }
+  .modal-date-chip { min-width: 52px !important; padding: 6px 10px !important; border-radius: 10px !important; flex-shrink: 0; }
+  .modal-date-chip .ec-date-day { font-size: 18px !important; }
+  .modal-date-chip .ec-date-month { font-size: 9px !important; }
+  .modal-title { font-size: 14px !important; line-height: 1.25 !important; }
+  .modal-subtitle { font-size: 11px !important; line-height: 1.3 !important; }
+  .modal-when { font-size: 10px !important; margin-top: 3px !important; }
+  .modal-close { width: 28px !important; height: 28px !important; flex-shrink: 0 !important; }
+}
