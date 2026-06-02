@@ -814,3 +814,40 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
 @media (max-width: 768px) {
   .main { padding: 0 16px !important; overflow: visible !important; }
 }
+
+/* ══ MOBILE: Add top padding to push content down ══ */
+@media (max-width: 768px) {
+  .content {
+    padding-top: 16px !important;
+  }
+}
+
+/* ══ MOBILE: Shrink green cover and add top spacing ══ */
+@media (max-width: 768px) {
+  .avatar-card::before,
+  .avatar-card::after {
+    height: 52px !important;
+  }
+
+  .avatar-ring {
+    margin-top: 16px !important;
+  }
+
+  .content {
+    padding-top: 12px !important;
+  }
+}
+
+/* ══ MOBILE: Push all content down from top ══ */
+@media (max-width: 768px) {
+  .profile-content {
+    padding-top: 12px !important;
+  }
+}
+
+/* ══ MOBILE: Push content down via main padding-top ══ */
+@media (max-width: 768px) {
+  .main {
+    padding-top: 12px !important;
+  }
+}

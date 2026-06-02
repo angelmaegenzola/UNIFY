@@ -1088,3 +1088,261 @@ body {
     border-radius: 50% !important;
   }
 }
+
+/* ══ MOBILE: Fix notif dropdown, banner/filter side padding ══ */
+@media (max-width: 768px) {
+  /* Fix notif dropdown - stay fixed, smaller */
+  .notif-dropdown {
+    position: fixed !important;
+    top: 60px !important;
+    right: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+    max-height: 320px !important;
+    z-index: 9999 !important;
+  }
+
+  /* Side padding for banner and filter */
+  .onboarding-banner,
+  .filter-bar,
+  .clubs-grid,
+  .welcome-toast {
+    margin-left: 12px !important;
+    margin-right: 12px !important;
+  }
+}
+
+/* ══ MOBILE: Fix notif dropdown escaping relative parent ══ */
+@media (max-width: 768px) {
+  .topbar-actions {
+    position: static !important;
+  }
+
+  .topbar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 200 !important;
+  }
+
+  .notif-dropdown {
+    position: fixed !important;
+    top: 56px !important;
+    right: 12px !important;
+    left: 12px !important;
+    width: auto !important;
+    max-height: 280px !important;
+    z-index: 9999 !important;
+  }
+}
+
+/* ══ MOBILE: Push content below fixed topbar ══ */
+@media (max-width: 768px) {
+  .main {
+    padding-top: 60px !important;
+  }
+}
+
+/* ══ MOBILE: More space below fixed topbar ══ */
+@media (max-width: 768px) {
+  .main {
+    padding-top: 80px !important;
+  }
+}
+
+/* ══ MOBILE: Fix modal footer layout ══ */
+@media (max-width: 768px) {
+  .modal-footer {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+  }
+
+  .modal-footer-right {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  .modal-btn-cancel,
+  .modal-btn-submit {
+    flex: 1 !important;
+    justify-content: center !important;
+    padding: 10px !important;
+    font-size: 13px !important;
+  }
+
+  .already-link {
+    order: 1 !important;
+    border: none !important;
+    background: transparent !important;
+    color: var(--text-mid) !important;
+    font-size: 12px !important;
+    justify-content: center !important;
+    padding: 4px !important;
+  }
+
+  .already-link:hover {
+    background: transparent !important;
+    color: var(--green-dark) !important;
+    text-decoration: underline !important;
+  }
+}
+
+/* ══ MOBILE: Compact modal buttons ══ */
+@media (max-width: 768px) {
+  .modal-btn-submit {
+    white-space: nowrap !important;
+    font-size: 11px !important;
+    padding: 8px 10px !important;
+  }
+
+  .modal-btn-cancel {
+    font-size: 11px !important;
+    padding: 8px 10px !important;
+  }
+}
+
+/* ══ MOBILE: Already member modal buttons side by side ══ */
+@media (max-width: 768px) {
+  #alreadyMemberOverlay .modal-footer {
+    flex-direction: row !important;
+    align-items: center !important;
+  }
+
+  #alreadyMemberOverlay .modal-btn-cancel,
+  #alreadyMemberOverlay .modal-btn-submit {
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+}
+
+/* ══ MOBILE: Make apply modal scrollable ══ */
+@media (max-width: 768px) {
+  .modal-box {
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .modal-body {
+    overflow-y: auto !important;
+    flex: 1 !important;
+  }
+}
+
+/* ══ MOBILE: Fix modal scroll, remove already-link underline ══ */
+@media (max-width: 768px) {
+  .modal-box {
+    max-height: 85vh !important;
+    height: 85vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .modal-body {
+    flex: 1 !important;
+    overflow-y: scroll !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .already-link:hover {
+    text-decoration: none !important;
+  }
+
+  .already-link {
+    text-decoration: none !important;
+  }
+}
+
+/* ══ FINAL FIX: Apply modal scroll on mobile ══ */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: flex-end !important;
+  }
+
+  .modal-box {
+    max-height: 92vh !important;
+    height: auto !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+  }
+
+  .modal-body {
+    flex: 1 1 auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    min-height: 0 !important;
+  }
+
+  .modal-footer {
+    flex-shrink: 0 !important;
+  }
+}
+
+/* ══ FINAL FIX: Already member modal - no empty gap ══ */
+@media (max-width: 768px) {
+  #alreadyMemberOverlay .modal-box {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: 92vh !important;
+  }
+}
+
+/* ══ FINAL FIX: Center all modals, only apply modal slides from bottom ══ */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: center !important;
+  }
+
+  .modal-box {
+    height: auto !important;
+    max-height: 92vh !important;
+    border-radius: var(--radius) !important;
+  }
+}
+
+/* ══ FINAL MOBILE MODAL SCROLL FIX ══ */
+@media (max-width: 768px) {
+  .modal-overlay {
+    align-items: center !important;
+    overflow: hidden !important;
+  }
+
+  .modal-box {
+    width: calc(100vw - 24px) !important;
+    max-height: 88vh !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+
+  .modal-header {
+    flex-shrink: 0 !important;
+  }
+
+  .modal-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+  }
+
+  .modal-footer {
+    flex-shrink: 0 !important;
+  }
+}
+
+/* Hide propose club button - handled by modal elsewhere */
+.propose-club-btn, a[href*='propose'], button.propose { display: none !important; }
+
+.propose-desktop-link { display: none !important; }

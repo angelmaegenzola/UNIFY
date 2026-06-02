@@ -1,4 +1,4 @@
-function preventScroll(e) { e.preventDefault(); }
+function preventScroll(e) { if (e.target.closest(".modal-body")) return; e.preventDefault(); }
 /* ============================================================
    UNIFY — Explore & Apply JS
    explore.js
@@ -268,10 +268,10 @@ setTimeout(() => { const t = document.getElementById('welcomeToast'); if (t) t.s
 function openAlreadyMember(clubId, clubName) {
       document.getElementById('amClubId').value = clubId;
       document.getElementById('amClubName').textContent = clubName;
-      document.getElementById('amFirstName').value = '';
-      document.getElementById('amLastName').value = '';
-      document.getElementById('amCourse').value = '';
-      document.getElementById('amYear').value = '';
+      document.getElementById('amFirstName').value = document.getElementById('amFirstName').defaultValue;
+      document.getElementById('amLastName').value = document.getElementById('amLastName').defaultValue;
+      document.getElementById('amCourse').value = document.getElementById('amCourse').defaultValue;
+      document.getElementById('amYear').value = document.getElementById('amYear').defaultValue;
       document.getElementById('amRole').value = 'member';
       document.getElementById('amRoleBtn').textContent = 'Member';
       document.querySelectorAll('#amRoleList .custom-select-option').forEach(o => {
@@ -407,3 +407,15 @@ document.addEventListener('click', function(e) {
     document.getElementById('amRoleBtn')?.classList.remove('open');
   }
 });
+
+// ══ Notification dropdown toggle ══
+
+// ══ toggleNotif wrapper for onclick handler ══
+function toggleNotif(e) {
+  e.stopPropagation();
+  if (notifDropdown && notifDropdown.classList.contains('open')) {
+    closeNotifDropdown();
+  } else {
+    openNotifDropdown();
+  }
+}
