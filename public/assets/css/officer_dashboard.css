@@ -2150,3 +2150,11 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .announce-card { overflow-x: auto !important; }
   .ann-scroll-wrap { min-width: 500px !important; }
 }
+
+@media (max-width: 768px) {
+  .ann-scroll-wrap .table-header-row,
+  .ann-scroll-wrap .table-row {
+    gap: 16px !important;
+    padding: 9px 16px !important;
+  }
+}
