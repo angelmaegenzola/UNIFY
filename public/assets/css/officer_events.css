@@ -1932,3 +1932,18 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--main-bg);color:
 @media (max-width: 768px) {
   .content { padding: 0 0 24px !important; }
 }
+
+@media (max-width: 768px) {
+  .topbar {
+    margin: 0 !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+  }
+  .main { padding-top: 0 !important; }
+}
+
+@media (max-width: 768px) {
+  .app { padding: 0 !important; }
+  .main { margin: 0 !important; padding: 0 !important; }
+  .topbar { margin: 0 !important; padding: 10px 16px !important; width: 100% !important; box-sizing: border-box !important; }
+}
