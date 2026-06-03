@@ -604,16 +604,23 @@ body.sidebar-open { overflow: hidden !important; }
 
 /* ── Modal side padding fix ── */
 @media (max-width: 600px) {
-  .modal-overlay { align-items: center; padding: 0 16px; }
+  .modal-overlay { align-items: flex-start; padding: 16px; overflow-y: auto; }
   .modal-box {
     border-radius: 16px;
     max-width: 100% !important;
     width: 100% !important;
-    margin: 0;
-    max-height: 90vh;
-    overflow-y: auto;
+    margin: auto;
+    max-height: none !important;
+    overflow-y: visible !important;
   }
   .modal-body { padding: 16px 20px; }
+  #efDateWrap .custom-select-list,
+  #efStartWrap .custom-select-list,
+  #efEndWrap .custom-select-list {
+    position: relative !important;
+    top: 4px !important;
+    box-shadow: 0 4px 16px rgba(13,43,26,0.12) !important;
+  }
 }
 
 /* ── Event modal custom selects ── */
@@ -823,5 +830,29 @@ body.sidebar-open { overflow: hidden !important; }
   .add-event-btn {
     flex-shrink: 0 !important;
     margin-left: auto !important;
+  }
+}
+
+.icon-btn .fa-rotate {
+  font-size: 18px;
+}
+
+/* Force calendar to not get clipped on mobile */
+@media (max-width: 600px) {
+  #event-modal.modal-overlay {
+    overflow-y: scroll !important;
+    align-items: flex-start !important;
+  }
+  .modal-box {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+  #efDateWrap, #efStartWrap, #efEndWrap {
+    position: static !important;
+  }
+  #efDateList, #efStartList, #efEndList {
+    position: relative !important;
+    width: 100% !important;
+    min-width: unset !important;
   }
 }

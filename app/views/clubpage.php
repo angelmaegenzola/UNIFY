@@ -72,6 +72,7 @@
       </div>
       <div class="topbar-actions">
         <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i></button>
+        <button class="icon-btn" id="syncBtn" title="Sync" onclick="syncPage()"><i class="fas fa-rotate"></i></button>
         <button class="hamburger-btn" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
         <div class="topbar-profile">
             <div class="topbar-avatar">
@@ -692,4 +693,14 @@ document.addEventListener('click', function(e) {
 });
 </script>
 </body>
-</html>
+</html><script>
+function syncPage() {
+  const icon = document.querySelector('#syncBtn .fa-rotate');
+  if (icon) {
+    icon.style.transition = 'transform 0.5s ease';
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => { icon.style.transform = ''; }, 500);
+  }
+  setTimeout(() => { window.location.href = window.location.pathname + '?v=' + Date.now(); }, 500);
+}
+</script>

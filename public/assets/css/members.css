@@ -717,7 +717,7 @@ body.sidebar-open { overflow: hidden !important; }
   .topbar-center { display: none !important; }
   .topbar-actions { display: flex !important; align-items: center !important; gap: 6px !important; flex-shrink: 0 !important; }
   .notif-wrap { display: flex !important; }
-  .icon-btn:not(#notifBellBtn) { display: none !important; }
+  .icon-btn:not(#notifBellBtn):not(#syncBtn) { display: none !important; }
   .topbar-profile { display: none !important; }
   .hamburger-btn {
     display: flex !important;
@@ -1267,4 +1267,8 @@ body.sidebar-open { overflow: hidden !important; }
     white-space: normal !important;
     word-break: break-word !important;
   }
+}
+
+.icon-btn .fa-rotate {
+  font-size: 18px;
 }

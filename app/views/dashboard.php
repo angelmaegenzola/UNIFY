@@ -1029,6 +1029,16 @@ document.addEventListener('click', function(e) {
     document.getElementById('aCategoryBtn')?.classList.remove('open');
   }
 });
+
+function syncDashboard() {
+  const icon = document.querySelector('.icon-btn .fa-rotate');
+  if (icon) {
+    icon.style.transition = 'transform 0.5s ease';
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => { icon.style.transform = ''; }, 500);
+  }
+  setTimeout(() => { window.location.href = window.location.pathname + '?v=' + Date.now(); }, 500);
+}
 </script>
 </body>
 
