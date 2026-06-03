@@ -2362,3 +2362,26 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
     flex: 1 1 auto !important;
   }
 }
+@media (max-width: 480px) {
+  .club-events-panel.active > div[style*="linear-gradient"] {
+    padding: 20px 16px !important;
+    min-height: 120px !important;
+    flex-wrap: wrap !important;
+  }
+  .club-events-panel.active > div[style*="linear-gradient"] > div[style*="flex:1"] {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+}
+@media (max-width: 480px) {
+  .club-events-panel.active > div[style*="linear-gradient"] {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    padding: 16px !important;
+  }
+  .club-events-panel.active > div[style*="linear-gradient"] button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
