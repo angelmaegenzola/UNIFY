@@ -80,6 +80,7 @@
         </div>
       </div>
       <div class="topbar-actions">
+        <button class="icon-btn" title="Sync" onclick="syncPage()"><i class="fas fa-rotate"></i></button>
         <button class="icon-btn" id="notifBtn" title="Notifications" onclick="toggleNotif(event)">
           <i class="fas fa-bell"></i>
           <span class="badge red hidden" id="notifBadge">0</span>
@@ -289,7 +290,7 @@
           </div>
           <div class="form-group">
             <label>Location</label>
-            <input type="text" id="ef-location" placeholder="e.g. Main Auditorium" />
+            <input type="text" id="ef-location" placeholder="e.g. Main Auditorium" onfocus="document.querySelectorAll('.custom-select-list').forEach(el=>el.classList.remove('open'))" />
           </div>
           <p id="ef-error" class="form-error" style="display:none;"></p>
         </div>
@@ -724,3 +725,14 @@ document.addEventListener('DOMContentLoaded', function(){
 </body>
 
 </html>
+<script>
+function syncPage() {
+  const icon = document.querySelector('.icon-btn .fa-rotate');
+  if (icon) {
+    icon.style.transition = 'transform 0.5s ease';
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => { icon.style.transform = ''; }, 500);
+  }
+  setTimeout(() => { window.location.href = window.location.pathname + '?v=' + Date.now(); }, 500);
+}
+</script>

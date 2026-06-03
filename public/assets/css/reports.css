@@ -1279,7 +1279,7 @@ body.sidebar-open { overflow: hidden !important; }
   .topbar-center { display: none !important; }
   .topbar-actions { display: flex !important; align-items: center !important; gap: 6px !important; flex-shrink: 0 !important; }
   .notif-wrap { display: flex !important; }
-  .icon-btn:not(#notifBellBtn) { display: none !important; }
+  .icon-btn:not(#notifBellBtn):not(#syncBtn) { display: none !important; }
   .topbar-profile { display: none !important; }
   .hamburger-btn {
     display: flex !important;
@@ -1622,4 +1622,8 @@ body.sidebar-open { overflow: hidden !important; }
   .topbar-left { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 0 !important; }
   .topbar-hamburger { display: none !important; }
   .topbar-title-group { display: contents !important; }
+}
+
+.icon-btn .fa-rotate {
+  font-size: 18px;
 }

@@ -281,27 +281,35 @@ body {
 
 .icon-btn {
   position: relative;
-  width: 36px; height: 36px;
-  border-radius: 11px;
-  border: 1.5px solid var(--border);
+  width: 32px; height: 32px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
   background: var(--card-bg);
   color: var(--text-mid);
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: all 0.18s;
 }
+.icon-btn .fa-rotate {
+  font-size: 18px;
+}
+button[title="Sync"] {
+  width: 36px !important; height: 36px !important;
+  border-radius: 11px !important;
+  border: 1.5px solid var(--border) !important;
+}
 .icon-btn:hover { background: var(--green-light); color: var(--green-dark); border-color: var(--green-accent); }
 
 .badge {
-  position: absolute; top: -4px; right: -4px;
-  font-size: 9px; font-weight: 700;
-  width: 16px; height: 16px;
+  position: absolute; top: -2px; right: -2px;
+  font-size: 7px; font-weight: 700;
+  width: 10px; height: 10px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   color: #fff;
   background: var(--green-accent);
-  border: 1.5px solid var(--main-bg);
+  border: 1px solid var(--main-bg);
 }
 .badge.red { background: var(--red); }
 
@@ -1299,13 +1307,14 @@ body {
   .tr-actions { gap: 3px !important; }
 
   /* Modal — centered with padding */
-  .modal-overlay { padding: 0 16px !important; align-items: center !important; }
+  .modal-overlay { padding: 16px !important; align-items: flex-start !important; overflow-y: auto !important; }
   .modal {
     width: 100% !important;
     max-width: 100% !important;
     border-radius: 20px !important;
-    max-height: 85vh !important;
+    max-height: none !important;
     padding: 20px 18px !important;
+    margin: auto !important;
   }
 
   /* Cards */

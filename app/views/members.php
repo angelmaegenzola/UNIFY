@@ -72,6 +72,7 @@
       </div>
       <div class="topbar-actions">
         <button class="icon-btn" title="Notifications"><i class="fas fa-bell"></i></button>
+        <button class="icon-btn" id="syncBtn" title="Sync" onclick="syncPage()"><i class="fas fa-rotate"></i></button>
         <div class="topbar-profile">
             <div class="topbar-avatar">
               <?php if (!empty($avatar_url)): ?>
@@ -460,6 +461,39 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
 function openAdd() { openModal('addModal'); }
 
 /* ── Edit (edits the primary/first membership record) ── */
+function toggleEditDrop(field, e) {
+  if (e) e.stopPropagation();
+  const listMap = { role: 'editRoleList', status: 'editStatusList' };
+  const btnMap  = { role: 'editRoleBtn',  status: 'editStatusBtn' };
+  const list = document.getElementById(listMap[field]);
+  const btn  = document.getElementById(btnMap[field]);
+  const isOpen = list.classList.toggle('open');
+  if (btn) btn.classList.toggle('open', isOpen);
+  // close the other
+  Object.keys(listMap).forEach(k => {
+    if (k !== field) {
+      document.getElementById(listMap[k])?.classList.remove('open');
+      document.getElementById(btnMap[k])?.classList.remove('open');
+    }
+  });
+}
+
+function selectEditOpt(field, val, label) {
+  const fieldMap = { role: 'editRole', status: 'editStatus' };
+  const btnMap   = { role: 'editRoleBtn', status: 'editStatusBtn' };
+  const listMap  = { role: 'editRoleList', status: 'editStatusList' };
+  document.getElementById(fieldMap[field]).value = val;
+  const btn = document.getElementById(btnMap[field]);
+  if (btn) btn.textContent = label;
+  const list = document.getElementById(listMap[field]);
+  if (list) {
+    list.querySelectorAll('.custom-select-option').forEach(o => {
+      o.classList.toggle('selected', o.textContent.trim() === label);
+    });
+    list.classList.remove('open');
+  }
+}
+
 function openEdit(m) {
   document.getElementById('editId').value      = m.id;
   document.getElementById('editName').value    = m.first_name + ' ' + m.last_name + ' — ' + m.club_name;
@@ -706,3 +740,14 @@ document.addEventListener('click', function(e) {
 </script>
 </body>
 </html>
+<script>
+function syncPage() {
+  const icon = document.querySelector('.icon-btn .fa-rotate');
+  if (icon) {
+    icon.style.transition = 'transform 0.5s ease';
+    icon.style.transform = 'rotate(360deg)';
+    setTimeout(() => { icon.style.transform = ''; }, 500);
+  }
+  setTimeout(() => { window.location.href = window.location.pathname + '?v=' + Date.now(); }, 500);
+}
+</script>
