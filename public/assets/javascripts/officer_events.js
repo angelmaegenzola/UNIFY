@@ -139,7 +139,7 @@ function openEditModal(dbId) {
     document.getElementById('assigneeSearch').value   = '';
     document.getElementById('assigneeDropdown').classList.remove('open');
     // Show status + mandatory for editing
-    document.getElementById('addOnlyHideRow').style.display = '';
+    if (document.getElementById('addOnlyHideRow')) document.getElementById('addOnlyHideRow').style.display = '';
     // Load existing collabs for this event
     selectedCollabClubId = 0;
     selectedCollabClubName = '';

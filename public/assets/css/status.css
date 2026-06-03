@@ -564,3 +564,36 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
   .sidebar-overlay.open { display: block !important; }
   body.sidebar-open { overflow: hidden !important; }
 }
+
+/* ── Application History ── */
+.history-section {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  gap: 10px;
+}
+.hi-club {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  flex: 1;
+}
+.hi-date {
+  font-size: 11px;
+  color: var(--text-light);
+  flex-shrink: 0;
+}

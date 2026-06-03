@@ -968,3 +968,15 @@
 .msg-layout { margin-top: 16px !important; }
 
 .msg-layout { margin-top: 16px !important; }
+
+/* Group chat avatar icon */
+.msg-club-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--green-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

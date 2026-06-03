@@ -876,6 +876,127 @@ margin-bottom: 18px;
 .crud-toast-info    { background: #dbeafe; color: #1d4ed8; border: 1px solid #93c5fd; }
 .crud-toast-warn    { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
 
+/* ── Next Event Strip — Desktop fix ── */
+.next-event-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  padding: 16px 20px;
+}
+
+.nes-info {
+  flex: 1;
+  min-width: 0; /* allows text truncation */
+}
+
+.nes-title {
+  font-weight: 700;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* truncate long titles */
+}
+
+.nes-meta {
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 11.5px;
+}
+
+.nes-cta {
+  flex-shrink: 0; /* never shrink the button */
+  white-space: nowrap;
+}
+/* ── Next Event Strip — Desktop overflow fix ── */
+.next-event-strip {
+  overflow: hidden !important;
+}
+
+.nes-info {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+}
+
+.nes-title {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  display: block !important;
+}
+
+.nes-meta {
+  overflow: hidden !important;
+  flex-wrap: wrap !important;
+}
+
+.nes-cta {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+/* ── Next Event Strip — Mobile fix ── */
+@media (max-width: 768px) {
+  .next-event-strip {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 14px 14px;
+  }
+
+  .nes-flag {
+    width: 100%;
+    margin-bottom: 2px;
+  }/* Next event hero strip */
+.next-event-strip {
+  background: linear-gradient(135deg, var(--green-mid), var(--green-dark));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow-lg);
+  position: relative;
+}
+
+.next-event-strip::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(42,122,72,0.4) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 80%, rgba(42,122,72,0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.nes-flag, .nes-date, .nes-info, .nes-cta { position: relative; z-index: 1; }
+
+.nes-info { flex: 1 1 0; min-width: 0; overflow: hidden; }
+
+.nes-title {
+  font-weight: 700; font-size: 17px; margin-bottom: 4px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  display: block; max-width: 100%;
+}
+
+.nes-meta { display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 12px; opacity: .92; }
+.nes-meta i { margin-right: 4px; opacity: .8; }
+
+.nes-cta {
+  background: #fff; color: var(--green-dark);
+  font-weight: 700; padding: 10px 16px;
+  border-radius: var(--radius-sm); font-size: 13px;
+  display: inline-flex; align-items: center; gap: 6px;
+  flex-shrink: 0; white-space: nowrap;
+  transition: transform .15s;
+}
+.nes-cta:hover { transform: translateY(-1px); }
+}
 /* ============================================================
    RESPONSIVE
 ============================================================ */
@@ -2214,3 +2335,30 @@ body.sidebar-open { overflow: hidden !important; position: fixed !important; wid
 }
 
 .sidebar-nav { padding-top: 60px !important; }
+
+/* ══ NEXT EVENT STRIP — FINAL FIX (must be last) ══ */
+.next-event-strip {
+  flex-wrap: nowrap !important;
+}
+.next-event-strip .nes-info {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  width: 0 !important;
+}
+.next-event-strip .nes-title {
+  display: block !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+}
+@media (max-width: 768px) {
+  .next-event-strip {
+    flex-wrap: wrap !important;
+  }
+  .next-event-strip .nes-info {
+    width: auto !important;
+    flex: 1 1 auto !important;
+  }
+}

@@ -333,6 +333,8 @@ const OM = (() => {
 
     $id('chatTitle') && ($id('chatTitle').textContent = name);
     $id('chatSubtitle') && ($id('chatSubtitle').textContent = `Direct message · ${CFG.clubName}`);
+    $id('mobileTopbarTitle') && ($id('mobileTopbarTitle').textContent = name);
+    $id('mobileTopbarSub') && ($id('mobileTopbarSub').textContent = `Direct message · ${CFG.clubName}`);
     $id('msgInput') && ($id('msgInput').placeholder = `Message ${name.split(' ')[0]}…`);
 
     const icon = document.querySelector('.msg-hash-icon i');

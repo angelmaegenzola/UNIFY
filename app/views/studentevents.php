@@ -212,29 +212,48 @@
       </div>
 
       <!-- NEXT-UP HERO STRIP -->
-      <?php if ($p_next): ?>
-      <div class="next-event-strip">
-        <div class="nes-flag"><i class="fas fa-bolt"></i> Next up</div>
-        <div class="nes-date">
-          <div class="nes-month"><?= htmlspecialchars($p_next['month']) ?></div>
-          <div class="nes-day"><?= htmlspecialchars($p_next['day_num']) ?></div>
-        </div>
-        <div class="nes-info">
-          <div class="nes-title"><?= htmlspecialchars($p_next['name']) ?></div>
-          <div class="nes-meta">
-            <span><i class="fas fa-clock"></i> <?= htmlspecialchars($p_next['time_range']) ?></span>
-            <?php if (!empty($p_next['location'])): ?>
-              <span><i class="fas fa-location-dot"></i> <?= htmlspecialchars($p_next['location']) ?></span>
-            <?php endif; ?>
-            <span><i class="fas fa-user-group"></i> <?= $p_next['going_count'] ?> going</span>
-            <span class="nes-when"><?= htmlspecialchars($p_next['when_label']) ?></span>
-          </div>
-        </div>
-        <button class="nes-cta" onclick="openEvent(<?= (int)$p_next['id'] ?>)">
-          View details <i class="fas fa-arrow-right"></i>
-        </button>
-      </div>
+<?php if ($p_next): ?>
+<div style="
+  background: linear-gradient(135deg, var(--green-mid), var(--green-dark));
+  color: #fff;
+  border-radius: 16px;
+padding: 28px 32px;
+min-height: 100px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 20px rgba(13,43,26,0.12);
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
+">
+  <div style="position:relative;z-index:1;background:rgba(255,255,255,0.18);padding:5px 11px;border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;display:inline-flex;align-items:center;gap:6px;flex-shrink:0;">
+    <i class="fas fa-bolt"></i> Next up
+  </div>
+  <div style="position:relative;z-index:1;background:rgba(255,255,255,0.15);border-radius:12px;padding:8px 14px;text-align:center;min-width:64px;flex-shrink:0;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;opacity:.9;"><?= htmlspecialchars($p_next['month']) ?></div>
+    <div style="font-size:22px;font-weight:800;line-height:1;"><?= htmlspecialchars($p_next['day_num']) ?></div>
+  </div>
+  <div style="position:relative;z-index:1;flex:1;min-width:0;overflow:hidden;width:0;">
+    <div style="font-weight:700;font-size:16px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:100%;">
+      <?= htmlspecialchars($p_next['name']) ?>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;opacity:.92;">
+      <span><i class="fas fa-clock"></i> <?= htmlspecialchars($p_next['time_range']) ?></span>
+      <?php if (!empty($p_next['location'])): ?>
+        <span><i class="fas fa-location-dot"></i> <?= htmlspecialchars($p_next['location']) ?></span>
       <?php endif; ?>
+      <span><i class="fas fa-user-group"></i> <?= $p_next['going_count'] ?> going</span>
+      <span style="background:rgba(255,255,255,0.2);padding:2px 10px;border-radius:999px;font-weight:600;"><?= htmlspecialchars($p_next['when_label']) ?></span>
+    </div>
+  </div>
+  <button onclick="openEvent(<?= (int)$p_next['id'] ?>)" style="position:relative;z-index:1;background:#fff;color:var(--green-dark);font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px;display:inline-flex;align-items:center;gap:6px;border:none;cursor:pointer;flex-shrink:0;white-space:nowrap;">
+    View details <i class="fas fa-arrow-right"></i>
+  </button>
+</div>
+<?php endif; ?>
 
       <!-- STATS BANNER -->
       <div class="stats-banner">

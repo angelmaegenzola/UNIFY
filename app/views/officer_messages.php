@@ -117,6 +117,49 @@
       </div>
     </header>
 
+    <!-- Mobile chat label -->
+    <div class="mobile-chat-label" id="mobileChatLabel">
+      <div class="mcl-left">
+        <div class="mcl-title" id="mobileTopbarTitle"><?= $isDM ? htmlspecialchars($dmUserName ?? 'DM') : 'Group Chat' ?></div>
+        <div class="mcl-sub" id="mobileTopbarSub"><?= $isDM ? 'Direct message · '.htmlspecialchars($clubName) : 'All '.$totalMembers.' members · '.htmlspecialchars($clubName) ?></div>
+      </div>
+      <span class="msg-live-badge" style="font-size:10px;padding:3px 10px;"><span class="msg-live-dot"></span> Live</span>
+    </div>
+
+    <!-- Mobile members bar -->
+    <div class="mobile-members-bar" id="mobileMembersBar">
+      <div class="mobile-members-scroll">
+        <div class="mobile-member-item" onclick="OM.switchToGroup()">
+          <div class="mobile-member-avatar" style="background:linear-gradient(135deg,#1e5c38,#2a7a48);overflow:hidden;">
+            <i class="fas fa-hashtag" style="font-size:18px;color:#fff;"></i>
+          </div>
+          <span>Group</span>
+        </div>
+        <?php
+          $colors = ['av-green','av-teal','av-red','av-yellow','av-purple'];
+          foreach ($dbMembers as $i => $m):
+            if ((int)$m['user_id'] === $userId) continue;
+            $color    = $colors[$i % 5];
+            $init     = strtoupper(substr($m['first_name'], 0, 1));
+            $fullName = htmlspecialchars($m['first_name'] . ' ' . $m['last_name']);
+            $memberPic = !empty($m['profile_picture'])
+              ? '/assets/pictures/profile_pictures/' . htmlspecialchars(basename($m['profile_picture']))
+              : '';
+        ?>
+        <div class="mobile-member-item" onclick="OM.openDM(<?= (int)$m['user_id'] ?>, '<?= $fullName ?>')">
+          <div class="mobile-member-avatar <?= $color ?>" style="overflow:hidden;">
+            <?php if ($memberPic): ?>
+              <img src="<?= $memberPic ?>" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+            <?php else: ?>
+              <?= $init ?>
+            <?php endif; ?>
+          </div>
+          <span><?= htmlspecialchars($m['first_name']) ?></span>
+        </div>
+        <?php endforeach; ?>
+      </div>
+    </div>
+
     <div class="content">
       <div class="msg-layout">
 

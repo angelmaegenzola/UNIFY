@@ -957,7 +957,7 @@ if (!empty($allEvents)) {
 
 $jsEvents = json_encode(array_map(fn($e) => [
     'db_id'        => (int)$e['id'],
-    'title'        => $e['title'] ?? '',
+    'title'        => $e['name'] ?? $e['title'] ?? '',
     'venue'        => $e['venue'] ?? '',
     'event_date'   => $e['event_date'] ?? '',
     'start_time'   => $e['start_time'] ?? null,

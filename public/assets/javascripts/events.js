@@ -226,46 +226,55 @@ function renderCalendar() {
 }
 
 /* ════════════════════════════════════════════════
-   Pending Approvals
+   Pending Approvals  ← FIXED
 ════════════════════════════════════════════════ */
 function renderApprovals() {
-  const today   = new Date(); today.setHours(0,0,0,0);
-  const pending = events.filter(e => {
-    const d = new Date(e.event_date + 'T00:00:00');
-    return e.status === 'pending_approval';
-  }).slice(0, 5);
+  const pending = events.filter(e => e.status === 'pending_approval').slice(0, 5);
 
-  document.getElementById('pendingCount').textContent = `${pending.length} pending`;
+  document.getElementById('pendingCount').textContent =
+    pending.length === 1 ? '1 pending' : `${pending.length} pending`;
 
   const scrollEl = document.getElementById('approvalsScroll');
+
   if (!pending.length) {
-    scrollEl.innerHTML = `<div class="no-approvals"><i class="fas fa-check-circle"></i>No pending approvals</div>`;
+    scrollEl.innerHTML = `
+      <div class="no-approvals">
+        <i class="fas fa-check-circle"></i>
+        No pending approvals
+      </div>`;
     return;
   }
 
-  const urgencies    = ['High','Medium','Low'];
-  const urgencyClass = ['urgency-high','urgency-medium','urgency-low'];
-  const iconColors   = ['icon-red','icon-gold','icon-teal'];
+  const urgencies    = ['High', 'Medium', 'Low'];
+  const urgencyClass = ['urgent', 'normal', 'low'];
+  const iconColors   = ['icon-red', 'icon-gold', 'icon-teal'];
   const icons        = ['fa-microphone','fa-palette','fa-flask','fa-users','fa-trophy'];
 
   scrollEl.innerHTML = pending.map((e, i) => `
     <div class="approval-item">
-      <div class="approval-item-top">
-        <div class="approval-item-icon ${iconColors[i % 3]}">
-          <i class="fas ${icons[i % icons.length]}"></i>
+      <div class="approval-icon ${iconColors[i % 3]}">
+        <i class="fas ${icons[i % icons.length]}"></i>
+      </div>
+      <div class="approval-info">
+        <div class="approval-name">${escHtml(e.name)}</div>
+        <div class="approval-meta">
+          <span><i class="fas fa-building-columns"></i> ${escHtml(e.club_name)}</span>
+          &nbsp;·&nbsp;
+          <span><i class="fas fa-calendar"></i> ${fmtDate(e.event_date)}</span>
         </div>
-        <span class="approval-title">${escHtml(e.name)}</span>
-        <span class="approval-urgency ${urgencyClass[i % 3]}">${urgencies[i % 3]}</span>
+        <div class="approval-btns">
+          <button class="appr-btn approve" onclick="markCompleted(${e.id})">
+            <i class="fas fa-check"></i> Approve
+          </button>
+          <button class="appr-btn reject" onclick="rejectPendingEvent(${e.id})">
+            <i class="fas fa-times"></i> Reject
+          </button>
+          <button class="appr-btn details" onclick="openEdit(${e.id})">
+            <i class="fas fa-eye"></i> Details
+          </button>
+        </div>
       </div>
-      <div class="approval-meta">
-        <span><i class="fas fa-building-columns"></i> ${escHtml(e.club_name)}</span>
-        <span><i class="fas fa-calendar"></i> ${fmtDate(e.event_date)}</span>
-      </div>
-      <div class="approval-actions">
-        <button class="btn-view-details" onclick="openEdit(${e.id})"><i class="fas fa-eye"></i> Details</button>
-        <button class="btn-approve" onclick="markCompleted(${e.id})">Approve</button>
-        <button class="btn-reject"  onclick="rejectPendingEvent(${e.id})">Reject</button>
-      </div>
+      <span class="approval-urgency ${urgencyClass[i % 3]}">${urgencies[i % 3]}</span>
     </div>`).join('');
 }
 
@@ -330,7 +339,6 @@ async function saveEvent(evt) {
     const fields = { club_id, name, description, event_date, start_time, end_time, location, status };
 
     if (editingId) {
-      // ── UPDATE ──
       await postPage('event_update', { id: editingId, ...fields });
       const idx      = events.findIndex(x => x.id === parseInt(editingId));
       const clubSel  = document.getElementById('ef-club');
@@ -339,21 +347,20 @@ async function saveEvent(evt) {
         events[idx] = {
           ...events[idx],
           ...fields,
-          club_id:   parseInt(club_id),   // ← ensure number wins over string from fields
+          club_id:   parseInt(club_id),
           club_name: clubName,
         };
       }
       showToast(`"${name}" updated.`);
     } else {
-      // ── CREATE ──
       const res     = await postPage('event_create', fields);
       const clubSel = document.getElementById('ef-club');
       const clubName = clubSel.options[clubSel.selectedIndex].text;
       const acronym  = clubName.split(' ').map(w => w[0]).join('').toUpperCase();
       events.push({
         ...fields,
-        id:           parseInt(res.id),   // ← force number AFTER spread so it wins
-        club_id:      parseInt(club_id),  // ← force number AFTER spread so it wins
+        id:           parseInt(res.id),
+        club_id:      parseInt(club_id),
         club_name:    clubName,
         club_acronym: acronym,
       });
@@ -378,7 +385,7 @@ async function saveEvent(evt) {
 function openDeleteModal(id) {
   const e = events.find(x => x.id === parseInt(id));
   if (!e) return;
-  pendingDeleteId = parseInt(id);   // ← store as number for consistent comparison
+  pendingDeleteId = parseInt(id);
   document.getElementById('delete-event-name').textContent = e.name;
   document.getElementById('delete-modal').classList.add('open');
 }
@@ -420,11 +427,6 @@ function markCompleted(id) {
   document.getElementById('evtApproveModal').classList.add('open');
 }
 
-/* ════════════════════════════════════════════════
-   Reject pending event → sets status = 'rejected'
-   (previously wrongly wired to openDeleteModal which
-   permanently deleted the DB row instead of rejecting it)
-════════════════════════════════════════════════ */
 /* ════════════════════════════════════════════════
    Pending approve/reject — uses styled modals
 ════════════════════════════════════════════════ */

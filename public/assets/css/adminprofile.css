@@ -447,7 +447,7 @@ body {
 }
 
 .avatar-card-banner {
-  height: 72px;
+  height: 60px;
   background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, var(--green-accent) 100%);
   position: relative;
 }
