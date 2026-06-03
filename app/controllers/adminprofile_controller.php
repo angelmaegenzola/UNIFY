@@ -28,16 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $lastName  = trim($_POST['last_name']  ?? '');
     $email     = trim($_POST['email']      ?? '');
     $username  = trim($_POST['username']   ?? '');
+    $phone     = trim($_POST['phone']      ?? '');
 
     if ($firstName && $lastName && $email) {
-      $upd = $pdo->prepare("UPDATE users SET first_name=?, last_name=?, email=?, username=? WHERE id=?");
-      $upd->execute([$firstName, $lastName, $email, $username, $userId]);
+      $upd = $pdo->prepare("UPDATE users SET first_name=?, last_name=?, email=?, username=?, phone=? WHERE id=?");
+      $upd->execute([$firstName, $lastName, $email, $username, $phone, $userId]);
       $_SESSION['first_name'] = $firstName;
       $_SESSION['last_name']  = $lastName;
       $dbUser['first_name']   = $firstName;
       $dbUser['last_name']    = $lastName;
       $dbUser['email']        = $email;
       $dbUser['username']     = $username;
+      $dbUser['phone']        = $phone;
       $success_msg = 'Profile updated successfully.';
     } else {
       $error_msg = 'First name, last name, and email are required.';
@@ -94,13 +96,14 @@ $clubsCount    = $pdo->query("SELECT COUNT(*) FROM clubs WHERE status='active'")
 $totalAnns     = $pdo->query("SELECT COUNT(*) FROM announcements")->fetchColumn();
 
 $user = [
-  'first_name'  => $dbUser['first_name'],
-  'last_name'   => $dbUser['last_name'],
-  'username'    => $dbUser['username'],
-  'email'       => $dbUser['email'],
-  'role'        => 'Club Admin',
-  'status'      => 'Active',
-  'joined'      => date('F Y', strtotime($dbUser['created_at'])),
+  'first_name'     => $dbUser['first_name'],
+  'last_name'      => $dbUser['last_name'],
+  'username'       => $dbUser['username'],
+  'email'          => $dbUser['email'],
+  'phone'          => $dbUser['phone'] ?? '',
+  'role'           => 'Club Admin',
+  'status'         => 'Active',
+  'joined'         => date('F Y', strtotime($dbUser['created_at'])),
   'events_managed' => $eventsManaged,
   'clubs_joined'   => $clubsCount,
   'announcements'  => $totalAnns,
@@ -125,4 +128,3 @@ $activity = [
   ['icon' => 'fa-xmark-circle',  'dot' => 'dot-red',    'title' => 'Rejected event "Unauthorized Off-Campus Trip"', 'meta' => 'Student Admin',            'time' => 'Mar 27, 10:05 AM'],
   ['icon' => 'fa-pen-to-square', 'dot' => 'dot-orange', 'title' => 'Updated profile information',                   'meta' => 'Account Settings',         'time' => 'Mar 25, 4:50 PM'],
 ];
-?>

@@ -717,7 +717,7 @@ body.sidebar-open { overflow: hidden !important; }
   .topbar-center { display: none !important; }
   .topbar-actions { display: flex !important; align-items: center !important; gap: 6px !important; flex-shrink: 0 !important; }
   .notif-wrap { display: flex !important; }
-  .icon-btn:not(#notifBellBtn):not(#syncBtn) { display: none !important; }
+  .icon-btn:not(#notifBellBtn) { display: none !important; }
   .topbar-profile { display: none !important; }
   .hamburger-btn {
     display: flex !important;
@@ -1269,6 +1269,29 @@ body.sidebar-open { overflow: hidden !important; }
   }
 }
 
-.icon-btn .fa-rotate {
-  font-size: 18px;
+/* ── Ensure sidebar is visible and swipe works ── */
+#mainSidebar {
+  left: 0 !important;
+  display: flex !important;
+}
+
+body.sidebar-open #mainSidebar {
+  left: 0 !important;
+}
+
+#sidebarOverlay {
+  display: block !important;
+}
+
+/* ── Restore sidebar visibility for all screens ── */
+#mainSidebar {
+  display: flex !important;
+  left: 0 !important;
+  top: 0 !important;
+  z-index: 10000 !important;
+}
+
+#sidebarOverlay {
+  display: block !important;
+  z-index: 9999 !important;
 }
