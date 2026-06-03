@@ -846,12 +846,26 @@ body.sidebar-open { overflow: hidden !important; }
     overflow: visible !important;
     max-height: none !important;
   }
-  #efDateWrap, #efStartWrap, #efEndWrap {
-    position: static !important;
-  }
-  #efDateList, #efStartList, #efEndList {
-    position: relative !important;
-    width: 100% !important;
-    min-width: unset !important;
-  }
+
+}
+
+/* === Dropdown float fix === */
+.custom-select-wrap {
+  position: relative !important;
+}
+.custom-select-list {
+  display: none !important;
+  position: absolute !important;
+  z-index: 9999 !important;
+  top: calc(100% + 4px) !important;
+  left: 0 !important;
+  min-width: 100% !important;
+  background: var(--card-bg, #fff) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+}
+.custom-select-list.open {
+  display: block !important;
+}
+.modal-body, .modal-box {
+  overflow: visible !important;
 }
